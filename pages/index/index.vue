@@ -5,7 +5,7 @@
 		<family v-if="actives == 0" class="moduleBox" :SelectFamily = 'familyInfo' ></family>
 		<live v-if="actives == 1" class="moduleBox" ></live>
 		<shopCar v-if="actives == 2" class="moduleBox" :scrollTopChild='scrollTopData' ></shopCar>
-		<mine v-if="actives == 3" class="moduleBox"></mine>
+		<mine v-if="actives == 3" class="moduleBox" :scrollTopChild='scrollTopData'></mine>
 		
 		<footerBar ref='footerBar' class='footerBar' @childActive = "activeData"></footerBar>
 	</view>

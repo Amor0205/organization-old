@@ -1,5 +1,14 @@
 <template>
-	<view class="container" :style="{background:commonColor}">
+	<view class="container" >
+		<!-- 未到指定距离 隐藏 -->
+		<view class="showTitleBox" v-if="scrollTopChild > 40">
+			<view class="leftBox">
+				昵称
+			</view>
+			<view class="rightBox" @click="changeBottomControl">
+				<image src="../../static/imgs/set_icon.png" mode=""></image>
+			</view>
+		</view>
 		<!-- 头部neirong -->
 		<view class="headBox" ref='headBox'>
 			<!-- 头部上方容器 -->
@@ -10,12 +19,15 @@
 					</view>
 					<view class="titleBox">
 						<view class="username" @click="goToPage('manageAccount')">
-							{{ userInfo.nikekName == null ? userInfo.phonenum : userInfo.nikekName }}
+							{{ userInfo.nikekName == null ? '点击头像设置昵称' : userInfo.nikekName }}
 						</view>
-						<view class="balance">
-							<text>
-								账户余额(元) 999.99
-							</text>
+						<view class="tagBox">
+							<view class="tag_1 common">
+								巡查人员
+							</view>
+							<view class="tag_2 common">
+								· 上班
+							</view>
 						</view>
 					</view>
 				</view>
@@ -25,7 +37,6 @@
 					</view>
 				</view>
 			</view>
-			
 			<!-- 头部下方容器 -->
 			<view class="headBottomBox">
 				<view class="contentBox" v-for="(item,index) in headList" :key='index'>
@@ -61,7 +72,7 @@
 		<view class="cuttingLine"></view>
 		
 		<!-- 功能列表 -->
-		<scroll-view class="functionListContainer" scroll-y="true" :style="{height:functionListHeight + 'px' }">
+		<scroll-view class="functionListContainer" scroll-y="true" >
 			<view class="functionListBox">
 				<view class="functionList" v-for="(item,index) in functionList" :key='index' @click="goToPage(item.url)">
 					<view class="leftBox">
@@ -81,12 +92,13 @@
 		</scroll-view>
 			
 		
-		
 	</view>
 </template>
 
 <script>
 	export default {
+		//获取到顶部高度数据
+		props:['scrollTopChild'],
 		data() {
 			return {
 				userInfo:'',		//用户信息
@@ -94,19 +106,17 @@
 				functionListHeight:200,
 				headBox:0,
 				centerBox:0,
-				commonColor:'',
-				
 				headList:{
 					collect:{
-						name:'收藏夹',
+						name:'好评',
 						number:21
 					},
 					attention:{
-						name:'关注商家',
+						name:'中评',
 						number:18
 					},
 					redPacket:{
-						name:'红包卡券',
+						name:'差评',
 						number:9
 					}
 				},
@@ -206,7 +216,7 @@
 			}
 		},
 		created() {
-			this.commonColor = this.commonColorAll
+			// this.commonColor = this.commonColorAll
 			//获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
 			
@@ -235,7 +245,36 @@
 <style lang="scss">
 	.container {
 		// height: 100%;
-		// background: #FFE300;
+		background: #ebeadf;
+		.showTitleBox {
+			width: 96%;
+			// width: 100%;
+			height: 100upx;
+			top: 0upx;
+			color: #282828;
+			background: rgba(235,234,223,1);
+			position: fixed;
+			display: flex;
+			justify-content: center;
+			// justify-content: space-around;
+			align-items: flex-end;
+			padding: 20upx 2%;
+			z-index: 999;
+			.leftBox {
+				font-weight: 600;
+				font-size: 18px;
+			}
+			.rightBox{
+				position: fixed;
+				right: 20upx;
+				width: 48upx;
+				height: 48upx;
+				image{
+					width: 100%;
+					height: 100%;
+				}
+			}
+		}
 		.headBox{
 			padding-top:100upx ;
 			height: 280upx;
@@ -265,22 +304,37 @@
 						flex-direction: column;
 						justify-content: center;
 						.username{
-							font-size:18px;
-							font-weight: 600;
-							margin: 0 0 18upx 26upx;
+							font-size:16px;
+							// font-weight: 600;
+							margin: 0 0 10upx 26upx;
 						}
-						.balance{
+						.tagBox{
 							font-size:12px;
 							min-width: 100upx;
 							height: 36upx;
 							display: flex;
-							align-items: center;
-							align-self: flex-start;
 							margin-left: 26upx;
-							padding: 0 15upx;
-							border-radius: 20upx;
-							background: #EC7171;
-							color: #FFFFFF;
+							// align-items: center;
+							// align-self: flex-start;
+							// padding: 0 15upx;
+							// border-radius: 20upx;
+							// background: #EC7171;
+							// color: #FFFFFF;
+							.common{
+								border-radius: 6upx;
+								padding: 0 14upx;
+							}
+							.tag_1{
+								background-color: #FEB34A;
+								color: #fff;
+								margin-right: 10upx;
+								
+							}
+							.tag_2{
+								background-color: #FFFFFF;
+								color: #2284FF;
+								border: 1px solid #2284FF;
+							}
 						}
 					}
 				}
@@ -303,13 +357,15 @@
 			.headBottomBox{
 				display: flex;
 				justify-content: space-around;
-				margin-top: 40upx;
-				// margin-bottom:60upx ;
+				margin: 40upx 0 0 26upx;
+				background-color: #ffe300;
+				padding: 20upx;
+				border-radius: 16upx 0 0 16upx;
 				.contentBox{
 					display: flex;
 					align-items: center;
 					flex-direction: column;
-					width: 100upx;
+					width: 25%;
 					height: 100upx;
 					font-size: 12px;
 					.numberBox{
