@@ -1,0 +1,391 @@
+{
+	"easycom": {
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [
+		// //登录
+		// {
+		// 	"path": "pages/login/login",
+		// 	"style": {
+		// 		"navigationBarTitleText": "登录",
+		// 		"app-plus": {
+		// 			"titleNView": false
+		// 		}
+		// 	}
+		// },
+		// //首页
+		// {
+		// 	"path": "pages/index/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "",
+		// 		"app-plus": {
+		// 			"titleNView": false,
+		// 			"bounce": "none"
+		// 		}
+		// 	}
+		// },
+		//首页
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": false,
+					"bounce": "none"
+				}
+			}
+		},
+		//登录
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//注册
+		{
+			"path": "pages/register/register",
+			"style": {
+				"navigationBarTitleText": "注册",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		// 身份证注册
+		{
+			"path": "pages/card/card",
+			"style": {
+				"navigationBarTitleText": "身份证注册",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		// 找回密码
+		{
+			"path": "pages/retrieve/retrieve",
+			"style": {
+				"navigationBarTitleText": "找回密码",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//我的模块设置
+		{
+			"path": "pages/set/set",
+			"style": {
+				"navigationBarTitleText": "设置",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//常用地址
+		{
+			"path": "pages/set/site",
+			"style": {
+				"navigationBarTitleText": "常用地址",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//账号管理
+		{
+			"path": "pages/set/manageAccount",
+			"style": {
+				"navigationBarTitleText": "账号管理",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//问题反馈
+		{
+			"path": "pages/set/feedback",
+			"style": {
+				"navigationBarTitleText": "问题反馈",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//常用设置
+		{
+			"path": "pages/set/commonSet",
+			"style": {
+				"navigationBarTitleText": "常用设置",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//关于孝敬邦
+		{
+			"path": "pages/set/about",
+			"style": {
+				"navigationBarTitleText": "关于",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//家人 -- 我的家人
+		{
+			"path": "pages/family/myFamily",
+			"style": {
+				"navigationBarTitleText": "我的家人",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "添加", //点击事件通过页面的 onNavigationBarButtonTap 函数进行监听
+							"fontSize": "15px",
+							"color": "#FF9500"
+						}]
+					}
+				}
+			}
+		},
+		//家人 -- 我的家人 --添加家人
+		{
+			"path": "pages/family/addFamily",
+			"style": {
+				"navigationBarTitleText": "添加家人",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//家人 -- 资讯展示更多
+		{
+			"path": "pages/family/more",
+			"style": {
+				"navigationBarTitleText": "更多详情",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//家人底部功能模块 -- 体检档案
+		{
+			"path": "pages/family/checkUp/checkUp",
+			"style": {
+				"navigationBarTitleText": "体检档案",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//家人底部功能模块 -- 体检档案 --详情
+		{
+			"path": "pages/family/checkUp/checkupDetail",
+			"style": {
+				"navigationBarTitleText": "体检档案",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+
+		//家人底部功能模块 -- 推送提醒
+		{
+			"path": "pages/family/notification/notification",
+			"style": {
+				"navigationBarTitleText": "推送提醒",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "+ 新建", //点击事件通过页面的 onNavigationBarButtonTap 函数进行监听
+							"fontSize": "15px",
+							"color": "#FF9500"
+						}]
+					}
+				}
+			}
+		},
+		//家人底部功能模块 -- 推送提醒 -- 新建提醒
+		{
+			"path": "pages/family/notification/addNotification",
+			"style": {
+				"navigationBarTitleText": "新建提醒",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "提交", //点击事件通过页面的 onNavigationBarButtonTap 函数进行监听
+							"fontSize": "15px",
+							"color": "#FF9500"
+						}]
+					}
+				}
+			}
+		},
+		//家人底部功能模块 -- sos 记录
+		{
+			"path": "pages/family/sosRecord/sosRecord",
+			"style": {
+				"navigationBarTitleText": "sos记录",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//家人底部功能模块 -- 服务记录
+		{
+			"path": "pages/family/service/service",
+			"style": {
+				"navigationBarTitleText": "服务记录",
+				"app-plus": {
+					"titleNView": true
+
+
+				}
+			}
+		},
+		//家人底部功能模块 -- 服务记录 -- 发起投诉
+		{
+			"path": "pages/family/service/complaint",
+			"style": {
+				"navigationBarTitleText": "发起投诉",
+				"app-plus": {
+					"titleNView": true
+
+
+				}
+			}
+		}, //家人底部功能模块 -- 服务记录 -- 服务凭证
+		{
+			"path": "pages/family/service/voucher",
+			"style": {
+				"navigationBarTitleText": "服务凭证",
+				"app-plus": {
+					"titleNView": true
+
+
+				}
+			}
+		},
+		//家人底部功能模块 -- 当前预约
+		{
+			"path": "pages/family/subscribe/subscribe",
+			"style": {
+				"navigationBarTitleText": "服务记录",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//家人底部功能模块 -- 设备管理
+		{
+			"path": "pages/family/hardware/hardware",
+			"style": {
+				"navigationBarTitleText": "服务记录",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//家人底部功能模块 -- 设备管理 --设备注册
+		{
+			"path": "pages/family/hardware/deviceDetails",
+			"style": {
+				"navigationBarTitleText": "设备注册",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//生活服务导航栏 -- 二级页面
+		{
+			"path": "pages/live/level_2_pages/level_2",
+			"style": {
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//生活服务导航栏 -- 二级页面 -- 公司主页
+		{
+			"path": "pages/live/level_2_pages/company",
+			"style": {
+				"navigationBarTitleText": "公司主页",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"backgroundColor":"#ffe500",
+						"buttons": [{
+							"text": "关注", //点击事件通过页面的 onNavigationBarButtonTap 函数进行监听
+							"fontSize": "15px",
+							"color": "#FF9500"
+						}]
+					}
+				}
+			}
+		},
+		//生活服务导航栏 -- 二级页面 -- 公司主页 --商品详情
+		{
+			"path": "pages/live/level_2_pages/commodityDetails",
+			"style": {
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//生活服务导航栏 -- 二级页面 -- 公司主页 --商品详情 -- 订单
+		{
+			"path": "pages/live/level_2_pages/orderFrom",
+			"style": {
+				"navigationBarTitleText": "确认订单",
+				"app-plus": {
+					"titleNView": {
+						"backgroundColor":"#f2f2f2"
+					}
+					
+				}
+			}
+		},
+		//我的 -- 精神文化spirit
+		{
+			"path": "pages/main/functionList/spirit",
+			"style": {
+				"navigationBarTitleText": "精神文化",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//功能页面 -- 待开发
+		{
+			"path": "pages/functionPage/toBeDeveloped",
+			"style": {
+				"navigationBarTitleText": "待开发",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
+		//功能页面 -- 处理webView
+		{
+			"path": "pages/functionPage/disposeWebView",
+			"style": {
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		}
+	],
+
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"backgroundColor": "#FFFFFF"
+	}
+}
