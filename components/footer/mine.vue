@@ -5,8 +5,9 @@
 			<view class="leftBox">
 				昵称
 			</view>
-			<view class="rightBox" @click="changeBottomControl">
-				<image src="../../static/imgs/set_icon.png" mode=""></image>
+			<view class="rightBox" @click="goToPage('set')">
+				<!-- <image src="../../static/imgs/set_icon.png" mode=""></image> -->
+				设置
 			</view>
 		</view>
 		<!-- 头部neirong -->
@@ -28,6 +29,9 @@
 							<view class="tag_2 common">
 								· 上班
 							</view>
+						</view>
+						<view class="companyName">
+							四川省微壹科技发展有限责任公司
 						</view>
 					</view>
 				</view>
@@ -53,49 +57,45 @@
 		<!-- 中间内容 -->
 		<view class="centerBox" ref='centerBox'>
 			<view class="title" >
-				我的订单
-			</view>
-			
-			<view class="centerNavBox">
-				<view class="navBox" v-for="(item,index) in centerNavList" :key='index'>
-					<view class="imgBox">
-						<image :src="item.imgUrl" mode=""></image>
+				<view class="leftBox">
+					数据查看
+				</view>
+				<view class="rightBox">
+					<view class="year" @click="changeChart('year')">
+						2019年
+						<image src="../../static/imgs/xx_1.png" style="width: 14upx;height: 10upx;" mode=""></image>
 					</view>
-					<view class="nameBox">
-						{{ item.name }}
+					<view class="all" @click="changeChart('all')">
+						全部
 					</view>
 				</view>
+			</view>
+			
+			<view class="chart">
+				<!--#ifdef MP-ALIPAY -->
+				<!-- <canvas canvas-id="canvasLineA" id="canvasLineA" class="charts" :width="cWidth*pixelRatio" :height="cHeight*pixelRatio" :style="{'width':cWidth+'px','height':cHeight+'px'}" @touchstart="touchLineA"></canvas> -->
+				<!--#endif-->
+				<!--#ifndef MP-ALIPAY -->
+				<canvas canvas-id="canvasLineA" id="canvasLineA" class="charts" @touchstart="touchLineA"></canvas>
+				<!--#endif-->
 			</view>
 		</view>
 		
 		<!-- 分割线 -->
-		<view class="cuttingLine"></view>
+		<!-- <view class="cuttingLine"></view> -->
 		
-		<!-- 功能列表 -->
-		<scroll-view class="functionListContainer" scroll-y="true" >
-			<view class="functionListBox">
-				<view class="functionList" v-for="(item,index) in functionList" :key='index' @click="goToPage(item.url)">
-					<view class="leftBox">
-						<view class="imgBox">
-							<image :src="item.imgUrl" mode=""></image>
-						</view>
-						<view class="nameBox">
-							{{ item.name }}
-						</view>
-					</view>
-					
-					<view class="arrowsBox">
-						<image src="../../static/imgs/arrows_r@2x.png" mode=""></image>
-					</view>
-				</view>
-			</view>
-		</scroll-view>
+		
+
 			
 		
 	</view>
 </template>
 
 <script>
+	import uCharts from '@/components/u-charts/u-charts.js';
+	
+	var _this;
+	var canvaLineA = null;
 	export default {
 		//获取到顶部高度数据
 		props:['scrollTopChild'],
@@ -106,6 +106,9 @@
 				functionListHeight:200,
 				headBox:0,
 				centerBox:0,
+				cWidth:'',
+				cHeight:'',
+				pixelRatio:1,
 				headList:{
 					collect:{
 						name:'好评',
@@ -121,70 +124,19 @@
 					}
 				},
 				
-				centerNavList:{
-					waitPay:{
-						name:'待支付',
-						imgUrl:'../../static/imgs/qianbao@2x.png'
-					},
-					waitService:{
-						name:'待服务',
-						imgUrl:'../../static/imgs/daifuwu@2x.png'
-					},
-					waitvaluate:{
-						name:'待评价',
-						imgUrl:'../../static/imgs/daipingjia@2x.png'
-					},
-					accomplish:{
-						name:'已完成',
-						imgUrl:'../../static/imgs/yiwanchengdingdan@2x.png'
-					},
-					unsubscribe:{
-						name:'退订服务',
-						imgUrl:'../../static/imgs/tuiding@2x.png'
-					}
+				chartsData:{
+					categories:["1月","2月","3月","4月","5月","6月","7月","8月","9月","11月","12月"],
+					series:[
+						{name:"累计完成","data":[100,80,95,150,112,132,122,422]}
+					]
+				},
+				chartsDataAll:{
+					categories:["2013","2014","2015","2016","2017","2018","2019","2020"],
+					series:[
+						{name:"累计完成","data":[100,80,95,150,182,132,122,233]}
+					]
 				},
 				
-				functionList:{
-					health:{
-						name:'健康养身',
-						imgUrl:'../../static/imgs/yangsheng@2x.png',
-						url:''
-						},
-					spirit:{
-						name:'精神文化',
-						imgUrl:'../../static/imgs/zongjiao@2x.png',
-						url:'../../pages/main/functionList/spirit'
-						},
-					news:{
-						name:'综合新闻',
-						imgUrl:'../../static/imgs/xinwen@2x.png',
-						url:''
-						},
-					activity:{
-						name:'优惠活动',
-						imgUrl:'../../static/imgs/youhuihuodong-2@2x.png',
-						url:''
-						},
-					vip:{
-						name:'会员中心',
-						imgUrl:'../../static/imgs/huiyuanzhongxin@2x.png',
-						url:''
-						},
-					homeland:{
-						name:'亲情家园',
-						imgUrl:'../../static/imgs/-jiaren@2x.png',
-						url:''
-						},
-					donate:{name:'爱心捐赠',
-						imgUrl:'../../static/imgs/gongyi@2x.png',
-						url:''
-						},
-					topUp:{
-						name:'账号充值',
-						imgUrl:'../../static/imgs/chongzhi@2x.png',
-						url:''
-						}
-				}
 			}
 		},
 		methods: {
@@ -213,18 +165,112 @@
 					this.centerBox = data.height
 					// console.log('centerBox：'+this.centerBox)
 				}).exec();
+			},
+			//控制图标配置
+			showLineA(canvasId,chartData){
+				canvaLineA = new uCharts({
+					$this:_this,
+					canvasId: canvasId,
+					type: 'line',
+					fontSize:11,
+					padding:[15,20,0,15],
+					legend:{
+						show:true,
+						padding:5,
+						lineHeight:11,
+						margin:0,
+					},
+					dataLabel:true,
+					dataPointShape:true,
+					background:'#FFFFFF',
+					// pixelRatio:_this.pixelRatio,
+					categories: chartData.categories,
+					series: chartData.series,
+					animation: true,
+					xAxis: {
+						type:'grid',
+						gridColor:'#CCCCCC',
+						gridType:'dash',
+						dashLength:8,
+						boundaryGap:'justify'
+					},
+					yAxis: {
+						gridType:'dash',
+						gridColor:'#CCCCCC',
+						dashLength:10,
+						splitNumber:6,
+						format:(val)=>{return val.toFixed(0)}
+					},
+					width: _this.cWidth*_this.pixelRatio,
+					height: _this.cHeight*_this.pixelRatio,
+					extra: {
+						line:{
+							type: 'curve'
+						}
+					}
+				});
+				//下面是默认选中索引
+				let cindex=3;
+				//下面是自定义文案
+				// let textList=[{text:'我是一个标题',color:null},{text:'自定义3：值3',color:'#f04864'}];
+				let textList=[];
+				//下面是event的模拟,tooltip的Y坐标值通过这个mp.changedTouches[0].y控制
+				let tmpevent={mp:{changedTouches:[{x: 0, y: 80}]}};
+				setTimeout(()=>{
+					canvaLineA.showToolTip( tmpevent , {
+						index:cindex,
+						textList:textList
+					});
+				},200)
+			},
+			//点击切换内容
+			touchLineA(e) {
+				canvaLineA.touchLegend(e);
+				canvaLineA.showToolTip(e, {
+					format: function (item, category) {
+						return category + ' ' + item.name + ':' + item.data + '单'
+					}
+				});
+			},	
+			//切换图表展示内容
+			changeChart(e){
+				if(e == 'year'){
+					this.showLineA("canvasLineA",this.chartsData)	
+				}else if(e == 'all'){
+					this.showLineA("canvasLineA",this.chartsDataAll)	
+				}
 			}
+				
 		},
+		
 		created() {
 			// this.commonColor = this.commonColorAll
 			//获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
 			
+			_this = this;
+			// #ifdef MP-ALIPAY
+			uni.getSystemInfo({
+				success: function (res) {
+					if(res.pixelRatio>1){
+						//正常这里给2就行，如果pixelRatio=3性能会降低一点
+						//_this.pixelRatio =res.pixelRatio;
+						_this.pixelRatio =2;
+					}
+				}
+			});
+			//#endif
+			this.cWidth=uni.upx2px(680);
+			this.cHeight=uni.upx2px(400);
+			
+			
 		},
 		mounted() {
+			
 			this.getHeightFun()
-			
-			
+		
+			this.showLineA("canvasLineA",this.chartsData)	
+		
 		},
 		watch:{
 			//监听
@@ -244,7 +290,7 @@
 
 <style lang="scss">
 	.container {
-		// height: 100%;
+		min-height: 100%;
 		background: #ebeadf;
 		.showTitleBox {
 			width: 96%;
@@ -265,19 +311,20 @@
 				font-size: 18px;
 			}
 			.rightBox{
+				font-size: 16px;
 				position: fixed;
 				right: 20upx;
-				width: 48upx;
-				height: 48upx;
-				image{
-					width: 100%;
-					height: 100%;
-				}
+				// width: 48upx;
+				// height: 48upx;
+				// image{
+				// 	width: 100%;
+				// 	height: 100%;
+				// }
 			}
 		}
 		.headBox{
 			padding-top:100upx ;
-			height: 280upx;
+			// height: 280upx;
 			display: flex;
 			flex-direction: column;
 			// justify-content: space-between;
@@ -303,17 +350,17 @@
 						display: flex;
 						flex-direction: column;
 						justify-content: center;
+						padding-left:26upx ;
 						.username{
 							font-size:16px;
 							// font-weight: 600;
-							margin: 0 0 10upx 26upx;
 						}
 						.tagBox{
 							font-size:12px;
 							min-width: 100upx;
 							height: 36upx;
 							display: flex;
-							margin-left: 26upx;
+							margin: 8upx 0;
 							// align-items: center;
 							// align-self: flex-start;
 							// padding: 0 15upx;
@@ -323,6 +370,7 @@
 							.common{
 								border-radius: 6upx;
 								padding: 0 14upx;
+								
 							}
 							.tag_1{
 								background-color: #FEB34A;
@@ -335,6 +383,10 @@
 								color: #2284FF;
 								border: 1px solid #2284FF;
 							}
+						}
+						.companyName{
+							font-size:12px;
+							color: #878BA1;
 						}
 					}
 				}
@@ -357,10 +409,10 @@
 			.headBottomBox{
 				display: flex;
 				justify-content: space-around;
-				margin: 40upx 0 0 26upx;
+				margin: 40upx 2% 0;
 				background-color: #ffe300;
 				padding: 20upx;
-				border-radius: 16upx 0 0 16upx;
+				border-radius: 16upx;
 				.contentBox{
 					display: flex;
 					align-items: center;
@@ -378,46 +430,35 @@
 		}
 		// 中间内容
 		.centerBox{
-			height: 220upx;
+			// height: 220upx;
 			background: #fff;
-			border-radius:20upx 20upx 0 0;
-			padding: 24upx 36upx;
+			border-radius:16upx;
+			padding: 20upx;
+			margin:30upx 2% 0;
 			.title{
 				font-size:16px;
-				font-weight:600;
 				color:#282828;
-			}
-			.centerNavBox{
 				display: flex;
 				justify-content: space-between;
-				margin-top:40upx ;
-				.navBox{
+				align-items: center;
+				.rightBox{
 					display: flex;
-					flex-direction: column;
-					align-items: center;
-					.imgBox{
-						width: 60upx;
-						height: 60upx;
-						background: #fff300;
-						border-radius: 50%;
-						margin-bottom: 24upx;
-						display: flex;
-						justify-content: center;
-						align-items: center;
-						image{
-							width: 50%;
-							height: 50%;
-						}
-					}
-					.nameBox{
-						width: 100upx;
-						font-size:12px;
-						font-weight:400;
-						color: #878BA1;
-						text-align: center;
-					}
+					justify-content: space-between;
+					font-size: 12px;
+					color: #666666;
+					width: 40%;
 				}
 			}
+			.chart{
+				width:680upx;
+				height: 400upx;
+				.charts {
+					width:680upx;
+					height: 400upx;
+					background-color: #FFFFFF;
+				}
+			}
+			
 			
 		}
 		

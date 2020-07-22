@@ -1,15 +1,15 @@
 {
-  "name": "oldpeople",
-  "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
-  "dependencies": {
-	"uview-ui": "file:uview-ui"
-  },
-  "devDependencies": {},
-  "scripts": {
-	"test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC"
+ "name": "oldpeople",
+ "version": "1.0.0",
+ "description": "",
+ "main": "main.js",
+ "dependencies": {
+  "uview-ui": "file:uview-ui"
+ },
+ "devDependencies": {},
+ "scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1"
+ },
+ "author": "",
+ "license": "ISC"
 }
