@@ -62,15 +62,18 @@
 				</view>
 				<view class="rightBox">
 					<view class="year" @click="changeChart('year')">
-						2019年
-						<image src="../../static/imgs/xx_1.png" style="width: 14upx;height: 10upx;" mode=""></image>
+						<!-- 2019年 -->
+						<picker @change="changeYear" :value="index" :range="chartsDataAll.categories">
+							<view class="uni-input">{{chartsDataAll.categories[index] + '年' }}</view>
+						</picker>
+						<image src="../../static/imgs/xx_1.png" style="width: 14upx;height: 10upx;margin-left: 4upx;" mode=""></image>
 					</view>
 					<view class="all" @click="changeChart('all')">
 						全部
 					</view>
 				</view>
 			</view>
-			
+			<!-- 展示图表 -->
 			<view class="chart">
 				<!--#ifdef MP-ALIPAY -->
 				<!-- <canvas canvas-id="canvasLineA" id="canvasLineA" class="charts" :width="cWidth*pixelRatio" :height="cHeight*pixelRatio" :style="{'width':cWidth+'px','height':cHeight+'px'}" @touchstart="touchLineA"></canvas> -->
@@ -78,6 +81,25 @@
 				<!--#ifndef MP-ALIPAY -->
 				<canvas canvas-id="canvasLineA" id="canvasLineA" class="charts" @touchstart="touchLineA"></canvas>
 				<!--#endif-->
+			</view>
+			
+		</view>
+		
+		<!-- 工作数据 -->
+		<view class="workData">
+			<!-- 总单数 -->
+			<view class="gross">
+				累计完成订单数量 <text class="number">{{' ' + completeSum }}</text>
+			</view>
+			
+			<!-- 评价详情 -->
+			<view class="evaluateDtl">
+				<view class="title">评价详情</view>
+				<view class="listBox">
+					<view class="" v-for="(item,index) in evaluateDtlList" :key='index'>
+						{{ item.name }}<text>{{ item.grade }}</text>分
+					</view>
+				</view>
 			</view>
 		</view>
 		
@@ -103,12 +125,11 @@
 			return {
 				userInfo:'',		//用户信息
 				headPortraitDefault:'../../static/imgs/default_touxiang.png',  //默认头像
-				functionListHeight:200,
-				headBox:0,
-				centerBox:0,
-				cWidth:'',
-				cHeight:'',
+				cWidth:'',		//图表
+				cHeight:'',		//图表
 				pixelRatio:1,
+				index:0,		//用于时间选择
+				completeSum:0,	//完成总数
 				headList:{
 					collect:{
 						name:'好评',
@@ -123,18 +144,41 @@
 						number:9
 					}
 				},
+				evaluateDtlList:[
+					{
+						name:'相应速度',
+						grade:4.6
+					},{
+						name:'服务效率',
+						grade:4.6
+					},{
+						name:'专业程度',
+						grade:4.6
+					}
+				],
 				
-				chartsData:{
+				chartsData:[
+					{
 					categories:["1月","2月","3月","4月","5月","6月","7月","8月","9月","11月","12月"],
-					series:[
-						{name:"累计完成","data":[100,80,95,150,112,132,122,422]}
-					]
-				},
+					series:[{
+						name:"累计完成",
+						data:[100,80,95,150,112,132,122,422],
+						}]
+					},
+					{
+					categories:["1月","2月","3月","4月","5月","6月","7月","8月","9月","11月","12月"],
+					series:[{
+						name:"累计完成",
+						data:[23,180,55,56,153,101,122,320,110,],
+						}]
+					}
+				],
 				chartsDataAll:{
-					categories:["2013","2014","2015","2016","2017","2018","2019","2020"],
-					series:[
-						{name:"累计完成","data":[100,80,95,150,182,132,122,233]}
-					]
+					categories:["2020","2019","2018"],
+					series:[{
+						name:"累计完成",
+						data:[231,210,642],
+						}]
 				},
 				
 			}
@@ -154,17 +198,6 @@
 						url:res
 					})
 				}
-			},
-			async getHeightFun(){
-				//获取元素高度
-				uni.createSelectorQuery().in(this).select('.headBox').boundingClientRect(data => {
-					this.headBox = data.height
-					// console.log('headBox：'+this.headBox)
-				}).exec();
-				await uni.createSelectorQuery().in(this).select('.centerBox').boundingClientRect(data => {
-					this.centerBox = data.height
-					// console.log('centerBox：'+this.centerBox)
-				}).exec();
 			},
 			//控制图标配置
 			showLineA(canvasId,chartData){
@@ -235,10 +268,19 @@
 			//切换图表展示内容
 			changeChart(e){
 				if(e == 'year'){
-					this.showLineA("canvasLineA",this.chartsData)	
+					this.changeYear()
+					this.showLineA("canvasLineA",this.chartsData[this.index])	
 				}else if(e == 'all'){
 					this.showLineA("canvasLineA",this.chartsDataAll)	
 				}
+			},
+			//切换时间
+			changeYear(e){
+				if(e){
+					this.index = e.target.value
+					this.showLineA("canvasLineA",this.chartsData[this.index])
+				}
+				
 			}
 				
 		},
@@ -266,24 +308,15 @@
 			
 		},
 		mounted() {
-			
-			this.getHeightFun()
-		
-			this.showLineA("canvasLineA",this.chartsData)	
-		
+			//显示图表 传入（图表名，图表数据）
+			this.showLineA("canvasLineA",this.chartsData[this.index])	
+			//计算总量
+			this.chartsDataAll.series[0].data.map(res=>{
+				this.completeSum += res
+			})
 		},
 		watch:{
-			//监听
-			centerBox:function(){
-				var footerBar = uni.getStorageSync('footerBarHeight')
-				// 获取设备信息
-				uni.getSystemInfo({
-					success:(res)=>{
-						this.functionListHeight = res.windowHeight - this.headBox - this.centerBox - footerBar ;
-						// console.log(this.headBox ,this.centerBox ,footerBar)
-					}
-				})
-			}
+			
 		}
 	}
 </script>
@@ -447,6 +480,10 @@
 					font-size: 12px;
 					color: #666666;
 					width: 40%;
+					.year{
+						display: flex;
+						align-items: center;
+					}
 				}
 			}
 			.chart{
@@ -458,8 +495,38 @@
 					background-color: #FFFFFF;
 				}
 			}
-			
-			
+		}
+		
+		// 工作数据
+		.workData{
+			background: #fff;
+			border-radius:16upx;
+			padding: 20upx;
+			margin:30upx 2% 0;
+			font-size: 16px;
+			color: #2f2f2f;
+			.gross{
+				margin-bottom:28upx ;
+				.number{
+					font-size: 20px;
+					color: #0a3ab3
+				}
+			}
+			.evaluateDtl{
+				.title{
+					margin-bottom:16upx ;
+				}
+				.listBox{
+					display: flex;
+					justify-content: space-between;
+					font-size: 14px;
+					color: #707070;
+					text{
+						font-size: 16px;
+						color: #0a3ab3;
+					}
+				}
+			}
 		}
 		
 		// 分割线
