@@ -15,7 +15,12 @@ import { http } from '@/common/service.js'
 	//})
  
  */
-var tokens = uni.getStorageSync('token')
+var tokens;
+
+if(uni.getStorageSync){
+	tokens = uni.getStorageSync('token')
+}
+	
 
 
 // 获取验证码

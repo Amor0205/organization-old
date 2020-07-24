@@ -2,9 +2,9 @@
   <!-- 首页 -->
 <template>
 	<view class="container" :style="{ height:containerHeight + 'px' }" >
-		<family v-if="actives == 0" class="moduleBox" :SelectFamily = 'familyInfo' ></family>
-		<live v-if="actives == 1" class="moduleBox" ></live>
-		<shopCar v-if="actives == 2" class="moduleBox" :scrollTopChild='scrollTopData' ></shopCar>
+		<one v-if="actives == 0" class="moduleBox" :SelectFamily = 'familyInfo' ></one>
+		<two v-if="actives == 1" class="moduleBox" ></two>
+		<three v-if="actives == 2" class="moduleBox" :scrollTopChild='scrollTopData' ></three>
 		<mine v-if="actives == 3" class="moduleBox" :scrollTopChild='scrollTopData'></mine>
 		
 		<footerBar ref='footerBar' class='footerBar' @childActive = "activeData"></footerBar>
@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import family from '../../components/footer/family.vue'				//引入家人组件 family
-import live from '../../components/footer/live.vue'					//引入生活组件 live
-import shopCar from '../../components/footer/shopCar.vue'			//引入购物车组件 shopCar
+import one from '../../components/footer/one.vue'					//引入组件 one
+import two from '../../components/footer/two.vue'					//引入组件 two
+import three from '../../components/footer/three.vue'				//引入组件 three
 import mine from '../../components/footer/mine.vue'					//引入我的航组件 mine
 import footerBar from '../../components/footer/footerBar.vue'		//引入底部导航组件 footerBar
 
@@ -40,9 +40,9 @@ import footerBar from '../../components/footer/footerBar.vue'		//引入底部导
 		},
 		components:{
 			footerBar,
-			family,
-			shopCar,
-			live,
+			one,
+			three,
+			two,
 			mine
 		},
 		methods: {
