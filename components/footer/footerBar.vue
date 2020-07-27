@@ -95,6 +95,7 @@
 		font-size: 24upx;
 		position: fixed;
 		bottom: 0;
+		z-index: 99;
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
