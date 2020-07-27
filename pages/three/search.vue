@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		更多
+		
 	</view>
 </template>
 

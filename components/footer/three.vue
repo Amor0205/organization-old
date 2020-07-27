@@ -66,9 +66,9 @@
 						
 					</view>
 					<view class="bottomBox">
-						<view class="buttonBox">
-							
-						</view>
+						<view class="buttonBox">提醒上门</view>
+						<view class="buttonBox" @click="goToPage('map')">地址导航</view>
+						<view class="buttonBox">电话联系</view>
 					</view>
 				</view>	
 			</view>
@@ -130,9 +130,14 @@ export default {
 		goToPage(e){
 			switch (e){
 				case 'search':
-					// uni.navigateTo({
-					// 	url:'../../pages/three/search'
-					// })
+					uni.navigateTo({
+						url:'../../pages/three/search'
+					})
+					break;
+				case 'map':
+					uni.navigateTo({
+						url:'../../pages/map'
+					})
 					break;
 				default:
 					break;
@@ -158,7 +163,7 @@ export default {
 		setTimeout(res=>{
 				uni.createSelectorQuery().in(this).select('.titleBox').boundingClientRect(data => {
 				this.topGapHeight = data.height
-				console.log(this.topGapHeight)
+				// console.log(this.topGapHeight)
 			}).exec();
 		})
 		
@@ -292,6 +297,17 @@ export default {
 							width: 70%;
 							color: #282828;
 						}
+					}
+				}
+				.bottomBox{
+					display: flex;
+					justify-content: flex-end;
+					.buttonBox{
+						color: #666666;
+						border: 1upx solid #666666;
+						border-radius: 40upx;
+						padding: 0 24upx;
+						margin-left: 20upx;
 					}
 				}
 			}
