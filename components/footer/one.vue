@@ -14,7 +14,7 @@
 				<view class="topBox">
 					<view class="leftBox" @click="showPopup">
 						<text>查看全部</text>
-						<image src="../../static/imgs/xx.png" style="width: 14upx;height: 10upx;margin-left: 4upx;" mode=""></image>
+						<image src="../../static/imgs/xx.png" style="width: 14upx;height: 12upx;margin-left: 4upx;" mode=""></image>
 					</view>
 					<view class="rightBox">
 						{{ locationList[locationIndex] }}
@@ -67,8 +67,8 @@
 					</view>
 					<view class="bottomBox">
 						<view class="buttonBox">提醒上门</view>
-						<view class="buttonBox" @click="goToPage('map')">地址导航</view>
-						<view class="buttonBox">电话联系</view>
+						<view class="buttonBox" @click="goToPage('map',item)">地址导航</view>
+						<view class="buttonBox" @click="goToPage('makePhone',item)">电话联系</view>
 					</view>
 				</view>	
 			</view>
@@ -95,6 +95,7 @@ export default {
 					endTime:1,
 					object:'萧蔷',
 					appointTime:'2020年02月02日 23:22',
+					phoneNum:13668281737,
 					project:'推拿',
 					remark:'请准时到',
 					serviceSite:"四川省眉山市彭山区凤鸣镇丽景苑二栋二单元2204"
@@ -103,6 +104,7 @@ export default {
 					endTime:1,
 					object:'萧蔷',
 					appointTime:'2020年02月02日 23:22',
+					phoneNum:13668281737,
 					project:'推拿',
 					remark:'请准时到',
 					serviceSite:"四川省眉山市彭山区凤鸣镇丽景苑二栋二单元2204"
@@ -111,6 +113,7 @@ export default {
 					endTime:1,
 					object:'萧蔷',
 					appointTime:'2020年02月02日 23:22',
+					phoneNum:13668281737,
 					project:'推拿',
 					remark:'请准时到',
 					serviceSite:"四川省眉山市彭山区凤鸣镇丽景苑二栋二单元2204"
@@ -129,7 +132,7 @@ export default {
 		
 	},
 	methods: {
-		goToPage(e){
+		goToPage(e,data){
 			switch (e){
 				case 'search':
 					uni.navigateTo({
@@ -137,9 +140,15 @@ export default {
 					})
 					break;
 				case 'map':
-					uni.navigateTo({
-						url:'../../pages/map'
-					})
+					// uni.navigateTo({
+					// 	url:'../../pages/map'
+					// })
+					this.getLocationFun(data.serviceSite)
+					break;
+				case 'makePhone':
+					uni.makePhoneCall({
+					    phoneNumber: JSON.stringify(data.phoneNum) 
+					});
 					break;
 				default:
 					break;
@@ -154,6 +163,90 @@ export default {
 		// 切换地点
 		changeLocation(index){
 			this.locationIndex = index;
+		},
+		//获取地址经纬度
+		getLocationFun(site){
+			uni.request({
+			    url: 'http://restapi.amap.com/v3/geocode/geo', //仅为示例，并非真实接口地址。
+			    data: {
+			        key: '698bd4e0ca6ef47bd4f84da21cc4d8fd',
+					s:'rsv3',
+					city:35,
+					address:site
+			    },
+			    header: {
+			        
+			    },
+			    success: (res) => {
+					var locations = res.data.geocodes[0].location
+					var longitude = locations.match(/(\S*),/)[1] //经度
+					var latitude = locations.match(/,(\S*)/)[1] 	//纬度
+					this.toMapAPP(longitude,latitude,site)
+			    }
+			});
+		},
+		//调起高德并定位
+		toMapAPP(longitude,latitude,name){
+			let url = "";
+			if (plus.os.name == "Android") {//判断是安卓端
+				plus.nativeUI.actionSheet({//选择菜单
+					title: "选择地图应用",
+					cancel: "取消",
+					buttons: [{title: "腾讯地图"},{title: "百度地图"}, {title: "高德地图"}]
+				}, function(e) {
+					switch (e.index) {
+						//下面是拼接url,不同系统以及不同地图都有不同的拼接字段
+						case 1:
+							//注意referer=xxx的xxx替换成你在腾讯地图开发平台申请的key
+							url = `qqmap://map/geocoder?coord=${latitude},${longitude}&referer=xxx`;
+							break;
+						case 2:
+							url = `baidumap://map/marker?location=${latitude},${longitude}&title=${name}&coord_type=gcj02&src=andr.baidu.openAPIdemo`;
+							break;
+						case 3:
+							url = `androidamap://viewMap?sourceApplication=appname&poiname=${name}&lat=${latitude}&lon=${longitude}&dev=0`;
+							break;
+						default:
+							break;
+					}
+					if (url != "") {
+						url = encodeURI(url);
+						//plus.runtime.openURL(url,function(e){})调起手机APP应用
+						plus.runtime.openURL(url, function(e) {
+							plus.nativeUI.alert("本机未安装指定的地图应用");
+						});
+					}
+				})
+			} else {
+				// iOS上获取本机是否安装了百度高德地图，需要在manifest里配置
+				// 在manifest.json文件app-plus->distribute->apple->urlschemewhitelist节点下添加
+				//（如urlschemewhitelist:["iosamap","baidumap"]）  
+				plus.nativeUI.actionSheet({
+					title: "选择地图应用",
+					cancel: "取消",
+					buttons: [{title: "腾讯地图"},{title: "百度地图"}, {title: "高德地图"}]
+				}, function(e) {
+					switch (e.index) {
+						case 1:
+							url = `qqmap://map/geocoder?coord=${latitude},${longitude}&referer=xxx`;
+							break;
+						case 2:
+							url = `baidumap://map/marker?location=${latitude},${longitude}&title=${name}&content=${name}&src=ios.baidu.openAPIdemo&coord_type=gcj02`;
+							break;
+						case 3:
+							url = `iosamap://viewMap?sourceApplication=applicationName&poiname=${name}&lat=${latitude}&lon=${longitude}&dev=0`;
+							break;
+						default:
+							break;
+					}
+					if (url != "") {
+						url = encodeURI(url);
+						plus.runtime.openURL(url, function(e) {
+							plus.nativeUI.alert("本机未安装指定的地图应用");
+						});
+					}
+				})
+			}
 		}
 		
 	},
@@ -173,9 +266,7 @@ export default {
 		
 	},
 	watch:{
-		topGapHeight:function(){
-			
-		}
+		
 	}
 	
 	
