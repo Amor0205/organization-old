@@ -32,21 +32,21 @@ export function getVerificationCode(phone) {
 	})
 }
 
-// 获取用户信息
-export function getUserInfo(token) {
-	return http.get('/consumer/getInfo', {
+
+// 获取sos记录
+export function get_sos_list(phone) {
+	return http.get('/hard/alarmLog/list', {
 		params: {
-			
+			phone
 		},
 		header:{
-			Authorization:token
+			Authorization:'Bearer ' + tokens
 		}
 	})
 }
 
-
-// 获取sos记录
-export function get_sos_list(phone) {
+// 获取位置经纬度记录
+export function getLocationFun(phone) {
 	return http.get('/hard/alarmLog/list', {
 		params: {
 			phone
