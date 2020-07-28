@@ -78,6 +78,8 @@
 </template>
 
 <script>
+	const key = 'c6ee414451d3d33edb092eaee05f2d0f';
+	const amapFile = require('../../common/amap-uni.js'); //先引入这个sdk
 export default {
 	//获取到顶部高度数据
 	props:['scrollTopChild'],
@@ -165,7 +167,9 @@ export default {
 				this.topGapHeight = data.height
 				// console.log(this.topGapHeight)
 			}).exec();
-		})
+		});
+		
+		
 		
 	},
 	watch:{
