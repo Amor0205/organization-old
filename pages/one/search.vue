@@ -1,35 +1,23 @@
 <template>
 	<view class="containerBox" >
-		<!-- 蒙版 -->
-		<view class="mask" v-show="popupShow" @click="showPopup" @touchmove.stop.prevent='moveHandle'></view>
 		<!-- 头部 -->
 		<view class="titleBox">
-			<view class="inputBox" @click="goToPage('search')">
+			<view class="imgBox" @click="goToPage('goBack')">
+				<image src="../../static/imgs/goback.png" mode=""></image>
+			</view>
+			<view class="inputBox">
 				<view class="centerBox">
 					<image src="../../static/imgs/sousuo@2x.png" mode=""></image>
-					<text>请输入你想搜索的内容</text>
-				</view>
-			</view>
-			<view class="controlBox">
-				<view class="topBox">
-					<view class="leftBox" @click="showPopup">
-						<text>查看全部</text>
-						<image src="../../static/imgs/xx.png" style="width: 14upx;height: 12upx;margin-left: 4upx;" mode=""></image>
-					</view>
-					<view class="rightBox">
-						{{ locationList[locationIndex] }}
-					</view>
-				</view>
-
-				<view class="bottomBox" v-show="popupShow">
-					<text class="title">
-						城区筛选
-					</text>
-					<view class="locationBox">
-						<view class="locationList" @click="changeLocation(index)" :class="index == locationIndex?'active':''" v-for="(item,index) in locationList" :key='index'>
-							{{ item }}
-						</view>
-					</view>
+					<input 
+					style="color: #282828;width: 400upx;"
+					placeholder="请输入你想搜索的内容" 
+					placeholder-style="font-size:28upx" 
+					confirm-type='search'
+					v-model="inputValue"
+					@input="inputFun"
+					@confirm="confirm"
+					></input>
+					<image @click="deleteValue" v-if="showDeletd" src="../../static/imgs/delete.png" mode=""></image>
 				</view>
 			</view>
 		</view>
@@ -87,40 +75,39 @@ export default {
 		return {
 			scrollTopMsg:0,			//据顶部高度
 			commonColor: '',		//全局颜色
-			popupShow:false,		//
 			topGapHeight:0,			//顶部间隙
+			inputValue:'',			//input数据
+			showDeletd:false,
 			orderList:[
-				{
-					orderNumber:'DABH23244743442342',
-					endTime:1,
-					object:'萧蔷',
-					appointTime:'2020年02月02日 23:22',
-					phoneNum:13668281737,
-					project:'推拿',
-					remark:'请准时到',
-					serviceSite:"四川省眉山市彭山区凤鸣镇丽景苑二栋二单元2204"
-				},{
-					orderNumber:'DABH23244743442342',
-					endTime:1,
-					object:'萧蔷',
-					appointTime:'2020年02月02日 23:22',
-					phoneNum:13668281737,
-					project:'推拿',
-					remark:'请准时到',
-					serviceSite:"四川省眉山市彭山区凤鸣镇丽景苑二栋二单元2204"
-				},{
-					orderNumber:'DABH23244743442342',
-					endTime:1,
-					object:'萧蔷',
-					appointTime:'2020年02月02日 23:22',
-					phoneNum:13668281737,
-					project:'推拿',
-					remark:'请准时到',
-					serviceSite:"四川省眉山市彭山区凤鸣镇丽景苑二栋二单元2204"
-				},
+				// {
+				// 	orderNumber:'DABH23244743442342',
+				// 	endTime:1,
+				// 	object:'萧蔷',
+				// 	appointTime:'2020年02月02日 23:22',
+				// 	phoneNum:13668281737,
+				// 	project:'推拿',
+				// 	remark:'请准时到',
+				// 	serviceSite:"四川省眉山市彭山区凤鸣镇丽景苑二栋二单元2204"
+				// },{
+				// 	orderNumber:'DABH23244743442342',
+				// 	endTime:1,
+				// 	object:'萧蔷',
+				// 	appointTime:'2020年02月02日 23:22',
+				// 	phoneNum:13668281737,
+				// 	project:'推拿',
+				// 	remark:'请准时到',
+				// 	serviceSite:"四川省眉山市彭山区凤鸣镇丽景苑二栋二单元2204"
+				// },{
+				// 	orderNumber:'DABH23244743442342',
+				// 	endTime:1,
+				// 	object:'萧蔷',
+				// 	appointTime:'2020年02月02日 23:22',
+				// 	phoneNum:13668281737,
+				// 	project:'推拿',
+				// 	remark:'请准时到',
+				// 	serviceSite:"四川省眉山市彭山区凤鸣镇丽景苑二栋二单元2204"
+				// },
 			],
-			locationList:['城西社区','凤鸣社区','西青社区','青羊区','郫都区'],
-			locationIndex:0,
 		};
 	},
 	
@@ -133,38 +120,39 @@ export default {
 	},
 	methods: {
 		goToPage(e,data){
-			
 			switch (e){
-				case 'search':
-					uni.navigateTo({
-						url:'../../pages/one/search'
-					})
+				case 'goBack':
+					uni.navigateBack()
 					break;
 				case 'map':
-					// uni.navigateTo({
-					// 	url:'../../pages/map'
-					// })
 					this.getLocationFun(data.serviceSite)
 					break;
 				case 'makePhone':
-					uni.makePhoneCall({
-						phoneNumber: JSON.stringify(data.phoneNum) 
-					});
-				
+					// #ifndef APP-PLUS
+						uni.makePhoneCall({
+							phoneNumber: JSON.stringify(data.phoneNum) 
+						});
+					// #endif
 					break;
 				default:
 					break;
 			}
 		},
-		//控制popup的显示
-		showPopup(){
-			this.popupShow = !this.popupShow
+		//input的内容发生变化触发
+		inputFun(e){
+			this.inputValue.length == 0 ? this.showDeletd = false : this.showDeletd = true;
 		},
-		//处理蒙版显示时不允许屏幕滚动
-		moveHandle (){},
-		// 切换地点
-		changeLocation(index){
-			this.locationIndex = index;
+		//点击 X 清空输入框的数据
+		deleteValue(){
+			this.inputValue = "";
+			this.showDeletd = false;
+		},
+		//点击搜索触发
+		confirm(e){
+			if(this.inputValue.leng != 0){
+				console.log(e.target.value)
+				uni.hideKeyboard();//隐藏软键盘
+			}
 		},
 		//获取地址经纬度
 		getLocationFun(site){
@@ -278,27 +266,12 @@ export default {
 
 <style lang="scss">
 
-.active{
-	border: 1px #FFE300 solid !important;
-	background: #FFFBDE !important;
-	color: #FF9500 !important;
-	
-}
-	
 .containerBox {
 	font-size: 14px;
 	line-height: 24px;
 	// height: 100%;
 	position: relative;
-	padding-bottom: 140upx;
-	//蒙版
-	.mask{
-		width: 100%;
-		height: 100%;
-		background: rgba($color: #626262, $alpha: 0.5);
-		position: absolute;
-		z-index: 299;
-	}
+	padding-bottom: 20upx;
 	.titleBox {
 		padding: 0 2%;
 		padding-top:100upx ;
@@ -307,6 +280,17 @@ export default {
 		position: fixed;
 		background: #FFFFFF;
 		z-index: 399;
+		display: flex;
+		align-items: center;
+		.imgBox{
+			width: 50upx;
+			height: 40upx;
+			margin-right:20upx ;
+			image{
+				width: 100%;
+				height: 100%;
+			}
+		}
 		.inputBox{
 			width: 100%;
 			background: #E8E8E8;
@@ -318,59 +302,20 @@ export default {
 			.centerBox{
 				display: flex;
 				align-items: center;
+				// justify-content: space-between;
 				color: #a9a9a9;
+				width: 75%;
 				image{
 					width: 32upx;
 					height: 32upx;
 					margin-right:16upx;
 				}
 			}
-		}
-		.controlBox{
-			.topBox{
-				margin-top: 40upx;
-				padding-bottom:20upx ;
-				display: flex;
-				justify-content: space-between;
-				.leftBox{
-					display: flex;
-					align-items: center;
-				}
-				.rightBox{
-					color: #4d4d4d;
-				}
-			}
-			.bottomBox{
-				padding-bottom: 40upx;
-				.title{
-					display: inline-block;
-					margin-bottom: 20upx;
-				}
-				.locationBox{
-					display: flex;
-					flex-wrap: wrap;
-					.locationList{
-						margin:0 0 20upx 2.5%;
-						width: 30%;
-						line-height: 60upx;
-						display: flex;
-						align-items: center;
-						justify-content: center;
-						border: 1px #F2F2F2 solid;
-						border-radius: 4px;
-						background: #fefefe;
-						color: #878787;
-					}
-				}
-			}
-			
-		}
-		
-		
+		}	
 	}
 	
 	.contentBox{
-		padding-top: 272upx;
+		padding-top: 200upx;
 		.orderListBox{
 			.outerListBox{
 				padding: 20upx 2%;

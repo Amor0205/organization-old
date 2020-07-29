@@ -28,42 +28,44 @@
 		<view class="particular">
 			<view class="cylinder">
 			</view>
-			<view class="specific" v-for="(item,index) in orderList" :key='index'>
-				<view class="orderList">
-					<view class="orderListTop">
-						<view class="orderListLeft">
-							<image :src="item.imgs" mode="" class="orderListimgs"></image>
-						</view>
-						<view class="orderListRight">
-							<view class="name">
-								{{item.name}}
+			<view class="information">
+				<view class="specific" v-for="(item,index) in orderList" :key='index'>
+					<view class="orderList">
+						<view class="orderListTop">
+							<view class="orderListLeft">
+								<image :src="item.imgs" mode="" class="orderListimgs"></image>
 							</view>
-							<view class="serviceSite">
-								{{item.serviceSite}}
+							<view class="orderListRight">
+								<view class="name">
+									{{item.name}}
+								</view>
+								<view class="serviceSite">
+									{{item.serviceSite}}
+								</view>
+							</view>
+						</view>
+
+						<view class="centerBox">
+							<view class="listBox">
+								<view class="leftBox">服务内容</view>
+								<view class="rightBox">{{ item.genre }}</view>
+							</view>
+							<view class="listBox">
+								<view class="leftBox">约定服务时间</view>
+								<view class="rightBox">{{ item.appointTime }}</view>
+							</view>
+							<view class="listBox">
+								<view class="leftBox">商品备注</view>
+								<view class="rightBox">{{ item.remark }}</view>
+							</view>
+							<view class="listBox">
+								<view class="leftBox">订单编号</view>
+								<view class="rightBox">{{ item.orderNumber }}</view>
 							</view>
 						</view>
 					</view>
 
-					<view class="centerBox">
-						<view class="listBox">
-							<view class="leftBox">服务内容</view>
-							<view class="rightBox">{{ item.genre }}</view>
-						</view>
-						<view class="listBox">
-							<view class="leftBox">约定服务时间</view>
-							<view class="rightBox">{{ item.appointTime }}</view>
-						</view>
-						<view class="listBox">
-							<view class="leftBox">商品备注</view>
-							<view class="rightBox">{{ item.remark }}</view>
-						</view>
-						<view class="listBox">
-							<view class="leftBox">订单编号</view>
-							<view class="rightBox">{{ item.orderNumber }}</view>
-						</view>
-					</view>
 				</view>
-
 			</view>
 			<!-- 服务项目记录 -->
 			<view class="baseBox">
@@ -119,9 +121,12 @@
 				</view>
 			</view>
 
-			<view class="refer">
-				提交服务
+			<view class="refer" @click="start">
+				开始服务
 			</view>
+			<!-- <view class="refer" >
+				提交服务
+			</view> -->
 		</view>
 
 	</view>
@@ -148,6 +153,7 @@
 					remark: '请尽量下午上门，谢谢。',
 					serviceSite: "四川省眉山市彭山区凤鸣镇丽景苑二栋二单元2204"
 				}],
+			
 
 
 			};
@@ -160,10 +166,13 @@
 		watch: {
 
 		},
-		methods: {},
-		created() {
-
+		methods: { 
+			// 开始服务按钮
+			start() {
+			
+			}
 		},
+
 		mounted() {
 			setTimeout(res => {
 				uni.createSelectorQuery().in(this).select('.headBox').boundingClientRect(data => {
@@ -186,7 +195,7 @@
 
 <style lang="scss">
 	.box {
-		padding-bottom: 450upx;
+		padding-bottom: 420upx;
 
 		.headBox {
 			width: 94%;
@@ -236,71 +245,74 @@
 			background: #D6C200;
 			margin: 0 auto;
 			border-radius: 30rpx;
-			box-shadow: darkgrey 0px 0px 1px 2px; //边框阴影
-			z-index: 999;
 		}
+		.information {
+			// margin-top: -10rpx;
+			position: relative;
+			top: -10rpx;
+			.specific {
+				width: 92%;
+				margin-top: -10rpx;
+				background: #f5f5f5;
+				margin: 0 auto;
+				box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 20px;
+				border-radius: 0rpx 0rpx 10rpx 10rpx ;
+				opacity: 1;
 
-		.specific {
-			width: 92%;
-			margin-top: -10rpx;
-			background: #f5f5f5;
-			margin: 0 auto;
-			box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 20px;
-			border-radius: 10rpx;
-			opacity: 1;
+				.orderList {
+					.orderListTop {
+						display: flex;
+						padding: 30rpx 0rpx 0rpx 20rpx;
 
-			.orderList {
-				.orderListTop {
-					display: flex;
-					padding: 30rpx 0rpx 0rpx 20rpx;
-
-					.orderListLeft {
-						width: 100rpx;
-						height: 100rpx;
-
-						.orderListimgs {
+						.orderListLeft {
 							width: 100rpx;
 							height: 100rpx;
+
+							.orderListimgs {
+								width: 100rpx;
+								height: 100rpx;
+							}
+						}
+
+						.orderListRight {
+							margin-left: 20rpx;
+
+							.name {
+								font-size: 36rpx;
+							}
+
+							.serviceSite {
+								font-size: 28rpx;
+								color: #878BA1;
+							}
 						}
 					}
 
-					.orderListRight {
-						margin-left: 20rpx;
+					.centerBox {
+						padding: 60rpx 0rpx 0rpx 20rpx;
 
-						.name {
-							font-size: 36rpx;
-						}
+						.listBox {
+							display: flex;
+							padding-bottom: 60upx;
 
-						.serviceSite {
-							font-size: 28rpx;
-							color: #878BA1;
+							.leftBox {
+								width: 35%;
+								color: #878BA1;
+								font-size: 28rpx;
+							}
+
+							.rightBox {
+								width: 70%;
+								color: #282828;
+								font-size: 28rpx;
+							}
 						}
 					}
+
 				}
-
-				.centerBox {
-					padding: 60rpx 0rpx 0rpx 20rpx;
-
-					.listBox {
-						display: flex;
-						padding-bottom: 60upx;
-
-						.leftBox {
-							width: 35%;
-							color: #878BA1;
-							font-size: 28rpx;
-						}
-
-						.rightBox {
-							width: 70%;
-							color: #282828;
-							font-size: 28rpx;
-						}
-					}
-				}
-
 			}
 		}
+
 	}
 
 	// 底部服务项目记录
