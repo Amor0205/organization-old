@@ -411,7 +411,7 @@ margin-top: 30rpx;
 			}
 	
 			.responsespeed {
-				font-size: 12rpx;
+				font-size: 24rpx;
 				color: #FEB34A;
 			}
 		}
