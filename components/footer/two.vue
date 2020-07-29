@@ -1,390 +1,379 @@
 <template>
 	<view class="box">
-		<view class="header " ref='header'>
-			<!-- 顶部搜索 -->
-			<view class="top flex a-align j-around">
-				<view class="flex j-content-c a-align">
-					<view class="beijing">
-						北京市
-					</view>
-					<view class="">
-						<image src="../../static/imgs/xx.png" mode="" class="image"></image>
-					</view>
+		<!-- 头部 -->
+		<view class="headBox">
+			<!-- 头部服务时间 -->
+			<view class="headBoxLeft">
+				<view class="serviceing">
+					正在服务中
 				</view>
-				<view class="">
-					<u-search placeholder="搜索" v-model="keyword" action-text='' height='80' class='search'></u-search>
-				</view>
-				<view class="left flex j-around  a-align">
-					<view class="name">
-						王秀宣
-					</view>
-					<view class="">
-						<image src="../../static/imgs/qiehuan.png" mode="" class="qiehuan"></image>
-					</view>
+				<view class="servicestate">
+					当前服务状态(已服务时间)
 				</view>
 			</view>
-			<!-- 五个分类 -->
-			<view class="five">
-				<view class="" v-for="(item,index) in daily" :key='index' @click="goToPage(item)">
-					<view class="icon" :style="{background:'linear-gradient(#e6cbd9, '+item.style.backgroundcolor+')' }" style="">
-						<image :src="item.imgs" mode="" class="imgs" :style="item.style"></image>
-					</view>
-					<view class="title" style=";">
-						{{item.title}}
-					</view>
+			<view class="headBoxright">
+				<view class="timer">
+					00
+				</view>
+				<view class="" style="line-height: 80rpx;">
+					:
+				</view>
+				<view class="timer">
+					00
 				</view>
 			</view>
-			<view class="note">
-			</view>
-		</view>
-		<!-- 底部 -->
-		<!-- <scroll-view > -->
-		<view class="health">
-			<!-- 广告 -->
-			<scroll-view  scroll-y="true" :style="{ height:listHeight + 'px' }" show-scrollbar='true'>
-				<view class="banners">
-					<image src="../../static/imgs/banner.png" mode="" class="banner"></image>
-				</view>
-				<!-- 公司推荐 -->
-				<view class="recommend" style="font-size:32rpx;margin: 48rpx 0rpx 0rpx 22rpx; font-weight:700;">
-					服务公司推荐
-				</view>
 
-				<view class="" style="margin-top: 48rpx;">
-									
-					<view v-for="(item,index) in synopsis" :key='index' class="synopsis">
-						<view class="">
-							<image :src="item.imgs" mode="" class="imgss"></image>
+		</view>
+		<!-- 服务详细情况 -->
+		<view class="particular">
+			<view class="cylinder">
+			</view>
+			<view class="specific" v-for="(item,index) in orderList" :key='index'>
+				<view class="orderList">
+					<view class="orderListTop">
+						<view class="orderListLeft">
+							<image :src="item.imgs" mode="" class="orderListimgs"></image>
 						</view>
-						<view class="right">
-							<view class="" style="font-size: 32rpx;">
+						<view class="orderListRight">
+							<view class="name">
 								{{item.name}}
 							</view>
-							<view class="comprehensive">
-								<view class="xingxing">
-									<image src="../../static/imgs/xingxing.png" mode="" style="width: 20rpx;height: 20rpx;"></image>
-								</view>
-								<view class="rank">
-									{{item.rank}}
-								</view>
-								<view class="sold">
-									已售{{item.sold}}+
-								</view>
-								<view class="evaluate">
-									评价{{item.evaluate}}+
-								</view>
-
-							</view>
-							<view class="price">
-								起价 ￥{{item.price}}
-							</view>
-							<view class="lable">
-								{{item.lable}}
+							<view class="serviceSite">
+								{{item.serviceSite}}
 							</view>
 						</view>
 					</view>
-					 <!-- </scroll-view> -->
+
+					<view class="centerBox">
+						<view class="listBox">
+							<view class="leftBox">服务内容</view>
+							<view class="rightBox">{{ item.genre }}</view>
+						</view>
+						<view class="listBox">
+							<view class="leftBox">约定服务时间</view>
+							<view class="rightBox">{{ item.appointTime }}</view>
+						</view>
+						<view class="listBox">
+							<view class="leftBox">商品备注</view>
+							<view class="rightBox">{{ item.remark }}</view>
+						</view>
+						<view class="listBox">
+							<view class="leftBox">订单编号</view>
+							<view class="rightBox">{{ item.orderNumber }}</view>
+						</view>
+					</view>
 				</view>
-		
-			</scroll-view>
+
+			</view>
+			<!-- 服务项目记录 -->
+			<view class="baseBox">
+				<view class="order">
+					<view class="orderLeft">
+						订单服务状态
+					</view>
+					<view class="orderRight">
+						<view class="refresh">
+							<image src="../../static/imgs/shuaxin.png" mode="" class="refreshImg"></image>
+						</view>
+						<view class="renewal">
+							更新状态
+						</view>
+					</view>
+				</view>
+
+				<view class="order">
+					<view class="orderLeft">
+						定位
+					</view>
+					<view class="" style="font-size: 28rpx; color: #00DB39;">
+						定位成功
+					</view>
+				</view>
+				<view class="order">
+					<view class="orderLeft">
+						确定服务项目
+					</view>
+					<view class="orderRight">
+						<view class="decided">
+							待确定
+						</view>
+						<view class="arrows">
+							<image src="../../static/imgs/arrows_r@2x.png" mode="" class="arrowsImg"></image>
+						</view>
+
+					</view>
+				</view>
+				<view class="order">
+					<view class="orderLeft">
+						拍摄服务前照片
+					</view>
+					<view class="orderRight">
+						<view class="decided">
+							待拍摄
+						</view>
+						<view class="arrows">
+							<image src="../../static/imgs/arrows_r@2x.png" mode="" class="arrowsImg"></image>
+						</view>
+
+					</view>
+				</view>
+			</view>
+
+			<view class="refer">
+				提交服务
+			</view>
 		</view>
-		<!-- </scroll-view> -->
+
 	</view>
+
 </template>
+
 <script>
 	export default {
-		name: "",
-		components: {
-		},
-		props: {},
+		//获取到顶部高度数据
+		props: ['scrollTopChild'],
 		data() {
 			return {
-				header:'',		//header高度
-				listHeight:'',	//列表高度
-				keyword: '',
-				daily: [{
-					imgs: '../../static/imgs/liliao.png',
-					title: '理疗',
-					style: {
-						width: '40rpx',
-						height: '34rpx',
-						backgroundcolor: '#E94337',
-					}
-				}, {
-					imgs: '../../static/imgs/tijian.png',
-					title: '上门体检',
+				scrollTopMsg: 0, //据顶部高度
+				commonColor: '', //全局颜色
+				popupShow: false, //
+				topGapHeight: 0, //顶部间隙
+				// active:false,
+				orderList: [{
+					imgs: '../../static/imgs/photo.png',
+					orderNumber: 'DABH23244743442342',
+					name: '萧蔷',
+					genre: '打扫卫生',
+					appointTime: '2020年02月02日 23:22',
+					remark: '请尽量下午上门，谢谢。',
+					serviceSite: "四川省眉山市彭山区凤鸣镇丽景苑二栋二单元2204"
+				}],
 
-					style: {
-						width: '36rpx',
-						height: '40rpx',
-						backgroundcolor: '#C77FF8',
-					}
-				}, {
-					imgs: '../../static/imgs/qingjie.png',
-					title: '清洁',
-					style: {
-						width: '42rpx',
-						height: '38rpx',
-						backgroundcolor: '#FFA600',
-					}
-				}, {
-					imgs: '../../static/imgs/cy.png',
-					title: '餐饮',
-					style: {
-						width: '32rpx',
-						height: '40rpx',
-						backgroundcolor: '#6BC9F8',
-					}
-				}, {
-					imgs: '../../static/imgs/xunshi.png',
-					title: '巡视',
-					style: {
-						width: '40rpx',
-						height: '32rpx',
-						backgroundcolor: '#FF7194',
-					}
-				}, ],
-				synopsis: [{
-					imgs: '../../static/imgs/one.png',
-					name: '新城医疗中心 (良乡)',
-					rank: '4.5',
-					sold: '2000',
-					evaluate: '2000',
-					price: '300',
-					lable: '“服务好, 人员专业”“很贴心”'
-				}, {
-					imgs: '../../static/imgs/two.png',
-					name: '万合一家医疗中心 (房山)',
-					rank: '4.5',
-					sold: '2000',
-					evaluate: '2000',
-					price: '300',
-					lable: '“服务好, 人员专业”“很贴心”'
-				}, {
-					imgs: '../../static/imgs/three.png',
-					name: '万合一家医疗中心 (绿地缤纷城)',
-					rank: '4.5',
-					sold: '2000',
-					evaluate: '2000',
-					price: '300',
-					lable: '“服务好, 人员专业”“很贴心”'
-				}]
-			}
-		},
-		methods: {
-			//获取元素高度
-			async getHeightFun(){
-				//获取元素高度
-				uni.createSelectorQuery().in(this).select('.header').boundingClientRect(data => {
-					this.header = data.height
-				}).exec();
-			},
-			//跳转页面
-			goToPage(res){
-				uni.navigateTo({
-					url:'../../pages/live/level_2_pages/level_2?title='+res.title
-				})
-			}
-		},
-		mounted() {
-			this.getHeightFun()
-			
-		},
-		onLoad() {
 
+			};
 		},
-		filters: {
 
-		},
 		computed: {
+
 
 		},
 		watch: {
-			header:function(){
-				var footerBar = uni.getStorageSync('footerBarHeight')
-				// 获取设备信息
-				uni.getSystemInfo({
-					success:(res)=>{
-						this.listHeight = res.windowHeight - this.header - footerBar ;
-						// console.log(this.header ,this.listHeight ,footerBar)
-					}
-				})
-			}
-		},
-		directives: {
 
+		},
+		methods: {},
+		created() {
+
+		},
+		mounted() {
+			setTimeout(res => {
+				uni.createSelectorQuery().in(this).select('.headBox').boundingClientRect(data => {
+					this.topGapHeight = data.height
+					console.log(this.topGapHeight)
+				}).exec();
+			})
+
+		},
+		watch: {
+			topGapHeight: function() {
+
+			}
 		}
-	}
+
+
+
+	};
 </script>
 
-<style scoped lang="scss">
-	* {
-		margin: 0;
-		padding: 0
-	}
-
+<style lang="scss">
 	.box {
-		width: 100%;
-		height: 100%;
-		background: #FFE300;
+		padding-bottom: 450upx;
+
+		.headBox {
+			width: 94%;
+			height: 300rpx;
+			background: #FFE300;
+			padding: 100rpx 3% 0 3%;
+			display: flex;
+			justify-content: space-between;
+			position: absolute;
+
+			.headBoxLeft {
+
+				.serviceing {
+					font-size: 36rpx;
+				}
+
+				.servicestate {
+					font-size: 24rpx;
+				}
+			}
+
+			.headBoxright {
+				display: flex;
+
+				.timer {
+					width: 80rpx;
+					height: 80rpx;
+					background: #FFE300;
+					border: 5rpx solid #D0BA00;
+					border-radius: 10rpx;
+					line-height: 80rpx;
+					text-align: center;
+				}
+			}
+		}
+
 	}
-	.header {
-		width: 100%;
-		// height: 360rpx;
-		height: 360rpx;
-		background: #FFE300;
-		position: fixed;
-		z-index: 999;
-		padding-top: 100upx;
-		top: 0;
-		.top {
-			width: 100%;
-			height: 80rpx;
-				// margin-top: 60rpx;
-			.beijing {
-				font-size: 30rpx;
-				line-height: 80rpx;
-				font-weight: 700;
-	
-			}
-			.image {
-				width: 25rpx;
-				height: 25rpx;
-				margin-left: 10rpx;
-			}
-			.search {
-				display: inline-block;
+
+	//服务对象信息
+	.particular {
+		position: relative;
+		top: 250rpx;
+
+		.cylinder {
+			width: 96%;
+			height: 20rpx;
+			background: #D6C200;
+			margin: 0 auto;
+			border-radius: 30rpx;
+			box-shadow: darkgrey 0px 0px 1px 2px; //边框阴影
+			z-index: 999;
+		}
+
+		.specific {
+			width: 92%;
+			margin-top: -10rpx;
+			background: #f5f5f5;
+			margin: 0 auto;
+			box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 20px;
+			border-radius: 10rpx;
+			opacity: 1;
+
+			.orderList {
+				.orderListTop {
+					display: flex;
+					padding: 30rpx 0rpx 0rpx 20rpx;
+
+					.orderListLeft {
+						width: 100rpx;
+						height: 100rpx;
+
+						.orderListimgs {
+							width: 100rpx;
+							height: 100rpx;
+						}
+					}
+
+					.orderListRight {
+						margin-left: 20rpx;
+
+						.name {
+							font-size: 36rpx;
+						}
+
+						.serviceSite {
+							font-size: 28rpx;
+							color: #878BA1;
+						}
+					}
+				}
+
+				.centerBox {
+					padding: 60rpx 0rpx 0rpx 20rpx;
+
+					.listBox {
+						display: flex;
+						padding-bottom: 60upx;
+
+						.leftBox {
+							width: 35%;
+							color: #878BA1;
+							font-size: 28rpx;
+						}
+
+						.rightBox {
+							width: 70%;
+							color: #282828;
+							font-size: 28rpx;
+						}
+					}
+				}
 
 			}
 		}
-		.left {
-			width: 172rpx;
-			height: 66rpx;
-			border: 1rpx solid white;
-			border-radius: 30rpx;
-			.name {
-				font-size: 28rpx;
-				font-weight: 700;
+	}
+
+	// 底部服务项目记录
+	.baseBox {
+		width: 92%;
+		margin: 0 auto;
+		padding-top: 70rpx;
+
+		.order {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding-bottom: 60rpx;
+
+			.orderLeft {
+				font-size: 32rpx;
 			}
-			.qiehuan {
-				width: 46rpx;
-				height: 46rpx;
-				margin-top: 10rpx;
+
+			.orderRight {
+				display: flex;
+				justify-content: space-around;
+				align-items: center;
+
+				.refresh {
+					width: 28rpx;
+					height: 28rpx;
+					display: flex;
+					justify-content: space-around;
+					align-items: center;
+					margin-right: 10rpx;
+
+					.refreshImg {
+						width: 28rpx;
+						height: 28rpx;
+						color: #878BA1;
+
+					}
+				}
+
+				.renewal {
+					font-size: 24rpx;
+					color: #878BA1;
+				}
 			}
 		}
-		.five {
-			width: 100%;
-			height: 200rpx;
-			margin-top: 60rpx;
+
+		.decided {
+			font-size: 28rpx;
+			margin-right: 20rpx;
+			color: #878BA1;
+		}
+
+		.arrows {
 			display: flex;
 			justify-content: space-around;
+			align-items: center;
+			width: 10rpx;
+			height: 20rpx;
 
-			.icon {
-				width: 84rpx;
-				height: 84rpx;
-				border-radius: 40%;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				// background-image: linear-gradient(#e6c7d2, #8c91e5)!important;
+			.arrowsImg {
+				width: 10rpx;
+				height: 20rpx;
 			}
-			.title {
-				font-size: 24rpx;
-				margin-top: 20rpx;
-				text-align: center;
-				color: #282828;
-			}
-		}
-		.note {
-			width: 20rpx;
-			height: 6rpx;
-			border-radius: 30%;
-			background-color: white;
-			margin: 0 auto;
 		}
 	}
-	.health {
-		width: 100%;
-		background: white;
-		// margin-top:50rpx;
-		border-top-right-radius: 30rpx;
-		border-top-left-radius: 30rpx;
-		position: absolute;
-		top:460rpx;
-		/* #ifdef APP-PLUS */
-		
-		/* #endif */
-		.banners {
-			display: flex;
-			justify-content: center;
 
-			.banner {
-				width: 706rpx;
-				height: 266rpx;
-				margin-top: 22rpx;
-			}
-		}
-
-		.synopsis {
-			width: 700rpx;
-			height: 160rpx;
-			margin: 0 auto;
-			display: flex;
-			margin-bottom: 60rpx;
-		}
-
-		.imgss {
-			width: 156rpx;
-			height: 156rpx;
-		}
-
-		.comprehensive {
-			width: 350rpx;
-			height: 30rpx;
-			margin-top: 6rpx;
-			display: flex;
-			align-items: center;
-			.xingxing {
-				margin-top: -10rpx;
-			}
-
-			.rank {
-				font-size: 24rpx;
-				color: #FEB34A;
-				margin-left: 2rpx;
-				line-height: 30rpx;
-			}
-
-			.sold {
-				font-size: 22rpx;
-				color: #878BA1;
-				margin-left: 12rpx;
-				line-height: 30rpx;
-			}
-
-			.evaluate {
-				font-size: 22rpx;
-				color: #878BA1;
-				margin-left: 12rpx;
-				line-height: 30rpx;
-			}
-
-		}
-
-		.price {
-			font-size: 22rpx;
-			color: #666666;
-			margin-top: 6rpx;
-		}
-
-		.lable {
-			font-size: 20rpx;
-			color: #FF9500;
-			margin-top: 8rpx;
-		}
-
-		.right {
-			margin-left: 20rpx;
-		}
+	.refer {
+		width: 90%;
+		height: 100rpx;
+		background: #E6E6E6;
+		margin: 0 auto;
+		line-height: 100rpx;
+		text-align: center;
+		border-radius: 50rpx;
 	}
 </style>
