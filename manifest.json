@@ -10,7 +10,8 @@
         "compilerVersion" : 3,
         "modules" : {
             "Share" : {},
-            "Maps" : {}
+            "Maps" : {},
+            "Push" : {}
         },
         "distribute" : {
             "android" : {
@@ -40,14 +41,13 @@
                 ]
             },
             "ios" : {
-				"urlschemewhitelist": [  
-					"baidumap",
-					"iosamap",
-					"qqmap"
-				]
-			},
+                "urlschemewhitelist" : [ "baidumap", "iosamap", "qqmap" ]
+            },
             "sdkConfigs" : {
-                "ad" : {}
+                "ad" : {},
+                "push" : {
+                    "unipush" : {}
+                }
             }
         }
     },

@@ -172,7 +172,17 @@
 			"style": {
 				"navigationBarTitleText": "",
 				"app-plus": {
-					"titleNView": true
+					"titleNView": false
+				}
+			}
+		},
+		//one -- 搜索
+		{
+			"path": "pages/one/search",
+			"style": {
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": false
 				}
 			}
 		}
