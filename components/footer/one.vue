@@ -184,6 +184,7 @@ export default {
 					var longitude = locations.match(/(\S*),/)[1] //经度
 					var latitude = locations.match(/,(\S*)/)[1] 	//纬度
 					this.toMapAPP(longitude,latitude,site)
+					console.log()
 			    }
 			});
 		},
@@ -194,18 +195,18 @@ export default {
 				plus.nativeUI.actionSheet({//选择菜单
 					title: "选择地图应用",
 					cancel: "取消",
-					buttons: [{title: "腾讯地图"},{title: "百度地图"}, {title: "高德地图"}]
+					buttons: [{title: "百度地图"}, {title: "高德地图"}]
 				}, function(e) {
 					switch (e.index) {
 						//下面是拼接url,不同系统以及不同地图都有不同的拼接字段
+						// case 1:
+						// 	//注意referer=xxx的xxx替换成你在腾讯地图开发平台申请的key
+						// 	url = `qqmap://map/geocoder?coord=${latitude},${longitude}&referer=xxx`;
+						// 	break;
 						case 1:
-							//注意referer=xxx的xxx替换成你在腾讯地图开发平台申请的key
-							url = `qqmap://map/geocoder?coord=${latitude},${longitude}&referer=xxx`;
-							break;
-						case 2:
 							url = `baidumap://map/marker?location=${latitude},${longitude}&title=${name}&coord_type=gcj02&src=andr.baidu.openAPIdemo`;
 							break;
-						case 3:
+						case 2:
 							url = `androidamap://viewMap?sourceApplication=appname&poiname=${name}&lat=${latitude}&lon=${longitude}&dev=0`;
 							break;
 						default:
@@ -226,16 +227,13 @@ export default {
 				plus.nativeUI.actionSheet({
 					title: "选择地图应用",
 					cancel: "取消",
-					buttons: [{title: "腾讯地图"},{title: "百度地图"}, {title: "高德地图"}]
+					buttons: [{title: "百度地图"}, {title: "高德地图"}]
 				}, function(e) {
 					switch (e.index) {
 						case 1:
-							url = `qqmap://map/geocoder?coord=${latitude},${longitude}&referer=xxx`;
-							break;
-						case 2:
 							url = `baidumap://map/marker?location=${latitude},${longitude}&title=${name}&content=${name}&src=ios.baidu.openAPIdemo&coord_type=gcj02`;
 							break;
-						case 3:
+						case 2:
 							url = `iosamap://viewMap?sourceApplication=applicationName&poiname=${name}&lat=${latitude}&lon=${longitude}&dev=0`;
 							break;
 						default:

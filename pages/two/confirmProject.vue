@@ -5,6 +5,8 @@
 				{{item.body}}
 			</u-collapse-item>
 		</u-collapse>
+		
+		
 	</view>
 </template>
 
