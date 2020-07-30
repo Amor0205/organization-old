@@ -91,7 +91,8 @@
 						定位成功
 					</view>
 				</view>
-				<view class="order">
+				
+				<view class="order" @click="goToPage('confirmProject')">
 					<view class="orderLeft">
 						确定服务项目
 					</view>
@@ -121,11 +122,14 @@
 				</view>
 			</view>
 
+			
 			<view class="refer" v-show="serves" @click="start">
 				开始服务
 			</view>
+			
 			<view class="refer"  v-show="!serves" @click="start">
 				提交服务
+			
 			</view>
 		</view>
 
@@ -143,6 +147,7 @@
 				commonColor: '', //全局颜色
 				popupShow: false, //
 				topGapHeight: 0, //顶部间隙
+				
 				serves:false,
 				orderList: [{
 					imgs: '../../static/imgs/photo.png',
@@ -170,6 +175,19 @@
 			// 开始服务按钮
 			start() {
 				this.serves=!this.serves
+			},
+			//前往页面
+			goToPage(res){
+				switch (res){
+					case 'confirmProject' :
+						//确认项目
+						uni.navigateTo({
+							url:'../../pages/two/confirmProject'
+						})
+						break;
+					default:
+						break;
+				}
 			}
 		},
 

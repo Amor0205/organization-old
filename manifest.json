@@ -10,8 +10,7 @@
         "compilerVersion" : 3,
         "modules" : {
             "Share" : {},
-            "Maps" : {},
-            "Push" : {}
+            "Maps" : {}
         },
         "distribute" : {
             "android" : {
