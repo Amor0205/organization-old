@@ -156,16 +156,6 @@
 				}
 			}
 		},
-		//地图
-		{
-			"path": "pages/map",
-			"style": {
-				"navigationBarTitleText": "",
-				"app-plus": {
-					"titleNView": true
-				}
-			}
-		},
 		//two -- 确认项目
 		{
 			"path": "pages/two/confirmProject",
