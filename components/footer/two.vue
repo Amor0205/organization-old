@@ -91,7 +91,7 @@
 						定位成功
 					</view>
 				</view>
-				<view class="order">
+				<view class="order" @click="goToPage('confirmProject')">
 					<view class="orderLeft">
 						确定服务项目
 					</view>
@@ -170,6 +170,19 @@
 			// 开始服务按钮
 			start() {
 			
+			},
+			//前往页面
+			goToPage(res){
+				switch (res){
+					case 'confirmProject' :
+						//确认项目
+						uni.navigateTo({
+							url:'../../pages/two/confirmProject'
+						})
+						break;
+					default:
+						break;
+				}
 			}
 		},
 

@@ -166,6 +166,16 @@
 				}
 			}
 		},
+		//two -- 确认项目
+		{
+			"path": "pages/two/confirmProject",
+			"style": {
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
 		//three -- 搜索
 		{
 			"path": "pages/three/search",
