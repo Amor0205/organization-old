@@ -121,12 +121,12 @@
 				</view>
 			</view>
 
-			<view class="refer" @click="start">
+			<view class="refer" v-show="serves" @click="start">
 				开始服务
 			</view>
-			<!-- <view class="refer" >
+			<view class="refer"  v-show="!serves" @click="start">
 				提交服务
-			</view> -->
+			</view>
 		</view>
 
 	</view>
@@ -143,7 +143,7 @@
 				commonColor: '', //全局颜色
 				popupShow: false, //
 				topGapHeight: 0, //顶部间隙
-				// active:false,
+				serves:false,
 				orderList: [{
 					imgs: '../../static/imgs/photo.png',
 					orderNumber: 'DABH23244743442342',
@@ -169,7 +169,7 @@
 		methods: { 
 			// 开始服务按钮
 			start() {
-			
+				this.serves=!this.serves
 			}
 		},
 

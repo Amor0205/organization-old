@@ -15,7 +15,6 @@
 				<view class="topBox">
 					<view class="leftBox" @click="showPopup">
 						<text>查看全部</text>
-				
 						<image src="../../static/imgs/xx.png" style="width: 14upx;height: 10upx;margin-left: 4upx;" mode=""></image>
 					</view>
 					<view class="rightBox">
