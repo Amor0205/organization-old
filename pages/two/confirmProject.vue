@@ -1,10 +1,5 @@
 <template>
 	<view class="container">
-		 <view class="content">
-		        <view>{{nums}}</view>
-		        <view>{{minute}}</view>
-		        <view>{{numss}}</view>
-		</view>
 	</view>
 </template>
 
@@ -12,9 +7,6 @@
 	export default {
 		data() {
 			return {
-				nums:'',
-				minute:'',
-				numss:''
 			}
 		},
 		methods: {
