@@ -160,7 +160,7 @@
 		{
 			"path": "pages/two/confirmProject",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "确认服务项目",
 				"app-plus": {
 					"titleNView": true
 				}
