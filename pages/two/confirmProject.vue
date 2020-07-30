@@ -6,7 +6,6 @@
 			</u-collapse-item>
 		</u-collapse>
 		
-		
 	</view>
 </template>
 
@@ -38,7 +37,34 @@
 		},
 		mounted() {
 			
-		}
+		},
+		onLoad() {
+			var hour, minute, second; /*时 分 秒*/
+			            hour = minute = second = 0; //初始化
+			            var millisecond = 0; //毫秒
+			            this.timer = setInterval(() => {
+			                millisecond = millisecond + 50;
+			                // console.log("---millisecond----"+millisecond);
+			                if (millisecond >= 1000) {
+			                    millisecond = 0;
+			                    second = second + 1;
+			                }
+			                if (second >= 60) {
+			                    second = 0;
+			                    minute = minute + 1;
+			                }
+			 
+			                if (minute >= 60) {
+			                    minute = 0;
+			                    hour = hour + 1;
+			                }
+			              
+							this.nums = hour+'时'+minute+'分'+second+'秒';
+			                this.numss = hour+'时';
+							this.minute=minute+'分'
+			            }, 50);
+			}
+		
 	}
 </script>
 
