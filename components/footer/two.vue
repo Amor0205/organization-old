@@ -4,7 +4,10 @@
 		<view class="headBox">
 			<!-- 头部服务时间 -->
 			<view class="headBoxLeft">
-				<view class="serviceing">
+				<view class="serviceing" v-show="!rockon">
+					等待服务
+				</view>
+				<view class="serviceing" v-show="rockon">
 					正在服务中
 				</view>
 				<view class="servicestate">
@@ -13,14 +16,23 @@
 			</view>
 			<view class="headBoxright">
 				<view class="timer">
-					00
+					{{hours}}
 				</view>
 				<view class="" style="line-height: 80rpx;">
 					:
 				</view>
 				<view class="timer">
-					00
+					{{minutes}}
 				</view>
+				<view class="" style="line-height: 80rpx;">
+					:
+				</view>
+				<view class="timer">
+				{{seconds}}
+				</view>
+
+
+
 			</view>
 
 		</view>
@@ -91,7 +103,7 @@
 						定位成功
 					</view>
 				</view>
-				
+
 				<view class="order" @click="goToPage('confirmProject')">
 					<view class="orderLeft">
 						确定服务项目
@@ -121,20 +133,14 @@
 					</view>
 				</view>
 			</view>
-
-			
-			<view class="refer" v-show="serves" @click="start">
+			<view class="refer" v-show="!serves" @click="start">
 				开始服务
 			</view>
-			
-			<view class="refer"  v-show="!serves" @click="start">
+			<view class="refer" v-show="serves"  @click="present">
 				提交服务
-			
 			</view>
 		</view>
-
 	</view>
-
 </template>
 
 <script>
@@ -147,8 +153,12 @@
 				commonColor: '', //全局颜色
 				popupShow: false, //
 				topGapHeight: 0, //顶部间隙
-				
-				serves:false,
+				serves: false,
+				nums: '',
+				rockon: false,
+				hours:'',
+				minutes:'',
+				seconds:'',
 				orderList: [{
 					imgs: '../../static/imgs/photo.png',
 					orderNumber: 'DABH23244743442342',
@@ -158,7 +168,7 @@
 					remark: '请尽量下午上门，谢谢。',
 					serviceSite: "四川省眉山市彭山区凤鸣镇丽景苑二栋二单元2204"
 				}],
-			
+
 
 
 			};
@@ -171,23 +181,57 @@
 		watch: {
 
 		},
-		methods: { 
+		methods: {
 			// 开始服务按钮
 			start() {
-				this.serves=!this.serves
+				this.serves = !this.serves
+				this.rockon = true
+				//计时器开始计数
+				var hour, minute, second; /*时 分 秒*/
+				hour = minute = second = 0; //初始化
+				var millisecond = 0; //毫秒
+				this.timer = setInterval(() => {
+					millisecond = millisecond + 50;
+					// console.log("---millisecond----"+millisecond);
+					if (millisecond >= 1000) {
+						millisecond = 0;
+						second = second + 1;
+						
+					}
+					if (second >= 60) {
+						second = 0;
+						minute = minute + 1;
+					}
+
+					if (minute >= 60) {
+						minute = 0;
+						hour = hour + 1;
+					}
+					// this.nums = hour+'时'+minute+'分'+second+'秒';
+					this.hours = hour+'时';
+					this.minutes = minute+'分' ;
+					this.seconds = second+'秒'
+					// console.log(this.seconds);
+				}, 50);
 			},
 			//前往页面
-			goToPage(res){
-				switch (res){
-					case 'confirmProject' :
+			goToPage(res) {
+				switch (res) {
+					case 'confirmProject':
 						//确认项目
 						uni.navigateTo({
-							url:'../../pages/two/confirmProject'
+							url: '../../pages/two/confirmProject'
 						})
 						break;
 					default:
 						break;
 				}
+			},
+			// 提交服务按钮
+			present(){
+				 clearInterval(this.timer);  
+				        this.timer = null;
+						
 			}
 		},
 
@@ -204,6 +248,12 @@
 			topGapHeight: function() {
 
 			}
+		},
+		onUnload:function(){
+		    if(this.timer) {  
+		        clearInterval(this.timer);  
+		        this.timer = null;  
+		    }  
 		}
 
 
@@ -246,6 +296,7 @@
 					border-radius: 10rpx;
 					line-height: 80rpx;
 					text-align: center;
+					font-size: 30rpx;
 				}
 			}
 		}
@@ -264,17 +315,19 @@
 			margin: 0 auto;
 			border-radius: 30rpx;
 		}
+
 		.information {
 			// margin-top: -10rpx;
 			position: relative;
 			top: -10rpx;
+
 			.specific {
 				width: 92%;
 				margin-top: -10rpx;
 				background: #f5f5f5;
 				margin: 0 auto;
 				box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 20px;
-				border-radius: 0rpx 0rpx 10rpx 10rpx ;
+				border-radius: 0rpx 0rpx 10rpx 10rpx;
 				opacity: 1;
 
 				.orderList {
