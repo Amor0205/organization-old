@@ -81,7 +81,7 @@
 							validator: (rule, value, callback) => {
 								return this.$u.test.mobile(value);
 							},
-							message: '手机为11为数字',
+							message: '手机为11位数字',
 							trigger: ['change', 'blur'],
 						}
 					],
@@ -153,7 +153,7 @@
 									).then(res => {
 										uni.hideLoading()
 										// 保存用户信息
-										uni.setStorageSync('userInfo',res.data.data.info)
+										uni.setStorageSync('userInfo',res.data.data.userInfo)
 										//登录成功 且没有特殊要求前往首页  tag = 0 返回上一页
 										if(this.tag == ''){
 											uni.navigateTo({

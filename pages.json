@@ -166,6 +166,38 @@
 				}
 			}
 		},
+		//two -- 服务前
+		{
+			"path": "pages/two/beforeShooting",
+			"style": {
+				"navigationBarTitleText": "服务前照片",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "提交", //点击事件通过页面的 onNavigationBarButtonTap 函数进行监听
+							"fontSize": "15px",
+							"color": "#FF9500"
+						}]
+					}
+				}
+			}
+		},
+		//two -- 服务后
+		{
+			"path": "pages/two/selectiveFocus",
+			"style": {
+				"navigationBarTitleText": "服务后照片",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "提交", //点击事件通过页面的 onNavigationBarButtonTap 函数进行监听
+							"fontSize": "15px",
+							"color": "#FF9500"
+						}]
+					}
+				}
+			}
+		},
 		//three -- 搜索
 		{
 			"path": "pages/three/search",

@@ -83,9 +83,14 @@ http.setConfig((config) => { /* 设置全局配置 */
 
 
 http.interceptors.request.use((config) => { /* 请求之前拦截器。可以使用async await 做异步操作 */
+  var tokens = '';
+  if(getTokenStorage()){
+	tokens = 'Bearer ' + getTokenStorage();
+  }
   config.header = {
     ...config.header,
-    token: getTokenStorage()
+    token: getTokenStorage(),
+	Authorization: tokens
   }
   /*
  if (!token) { // 如果token不存在，return Promise.reject(config) 会取消本次请求
@@ -102,6 +107,7 @@ http.interceptors.response.use(async (response) => { /* 请求之后拦截器。
   // if (response.data.code !== 200) { // 服务端返回的状态码不等于200，则reject()
   //   return Promise.reject(response)
   // }
+  
   return response
 }, (response) => { // 请求错误做点什么。可以使用async await 做异步操作
   console.log(response)

@@ -118,9 +118,23 @@
 
 					</view>
 				</view>
-				<view class="order">
+				<view class="order" @click="goToPage('beforeShooting')">
 					<view class="orderLeft">
 						拍摄服务前照片
+					</view>
+					<view class="orderRight">
+						<view class="decided">
+							待拍摄
+						</view>
+						<view class="arrows">
+							<image src="../../static/imgs/arrows_r@2x.png" mode="" class="arrowsImg"></image>
+						</view>
+
+					</view>
+				</view>
+				<view class="order" @click="goToPage('selectiveFocus')">
+					<view class="orderLeft">
+						拍摄服务后照片
 					</view>
 					<view class="orderRight">
 						<view class="decided">
@@ -223,6 +237,19 @@
 							url: '../../pages/two/confirmProject'
 						})
 						break;
+						case 'beforeShooting':
+						//确认项目
+						uni.navigateTo({
+							url: '../../pages/two/beforeShooting'
+						})
+						break;
+						case 'selectiveFocus':
+						//确认项目
+						uni.navigateTo({
+							url: '../../pages/two/selectiveFocus'
+						})
+						break;
+						
 					default:
 						break;
 				}

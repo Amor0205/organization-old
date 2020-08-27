@@ -1,8 +1,9 @@
 <template>
 	<view class="container">
+		
 		<view class="headPortraitBox">
 			<view class="imgBox" @click="uploadPic">
-				<image :src="headPortrait.length == 0 ? headPortraitDefault : headPortrait " mode=""></image>
+				<image :src="userInfo.avatar ? userInfo.avatar : headPortraitDefault" mode=""></image>
 				<view class="iconBox">
 					<image src="../../static/imgs/camera_fill.png" mode=""></image>
 				</view>
@@ -10,29 +11,29 @@
 		</view>
 		
 		<view class="nikeNameBox">
-			<input type="text" placeholder="昵称" :value="userInfo.nikekName == null ? userInfo.phonenum : userInfo.nikekName"  class="titleBox"/>
+			<input type="text" placeholder="昵称" v-model="userName"   class="titleBox"/>
 			<view class="imgBox">
 				<image src="../../static/imgs/xiugai.png" mode=""></image>
-			</view>
+			</view> 
 			
 		</view>
 		
 		<view class="sexBox">
-			<view class="selectBox" :class="selectSex == 'man' ? '' : 'sexActive' " @click="selectSexFun('man')">	
+			<view class="selectBox" :class="selectSex == '男' ? '' : 'sexActive' " @click="selectSexFun('男')">	
 				<image src="../../static/imgs/nan.png" mode=""></image>
 				<text>男</text>
 				<!-- 动画 -->
-				<view class="animationBox" :class="selectSex == 'man' ? 'animation' : '' ">
+				<view class="animationBox" :class="selectSex == '男' ? 'animation' : '' ">
 				</view>
 			</view>
 			<view class="centerBox">
 				or
 			</view>
-			<view class="selectBox" :class="selectSex == 'woman' ? '' : 'sexActive' " @click="selectSexFun('woman')">
+			<view class="selectBox" :class="selectSex == '女' ? '' : 'sexActive' " @click="selectSexFun('女')">
 				<image src="../../static/imgs/nv.png" mode=""></image>
 				<text>女</text>
 				<!-- 动画 -->
-				<view class="animationBox" :class="selectSex == 'woman' ? 'animation' : '' ">
+				<view class="animationBox" :class="selectSex == '女' ? 'animation' : '' ">
 				</view>
 			</view>
 		</view>
@@ -49,20 +50,32 @@
 				</view>
 			</view>
 		</view>
+		<image style="width: 200rpx;height: 200rpx;" :src="imgss" mode=""></image>
+		<u-button 
+		class="custom-style" 
+		type="warning" 
+		shape="circle" 
+		:ripple="true" 
+		@click="submit"
+		ripple-bg-color="#ffee00">保存</u-button>
 		
-		<u-button class="custom-style" type="warning" shape="circle" :ripple="true" ripple-bg-color="#ffee00">保存</u-button>
 			
 	</view>
 </template>
 
 <script>
+	import { setUserInfo } from '../../src/ajax.js'
 	export default {
 		data() {
 			return {
+				imgss:'',
 				userInfo:'',		//用户信息
-				selectSex:'man',	//性别选择
-				headPortrait:'',	//头像
-				headPortraitDefault:'../../static/imgs/default_touxiang.png',
+				selectSex:'男',		//性别选择
+				userName:'',		//用户名
+				// headPortrait:'',	//头像
+				headPortraitDefault:'../../static/imgs/default_touxiang.png',	//显示默认图片
+				uploadPicData:'',	//上传图片数据
+				tokens:'',
 				flow:[{	
 						show:true,
 						title:'立即执行',
@@ -87,33 +100,92 @@
 			// 图片上传
 			uploadPic(){
 				uni.chooseImage({
-				    success: (chooseImageRes) => {
-				        const tempFilePaths = chooseImageRes.tempFilePaths;
-						this.headPortrait = tempFilePaths[0]
-						
-						// console.log(chooseImageRes)
-						// console.log(tempFilePaths)
-				        // uni.uploadFile({
-				        //     url: 'http://110.187.88.70:11801', //仅为示例，非真实的接口地址
-				        //     filePath: tempFilePaths[0],
-				        //     name: 'file',
-				        //     formData: {
-				        //         'user': 'test'
-				        //     },
-				        //     success: (uploadFileRes) => {
-				        //         console.log(uploadFileRes.data);
-				        //     }
-				        // });
+					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+				    success: (res) => {
+				        const tempFilePaths = res.tempFilePaths;
+						this.userInfo.avatar = tempFilePaths[0]
+						this.uploadPicData = tempFilePaths[0]
 				    }
 				});
-				
-				
+			},
+			//提交信息
+			submit(){
+				var _this = this;
+				uni.showLoading({
+					title:'正在上传信息'
+				})
+				// console.log(this.uploadPicData)
+				// if(this.uploadPicData){
+					uni.uploadFile({
+						url: 'http://110.187.88.70:11801/consumer/editConsumerMessage1', //仅为示例，非真实的接口地址
+						filePath: this.uploadPicData,
+						name: 'file',
+						header:{
+							'Authorization':'Bearer '+ _this.tokens
+						},
+						formData:{
+							consId:_this.userInfo.consId,
+							nikeName:_this.userName,
+							sex:_this.selectSex
+						},
+						success: (res) => {
+							var data = JSON.parse(res.data)
+							uni.hideLoading()
+							uni.showToast({
+								icon:'none',
+								title:data.message
+							})
+							this.imgss = data.data.consumer.avatar;
+							console.log(data.data.consumer.avatar)
+							if(data.code == 2000){
+								uni.setStorageSync('userInfo',data.data.consumer)
+								uni.navigateTo({
+									url:'../index/index'
+								})
+							}
+						}
+					});			
+				// }else{
+				// 	uni.uploadFile({
+				// 		url: 'http://110.187.88.70:11801/consumer/editConsumerMessage1', //仅为示例，非真实的接口地址
+				// 		filePath: '',
+				// 		name: 'file',
+				// 		header:{
+				// 			'Authorization':'Bearer '+ _this.tokens
+				// 		},
+				// 		formData:{
+				// 			consId:_this.userInfo.consId,
+				// 			nikeName:_this.userName,
+				// 			sex:_this.selectSex
+				// 		},
+				// 		success: (res) => {
+				// 			var data = JSON.parse(res.data)
+				// 			uni.hideLoading()
+				// 			uni.showToast({
+				// 				icon:'none',
+				// 				title:data.message
+				// 			})
+				// 			console.log(data)
+				// 			if(data.code == 2000){
+				// 				uni.setStorageSync('userInfo',data.data.consumer)
+				// 			}
+				// 		}
+				// 	});		
+				// }
 			}
 			
 		},
 		created() {
-			//获取userInfo
-			this.userInfo = uni.getStorageSync('userInfo')
+			this.tokens = uni.getStorageSync('token')
+			if(uni.getStorageSync('userInfo')){
+				//获取userInfo
+				this.userInfo = uni.getStorageSync('userInfo');
+				this.selectSex = this.userInfo.sex;
+				this.userName = this.userInfo.nikeName;
+				// this.headPortraitDefault = this.userInfo.avatar;
+				console.log(this.userInfo.avatar)
+			}
+			
 		},
 		mounted() {
 			

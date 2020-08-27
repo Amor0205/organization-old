@@ -16,11 +16,12 @@
 			<view class="headTopBox">
 				<view class="leftBox">
 					<view class="imgbox" @click="goToPage('manageAccount')">
-						<image :src="headPortraitDefault" mode=""></image>
+						<!-- <image :src="headPortraitDefault" mode=""></image> -->
+							<image :src="userInfo.avatar ? userInfo.avatar : headPortraitDefault" mode=""></image>
 					</view>
 					<view class="titleBox">
 						<view class="username" @click="goToPage('manageAccount')">
-							{{ userInfo.nikekName == null ? '点击头像设置昵称' : userInfo.nikekName }}
+							{{ userInfo.nikeName == null ? '点击头像设置昵称' : userInfo.nikeName }}
 						</view>
 						<view class="tagBox">
 							<view class="tag_1 common">
@@ -284,11 +285,15 @@
 			}
 				
 		},
-		
 		created() {
 			// this.commonColor = this.commonColorAll
-			//获取userInfo
+			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
+			console.log(this.userInfo);
+			this.commonColor = this.commonColorAll
+			//获取userInfo
+			// this.userInfo = uni.getStorageSync('userInfo')
+			console.log(this.userInfo)
 			
 			_this = this;
 			// #ifdef MP-ALIPAY
@@ -304,8 +309,6 @@
 			//#endif
 			this.cWidth=uni.upx2px(680);
 			this.cHeight=uni.upx2px(400);
-			
-			
 		},
 		mounted() {
 			//显示图表 传入（图表名，图表数据）
@@ -316,8 +319,21 @@
 			})
 		},
 		watch:{
+			userInfoChild:function(){
+				this.userInfo = this.$props.userInfoChild
+			}
+		},
+		onLoad() {
+			if (uni.getStorageSync('token').length == 0) {
+				uni.navigateTo({
+					url: '../login/login'
+				})
+			}
+		},
+		onShow() {
 			
 		}
+		
 	}
 </script>
 

@@ -19,15 +19,28 @@ var tokens;
 
 if(uni.getStorageSync){
 	tokens = uni.getStorageSync('token')
+	console.log(tokens)
 }
 	
 
-
-// 获取验证码
-export function getVerificationCode(phone) {
+// 获取验证码 1:用户注册 2:求助设备绑定 3:手环绑定 4:添加家人
+export function getVerificationCode(phone,type) {
 	return http.get('/consumer/sendVerifyCode', {
 		params: {
-			phone
+			phone,
+			type:1
+		}
+	})
+}
+
+// 获取用户信息
+export function getUserInfo(token) {
+	return http.get('/consumer/userInfo', {
+		params: {
+			
+		},
+		header:{
+			Authorization:'Bearer ' + token
 		}
 	})
 }
@@ -45,20 +58,103 @@ export function get_sos_list(phone) {
 	})
 }
 
-// 获取位置经纬度记录
-export function getLocationFun(phone) {
-	return http.get('/hard/alarmLog/list', {
+// 家人列表
+export function familyList(consId) {
+	return http.get('/consumer/showCare', {
 		params: {
-			phone
-		},
-		header:{
-			Authorization:'Bearer ' + tokens
+			consId
 		}
+	})
+}
+
+//获取设备列表
+export function getDiviceList(consId,type){
+	return http.get('/hard/device',{
+		params:{
+			consId,
+			type
+		}
+
 	})
 }
 
 
 
+//商家展示
+export function getShopsList(categoryId,sortId,currentPage,){
+	return http.get('/business',{
+		params:{
+			categoryId,
+			sortId,
+			currentPage,
+			pageSize:20
+		}
+
+	})
+}
+
+//商品展示
+export function getGoodsList(businessId,sortId,currentPage){
+	return http.get('/products',{
+		params:{
+			businessId,
+			sortId,
+			currentPage,
+			pageSize:20
+		}
+
+	})
+}
+
+//商品详情
+export function getGoodsDetails(proId){
+	return http.get('products/selectProduct',{
+		params:{
+			proId
+		}
+		
+	})
+}
+
+
+//获取地址列表
+export function getAddressList(consId){
+	return http.get('/address/listAddress',{
+		params:{
+			consId
+		}
+	})
+}
+
+//添加至购物车
+export function addShopCart(consId,proId){
+	return http.get('/cart/addCart',{
+		params:{
+			consId,
+			proId
+		}
+
+	})
+}
+
+//获取购物车列表
+export function getShopCarList(consId){
+	return http.get('/cart/showCart',{
+		params:{
+			consId
+		}
+	})
+}
+
+//获取订单
+export function getOrderList(consId,proId){
+	return http.get('/order/confirmOrder',{
+		params:{
+			consId,
+			proId	
+		}
+	})
+}
 
 
 
@@ -99,23 +195,40 @@ export function login(username,password){
 		client_id:'app',
 		client_secret:'123456',
 		grant_type:'password'
-		},{
-			header:{
-				'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
-			},
-		})
+	},
+	{	
+		header:{
+			'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
+		},
+	})
 }
 
-//设备绑定
-export function diviceBind(phone,devCode,devAddress,birthday){
-	return http.post('/hard/device/diviceBind',{
-			phone,
-			devCode,
-			devAddress,
-			birthday
-		},{
-			header:{
-				Authorization:'Bearer ' + tokens
-			}
-		})
+
+
+
+
+
+
+/* 
+	upLoad
+ */
+
+//修改 上传 个人信息
+export function setUserInfo( consId,nikeName,sex){
+	return http.upload('/consumer/editConsumerMessage1', {
+			params: {}, /* 会加在url上 */
+			files: [], // 需要上传的文件列表。使用 files 时，filePath 和 name 不生效。App、H5（ 2.6.15+）
+			fileType: 'image/video/audio', // 仅支付宝小程序，且必填。
+			filePath: '', // 要上传文件资源的路径。
+			name: 'file', // 文件对应的 key , 开发者在服务器端通过这个 key 可以获取到文件二进制内容
+			header: {},  /* 会与全局header合并，如有同名属性，局部覆盖全局 */
+			formData: {
+				consId,
+				nikeName,
+				sex
+			}// HTTP 请求中其他额外的 form data
+		}
+	)
+	
 }
+
