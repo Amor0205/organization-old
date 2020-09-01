@@ -50,7 +50,7 @@
 						</view>
 						<view class="listBox">
 							<view class="leftBox">约定服务时间</view>
-							<view class="rightBox">{{ item.date }}</view>
+							<view class="rightBox">{{ time}}</view>
 						</view>
 						<view class="listBox">
 							<view class="leftBox">服务内容</view>
@@ -97,7 +97,8 @@
 				currentPage: 1, //当前页数,
 				id: '1273804055990304770',
 				services: '',
-				date: [], // getTime储存从服务器请求回来的数据
+				time:'', //时间转换
+				date:'',
 				orderList: [{
 					orderNumber: 'DABH23244743442342',
 					endTime: 1,
@@ -173,7 +174,28 @@
 			changeLocation(index) {
 				this.locationIndex = index;
 			},
+			//获取地址经纬度
+			getLocationFun(site) {
+				uni.request({
+					url: 'http://restapi.amap.com/v3/geocode/geo', //仅为示例，并非真实接口地址。
+					data: {
+						key: '698bd4e0ca6ef47bd4f84da21cc4d8fd',
+						s: 'rsv3',
+						city: 35,
+						address: site
+					},
+					header: {
 
+					},
+					success: (res) => {
+						// var locations = res.data.geocodes[0].location
+						// var longitude = locations.match(/(\S*),/)[1] //经度
+						// var latitude = locations.match(/,(\S*)/)[1] 	//纬度
+						// this.toMapAPP(longitude,latitude,site)
+						// console.log()
+					}
+				});
+			},
 			//调起高德并定位
 			toMapAPP(longitude, latitude, name) {
 				let url = "";
@@ -258,11 +280,10 @@
 						console.log(res);
 						this.services = res.data.data.services.services
 						console.log(this.services);
-						//把获取到的时间进行转换
-						let date=new Date(new Date(new Date(res.data.data.services.services[0].beginTime).toJSON()) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') 
-						     console.log(date)
+						this.time = new Date(new Date(new Date(res.data.data.services.services[0].createTime).toJSON()) + 8 * 3600 *
+							1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+						
 					}
-
 				})
 			}
 
@@ -278,17 +299,11 @@
 					// console.log(this.topGapHeight)
 				}).exec();
 			});
-
-
-
 		},
-
 		onLoad(option) {
 			this.id = option.id
 			console.log(this.id);
 		},
-	
-
 
 	};
 </script>
