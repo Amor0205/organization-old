@@ -173,7 +173,28 @@
 			changeLocation(index) {
 				this.locationIndex = index;
 			},
-
+			//获取地址经纬度
+			getLocationFun(site){
+				uni.request({
+				    url: 'http://restapi.amap.com/v3/geocode/geo', //仅为示例，并非真实接口地址。
+				    data: {
+				        key: '698bd4e0ca6ef47bd4f84da21cc4d8fd',
+						s:'rsv3',
+						city:35,
+						address:site
+				    },
+				    header: {
+				        
+				    },
+				    success: (res) => {
+						// var locations = res.data.geocodes[0].location
+						// var longitude = locations.match(/(\S*),/)[1] //经度
+						// var latitude = locations.match(/,(\S*)/)[1] 	//纬度
+						// this.toMapAPP(longitude,latitude,site)
+						// console.log()
+				    }
+				});
+			},
 			//调起高德并定位
 			toMapAPP(longitude, latitude, name) {
 				let url = "";
