@@ -50,7 +50,7 @@
 						</view>
 						<view class="listBox">
 							<view class="leftBox">约定服务时间</view>
-							<view class="rightBox">{{ item.beginTime }}</view>
+							<view class="rightBox">{{ item.date }}</view>
 						</view>
 						<view class="listBox">
 							<view class="leftBox">服务内容</view>
@@ -96,7 +96,8 @@
 				status: 1,
 				currentPage: 1, //当前页数,
 				id: '1273804055990304770',
-				services:'',
+				services: '',
+				date: [], // getTime储存从服务器请求回来的数据
 				orderList: [{
 					orderNumber: 'DABH23244743442342',
 					endTime: 1,
@@ -253,9 +254,13 @@
 					this.status,
 					this.currentPage
 				).then(res => {
-					if(res.data.code===2000){
-						this.services=res.data.data.services.services
+					if (res.data.code === 2000) {
+						console.log(res);
+						this.services = res.data.data.services.services
 						console.log(this.services);
+						//把获取到的时间进行转换
+						let date=new Date(new Date(new Date(res.data.data.services.services[0].beginTime).toJSON()) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') 
+						     console.log(date)
 					}
 
 				})
@@ -282,7 +287,7 @@
 			this.id = option.id
 			console.log(this.id);
 		},
-
+	
 
 
 	};
