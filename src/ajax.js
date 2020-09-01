@@ -32,7 +32,6 @@ export function getVerificationCode(phone,type) {
 		}
 	})
 }
-
 // 获取用户信息
 export function getUserInfo(token) {
 	return http.get('/consumer/userInfo', {
@@ -44,54 +43,24 @@ export function getUserInfo(token) {
 		}
 	})
 }
-
-
-// 获取sos记录
-export function get_sos_list(phone) {
-	return http.get('/hard/alarmLog/list', {
+// 待开始订单
+export function getBegin(belongId,status,currentPage) {
+	return http.get('/service/selectService', {
 		params: {
-			phone
-		},
-		header:{
-			Authorization:'Bearer ' + tokens
-		}
-	})
-}
-
-// 家人列表
-export function familyList(consId) {
-	return http.get('/consumer/showCare', {
-		params: {
-			consId
-		}
-	})
-}
-
-//获取设备列表
-export function getDiviceList(consId,type){
-	return http.get('/hard/device',{
-		params:{
-			consId,
-			type
-		}
-
-	})
-}
-
-
-
-//商家展示
-export function getShopsList(categoryId,sortId,currentPage,){
-	return http.get('/business',{
-		params:{
-			categoryId,
-			sortId,
+			belongId,
+			status,
 			currentPage,
 			pageSize:20
 		}
-
 	})
 }
+
+
+
+
+
+
+
 
 //商品展示
 export function getGoodsList(businessId,sortId,currentPage){
@@ -192,7 +161,7 @@ export function login(username,password){
 	return http.post('/oauth/login',{
 		username,
 		password,
-		client_id:'app',
+		client_id:'server',
 		client_secret:'123456',
 		grant_type:'password'
 	},

@@ -289,7 +289,7 @@
 			// this.commonColor = this.commonColorAll
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
-			console.log(this.userInfo);
+
 			this.commonColor = this.commonColorAll
 			//获取userInfo
 			// this.userInfo = uni.getStorageSync('userInfo')
