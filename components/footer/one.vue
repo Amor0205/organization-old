@@ -96,7 +96,8 @@
 				status: 1,
 				currentPage: 1, //当前页数,
 				id: '1273804055990304770',
-				services:'',
+				services: '',
+				getTime: "", // getTime储存从服务器请求回来的数据
 				orderList: [{
 					orderNumber: 'DABH23244743442342',
 					endTime: 1,
@@ -253,9 +254,13 @@
 					this.status,
 					this.currentPage
 				).then(res => {
-					if(res.data.code===2000){
-						this.services=res.data.data.services.services
+					if (res.data.code === 2000) {
+						console.log(res);
+						this.services = res.data.data.services.services
 						console.log(this.services);
+						//  将请求回来的时间存到 getTime中
+						this.getTime =  res.data.data.services.services.beginTime
+						console.log(this.getTime);
 					}
 
 				})
@@ -282,7 +287,13 @@
 			this.id = option.id
 			console.log(this.id);
 		},
-
+		computed: {
+			times() {
+				var s = this.getTime;
+				//  将截取后的时间return出来 
+				return s.substring(0, 10)
+			}
+		},
 
 
 	};
