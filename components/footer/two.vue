@@ -28,10 +28,8 @@
 					:
 				</view>
 				<view class="timer">
-				{{seconds}}
+					{{seconds}}
 				</view>
-
-
 
 			</view>
 
@@ -41,18 +39,18 @@
 			<view class="cylinder">
 			</view>
 			<view class="information">
-				<view class="specific" v-for="(item,index) in orderList" :key='index'>
+				<view class="specific">
 					<view class="orderList">
 						<view class="orderListTop">
 							<view class="orderListLeft">
-								<image :src="item.imgs" mode="" class="orderListimgs"></image>
+								<image :src="jxz.beImg" mode="" class="orderListimgs"></image>
 							</view>
 							<view class="orderListRight">
 								<view class="name">
-									{{item.name}}
+									{{jxz.consumer}}
 								</view>
 								<view class="serviceSite">
-									{{item.serviceSite}}
+									{{jxz.address}}
 								</view>
 							</view>
 						</view>
@@ -60,19 +58,19 @@
 						<view class="centerBox">
 							<view class="listBox">
 								<view class="leftBox">服务内容</view>
-								<view class="rightBox">{{ item.genre }}</view>
+								<view class="rightBox">{{jxz.products}}</view>
 							</view>
 							<view class="listBox">
 								<view class="leftBox">约定服务时间</view>
-								<view class="rightBox">{{ item.appointTime }}</view>
+								<view class="rightBox">{{ time }}</view>
 							</view>
 							<view class="listBox">
 								<view class="leftBox">商品备注</view>
-								<view class="rightBox">{{ item.remark }}</view>
+								<view class="rightBox">{{ jxz.bz }}</view>
 							</view>
 							<view class="listBox">
 								<view class="leftBox">订单编号</view>
-								<view class="rightBox">{{ item.orderNumber }}</view>
+								<view class="rightBox">{{ jxz.id }}</view>
 							</view>
 						</view>
 					</view>
@@ -99,8 +97,11 @@
 					<view class="orderLeft">
 						定位
 					</view>
-					<view class="" style="font-size: 28rpx; color: #00DB39;">
+					<!-- <view class="" style="font-size: 28rpx; color: #00DB39;">
 						定位成功
+					</view> -->
+					<view class="" style="font-size: 28rpx; color: #878BA1; ">
+						未定位
 					</view>
 				</view>
 
@@ -150,14 +151,23 @@
 			<view class="refer" v-show="!serves" @click="start">
 				开始服务
 			</view>
-			<view class="refer" v-show="serves"  @click="present">
+			<view class="refer" v-show="serves" @click="present">
 				提交服务
 			</view>
+		</view>
+
+
+		<view class="">
+			定位{{nowLocation}}
 		</view>
 	</view>
 </template>
 
 <script>
+	import {
+		getProceed,
+		initiate
+	} from '../../src/ajax.js'
 	export default {
 		//获取到顶部高度数据
 		props: ['scrollTopChild'],
@@ -170,9 +180,16 @@
 				serves: false,
 				nums: '',
 				rockon: false,
-				hours:'',
-				minutes:'',
-				seconds:'',
+				hours: '',
+				minutes: '',
+				seconds: '',
+				nowLocation: '', //定位
+				location: 1,
+				tokens: '',
+				belongId:1273804055990304770,
+				id: '1273804055990304770', //用户id
+				time: '', //时间转换
+				jxz: {},
 				orderList: [{
 					imgs: '../../static/imgs/photo.png',
 					orderNumber: 'DABH23244743442342',
@@ -210,7 +227,7 @@
 					if (millisecond >= 1000) {
 						millisecond = 0;
 						second = second + 1;
-						
+
 					}
 					if (second >= 60) {
 						second = 0;
@@ -222,11 +239,41 @@
 						hour = hour + 1;
 					}
 					// this.nums = hour+'时'+minute+'分'+second+'秒';
-					this.hours = hour+'时';
-					this.minutes = minute+'分' ;
-					this.seconds = second+'秒'
+					this.hours = hour + '时';
+					this.minutes = minute + '分';
+					this.seconds = second + '秒'
 					// console.log(this.seconds);
 				}, 50);
+				var _this = this;
+				uni.uploadFile({
+					url: 'http://110.187.88.70:11801/service/startService', //仅为示例，非真实的接口地址
+					filePath:'',
+					name: 'file',
+					header: {
+						'Authorization': 'Bearer ' + _this.tokens
+					},
+					formData: {
+						serviceId: this.jxz.id,
+						location: this.jxz.location,
+						products: this.jxz.products,
+					},
+					success: (res) => {
+						var data = JSON.parse(res.data)
+						uni.hideLoading()
+						uni.showToast({
+							icon: 'none',
+							title: data.message
+						})
+						if (data.code == 2000) {
+							uni.setStorageSync('userInfo', data.data.consumer)
+							uni.navigateTo({
+								url: '../index/index'
+							})
+						}
+					}
+				})
+
+
 			},
 			//前往页面
 			goToPage(res) {
@@ -237,31 +284,102 @@
 							url: '../../pages/two/confirmProject'
 						})
 						break;
-						case 'beforeShooting':
+					case 'beforeShooting':
 						//确认项目
 						uni.navigateTo({
 							url: '../../pages/two/beforeShooting'
 						})
 						break;
-						case 'selectiveFocus':
+					case 'selectiveFocus':
 						//确认项目
 						uni.navigateTo({
 							url: '../../pages/two/selectiveFocus'
 						})
 						break;
-						
+
 					default:
 						break;
 				}
 			},
 			// 提交服务按钮
-			present(){
-				 clearInterval(this.timer);  
-				        this.timer = null;
-						
-			}
+			present() {
+				clearInterval(this.timer);
+				this.timer = null;
+				var _this = this;
+				uni.uploadFile({
+					url: 'http://110.187.88.70:11801/service/submitService', //仅为示例，非真实的接口地址
+					filePath:'',
+					name: 'file',
+					header: {
+						'Authorization': 'Bearer ' + _this.tokens
+					},
+					formData: {
+						serviceId: this.jxz.id,
+						belongId: this.belongId,
+					},
+					success: (res) => {
+						if (res.code == 2000) {
+							uni.showToast({
+								title:'提交成功'
+							})
+						}
+					}
+				})	
+			},
+			//进行中订单
+			gethand() {
+				getProceed(
+					this.id,
+				).then(res => {
+					if (res.data.code === 2000) {
+						// console.log(res);
+						this.jxz = res.data.data.jxz
+						console.log(this.jxz);
+						this.time = new Date(new Date(new Date(res.data.data.jxz.createTime).toJSON()) + 8 * 3600 *
+							1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+						console.log(this.time);
+
+					}
+				})
+			},
+			// 获取当前位置
+			getNowLocation() {
+				var _this = this;
+				uni.getLocation({
+					type: 'wgs84',
+					geocode: true,
+					success: function(res) {
+						//本地储存定位位置
+						// uni.setStorageSync('nowLocation',_this.nowLocation)
+						// if(_this.nowLocation != res.address.city){
+						// uni.showToast({
+						// 	icon:'none',
+						// 	title:'定位成功'
+						// })
+						console.log(res)
+						_this.nowLocation = res.address.province + res.address.city + res.address.district + res.address.poiName
+						console.log(_this.nowLocation);
+						// }
+					},
+					fail: function() {
+						uni.showToast({
+							icon: 'none',
+							title: '定位失败'
+						})
+					}
+				})
+
+			},
+
+
 		},
 
+		created() {
+			this.gethand()
+			this.getNowLocation()
+			this.tokens = uni.getStorageSync('token')
+			console.log(this.tokens);
+		},
 		mounted() {
 			setTimeout(res => {
 				uni.createSelectorQuery().in(this).select('.headBox').boundingClientRect(data => {
@@ -276,12 +394,16 @@
 
 			}
 		},
-		onUnload:function(){
-		    if(this.timer) {  
-		        clearInterval(this.timer);  
-		        this.timer = null;  
-		    }  
-		}
+		onUnload: function() {
+			if (this.timer) {
+				clearInterval(this.timer);
+				this.timer = null;
+			}
+		},
+		onLoad(option) {
+			this.id = option.id
+			console.log(this.id);
+		},
 
 
 

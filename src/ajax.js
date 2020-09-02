@@ -1,4 +1,6 @@
-import { http } from '@/common/service.js' 
+import {
+	http
+} from '@/common/service.js'
 
 /* 
 	GET
@@ -17,18 +19,18 @@ import { http } from '@/common/service.js'
  */
 var tokens;
 
-if(uni.getStorageSync){
+if (uni.getStorageSync) {
 	tokens = uni.getStorageSync('token')
 	console.log(tokens)
 }
-	
+
 
 // 获取验证码 1:用户注册 2:求助设备绑定 3:手环绑定 4:添加家人
-export function getVerificationCode(phone,type) {
+export function getVerificationCode(phone, type) {
 	return http.get('/consumer/sendVerifyCode', {
 		params: {
 			phone,
-			type:1
+			type: 1
 		}
 	})
 }
@@ -36,94 +38,56 @@ export function getVerificationCode(phone,type) {
 export function getUserInfo(token) {
 	return http.get('/consumer/userInfo', {
 		params: {
-			
+
 		},
-		header:{
-			Authorization:'Bearer ' + token
+		header: {
+			Authorization: 'Bearer ' + token
 		}
 	})
 }
 // 待开始订单
-export function getBegin(belongId,status,currentPage) {
+export function getBegin(belongId, status, currentPage) {
 	return http.get('/service/selectService', {
 		params: {
 			belongId,
 			status,
 			currentPage,
-			pageSize:20
+			pageSize: 20
 		}
 	})
 }
 
 
+// 进行中订单
+export function getProceed(belongId) {
+	return http.get('/service/serviceGoing', {
+		params: {
+			belongId,
 
+		}
+	})
+}
 
-
-
-
-
-//商品展示
-export function getGoodsList(businessId,sortId,currentPage){
-	return http.get('/products',{
-		params:{
-			businessId,
-			sortId,
+// 已完成订单
+export function getFinished(belongId, status, currentPage) {
+	return http.get('service/selectService', {
+		params: {
+			belongId,
+			status,
 			currentPage,
-			pageSize:20
-		}
+			pageSize: 20
 
-	})
-}
-
-//商品详情
-export function getGoodsDetails(proId){
-	return http.get('products/selectProduct',{
-		params:{
-			proId
-		}
-		
-	})
-}
-
-
-//获取地址列表
-export function getAddressList(consId){
-	return http.get('/address/listAddress',{
-		params:{
-			consId
 		}
 	})
 }
 
-//添加至购物车
-export function addShopCart(consId,proId){
-	return http.get('/cart/addCart',{
-		params:{
-			consId,
-			proId
-		}
 
-	})
-}
 
-//获取购物车列表
-export function getShopCarList(consId){
-	return http.get('/cart/showCart',{
-		params:{
-			consId
-		}
-	})
-}
 
-//获取订单
-export function getOrderList(consId,proId){
-	return http.get('/order/confirmOrder',{
-		params:{
-			consId,
-			proId	
-		}
-	})
-}
+
+
+
+
 
 
 
@@ -147,31 +111,29 @@ export function getOrderList(consId,proId){
  */
 
 //注册
-export function register(phone,password,verifyCode){
-	return http.post('/oauth/regist',{
+export function register(phone, password, verifyCode) {
+	return http.post('/oauth/regist', {
 		phone,
 		password,
 		verifyCode,
-		clientId:'app'
+		clientId: 'app'
 	})
 }
 
 //登录
-export function login(username,password){
-	return http.post('/oauth/login',{
+export function login(username, password) {
+	return http.post('/oauth/login', {
 		username,
 		password,
-		client_id:'server',
-		client_secret:'123456',
-		grant_type:'password'
-	},
-	{	
-		header:{
-			'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
+		client_id: 'server',
+		client_secret: '123456',
+		grant_type: 'password'
+	}, {
+		header: {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
 		},
 	})
 }
-
 
 
 
@@ -183,21 +145,21 @@ export function login(username,password){
  */
 
 //修改 上传 个人信息
-export function setUserInfo( consId,nikeName,sex){
+export function setUserInfo(consId, nikeName, sex) {
 	return http.upload('/consumer/editConsumerMessage1', {
-			params: {}, /* 会加在url上 */
-			files: [], // 需要上传的文件列表。使用 files 时，filePath 和 name 不生效。App、H5（ 2.6.15+）
-			fileType: 'image/video/audio', // 仅支付宝小程序，且必填。
-			filePath: '', // 要上传文件资源的路径。
-			name: 'file', // 文件对应的 key , 开发者在服务器端通过这个 key 可以获取到文件二进制内容
-			header: {},  /* 会与全局header合并，如有同名属性，局部覆盖全局 */
-			formData: {
-				consId,
-				nikeName,
-				sex
-			}// HTTP 请求中其他额外的 form data
-		}
-	)
-	
-}
+		params: {},
+		/* 会加在url上 */
+		files: [], // 需要上传的文件列表。使用 files 时，filePath 和 name 不生效。App、H5（ 2.6.15+）
+		fileType: 'image/video/audio', // 仅支付宝小程序，且必填。
+		filePath: '', // 要上传文件资源的路径。
+		name: 'file', // 文件对应的 key , 开发者在服务器端通过这个 key 可以获取到文件二进制内容
+		header: {},
+		/* 会与全局header合并，如有同名属性，局部覆盖全局 */
+		formData: {
+			consId,
+			nikeName,
+			sex
+		} // HTTP 请求中其他额外的 form data
+	})
 
+}

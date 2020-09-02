@@ -1,64 +1,114 @@
+<!-- 服务后 -->
 <template>
-    <view>
-        <progress :percent="percent" strock-width="10"></progress>
-        <button type="primary" @tap="cI">chooseImg</button>
-    </view>
+	<view class="box">
+		<view class="uploading">
+			<view class="input">
+				<u-input v-model="value1" type="text" placeholder='请输入位置标题名称' :clearable='clearable' />
+			</view>
+			<view class="easy-upload">
+				<easy-upload :dataList="imageList" uploadUrl="http://localhost:3000/upload" :types="category" deleteUrl='http://localhost:3000/upload'
+				 :uploadCount="6" @successImage="successImage" @successVideo="successvideo"></easy-upload>
+			</view>
+		</view>
+		<view class="uploading">
+			<view class="input">
+				<u-input v-model="value2" type="text" placeholder='请输入位置标题名称' :clearable='clearable' />
+			</view>
+			<view class="easy-upload">
+				<easy-upload :dataList="imageLists" uploadUrl="http://localhost:3000/upload" :types="category" deleteUrl='http://localhost:3000/upload'
+				 :uploadCount="6" @successImage="successImage" @successVideo="successvideo"></easy-upload>
+			</view>
+		</view>
+		<view class="uploading">
+			<view class="input">
+				<u-input v-model="value3" type="text" placeholder='请输入位置标题名称' :clearable='clearable' />
+			</view>
+			<view class="easy-upload">
+				<easy-upload :dataList="imageListss" uploadUrl="http://localhost:3000/upload" :types="category" deleteUrl='http://localhost:3000/upload'
+				 :uploadCount="6" @successImage="successImage" @successVideo="successvideo"></easy-upload>
+			</view>
+		</view>
+	</view>
 </template>
 
 <script>
-    // 注册一个进度条
-    var _self;
+	export default {
+		name: "",
+		components: {
 
-    export default {
-        data() {
-            return {
-                percent:0
-            }
-        },
-        onLoad() {
-            _self = this;
-        },
-        methods: {
-       
-            cI:function(){
-                uni.chooseImage({
-                    count: 1,
-                    sizeType:['copressed'],
-                    success(res) {
-                        //因为有一张图片， 输出下标[0]， 直接输出地址
-                        var imgFiles = res.tempFilePaths[0]
-                        console.log(imgFiles)
-                        // 上传图片
-                        // 做成一个上传对象
-                        var uper = uni.uploadFile({
-                            // 需要上传的地址
-                            url:'http://110.187.88.70:11801/consumer/editConsumerMessage1',
-                            // filePath  需要上传的文件
-                            filePath: imgFiles,
-                            name: 'file',
-							header:{
-								'Authorization':'Bearer '+ _this.tokens
-							},
-                            success(res1) {
-                                // 显示上传信息
-                                console.log(res1)
-                            }
-                        });
-                        // onProgressUpdate 上传对象更新的方法
-                        uper.onProgressUpdate(function(res){
-                            // 进度条等于 上传到的进度
-                            _self.percent = res.progress
-                            console.log('上传进度' + res.progress)
-                            console.log('已经上传的数据长度' + res.totalBytesSent)
-                            console.log('预期需要上传的数据总长度' + res.totalBytesExpectedToSend)
-                        })
-                    }
-                })
-            }
-        }
-    }
+		},
+		props: {},
+		data() {
+			return {
+				value1: '',
+				value2: '',
+				value3: '',
+				imageList: [],
+				imageLists: [],
+				imageListss: [],
+				clearable: false,
+				category: 'image'
+			}
+		},
+		methods: {
+			successImage(e) {
+				uni.showModal({
+					content: '上传成功,详细信息请看控制台'
+				})
+				console.log(e)
+			},
+			successvideo(e) {
+				console.log(e)
+			}
+		},
+		mounted() {},
+
+		onLoad() {
+			uni.request({
+				url: 'http://localhost:3000/upload',
+				method: 'GET',
+				data: {
+					category: this.category
+				},
+				success: res => {
+					this.imageList = res.data
+					this.imageLists = res.data
+					this.imageListss = res.data
+					console.log(this.imageList);
+				},
+				fail(err) {
+					// console.log(err)
+				}
+			});
+		},
+		onNavigationBarButtonTap(){
+			uni.navigateTo({
+				url:'../../components/footer/two'
+			})
+				
+		},
+		filters: {
+
+		},
+		computed: {
+
+		},
+		watch: {
+
+		},
+		directives: {}
+	}
 </script>
 
-<style>
+<style scoped lang="scss">
+	.input {
+		margin: 20rpx 0rpx 0rpx 10rpx;
+	}
 
+	.easy-upload {
+		margin-top: 20rpx;
+	}
+	.uploading{
+		margin-top: 30rpx;
+	}
 </style>

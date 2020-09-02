@@ -68,6 +68,19 @@
                     "qq" : {
                         "appid" : "wxdcc745985d5b6df3"
                     }
+                },
+                "maps" : {
+                    "amap" : {
+                        "appkey_ios" : "ad051e9ef613775f0b23b2d7fb7bf2cd",
+                        "appkey_android" : "15c4c242476ae6ddd4f8584c2dc74c3b"
+                    }
+                },
+                "geolocation" : {
+                    "amap" : {
+                        "__platform__" : [ "ios", "android" ],
+                        "appkey_ios" : "15c4c242476ae6ddd4f8584c2dc74c3b",
+                        "appkey_android" : "15c4c242476ae6ddd4f8584c2dc74c3b"
+                    }
                 }
             }
         }

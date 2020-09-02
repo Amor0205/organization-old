@@ -21,7 +21,7 @@
 						{{ locationList[locationIndex] }}
 					</view>
 				</view>
-				
+
 				<view class="bottomBox" v-show="popupShow">
 					<text class="title">
 						城区筛选
@@ -36,73 +36,73 @@
 			</view>
 		</view>
 		<view class="contentBox">
-			<view class="orderListBox" v-for="(item,index) in orderList" :key='index'>
+			<view class="orderListBox" v-for="(item,index) in services" :key='index'>
 				<!-- 间隔行 -->
 				<u-gap height="14" bg-color="#e5e5e5"></u-gap>
 				<view class="outerListBox">
 					<view class="topBox">
-						<text>{{ item.genre }}</text>
-						
+						<text>{{ item.products }}</text>
+
 					</view>
 					<view class="centerBox">
 						<view class="listBox">
 							<view class="leftBox">服务对象</view>
-							<view class="rightBox">{{ item.object }}</view>
+							<view class="rightBox">{{ item.consumer }}</view>
 						</view>
 						<view class="listBox">
 							<view class="leftBox">约定服务时间</view>
-							<view class="rightBox">{{ item.appointTime }}</view>
+							<view class="rightBox">{{ time }}</view>
 						</view>
 						<view class="listBox">
 							<view class="leftBox">服务完成时间</view>
-							<view class="rightBox">{{ item.endtime }}</view>
+							<view class="rightBox">{{ times }}</view>
 						</view>
 						<view class="listBox">
 							<view class="leftBox">商品备注</view>
-							<view class="rightBox">{{ item.remark }}</view>
+							<view class="rightBox">{{ item.bz }}</view>
 						</view>
 
-					<view class="base">
-						<view class="baseBox">
-							<view class="speed">
-								响应速度
-							</view>
-							<view class="score">
-								<view class="scoreImg">
-									<image :src="item.imgs" mode="" class="scoreImgs"></image>
+						<view class="base">
+							<view class="baseBox">
+								<view class="speed">
+									响应速度
 								</view>
-								<view class="responsespeed">
-									{{ item.responsespeed }}
+								<view class="score">
+									<view class="scoreImg">
+										<image src="../../static/imgs/bf.png" mode="" class="scoreImgs"></image>
+									</view>
+									<view class="responsespeed">
+										{{ item.responsespeed }}
+									</view>
+								</view>
+							</view>
+							<view class="baseBox">
+								<view class="speed">
+									服务时效
+								</view>
+								<view class="score">
+									<view class="scoreImg">
+										<image src="../../static/imgs/bf.png" mode="" class="scoreImgs"></image>
+									</view>
+									<view class="responsespeed">
+										{{ item.responsespeed }}
+									</view>
+								</view>
+							</view>
+							<view class="baseBox">
+								<view class="speed">
+									专业程度
+								</view>
+								<view class="score">
+									<view class="scoreImg">
+										<image src="../../static/imgs/bf.png" mode="" class="scoreImgs"></image>
+									</view>
+									<view class="responsespeed">
+										{{ item.responsespeed }}
+									</view>
 								</view>
 							</view>
 						</view>
-						<view class="baseBox">
-							<view class="speed">
-								服务时效
-							</view>
-							<view class="score">
-								<view class="scoreImg">
-									<image :src="item.imgs" mode="" class="scoreImgs"></image>
-								</view>
-								<view class="responsespeed">
-									{{ item.responsespeed }}
-								</view>
-							</view>
-						</view>
-						<view class="baseBox">
-							<view class="speed">
-								专业程度
-							</view>
-							<view class="score">
-								<view class="scoreImg">
-									<image :src="item.imgs" mode="" class="scoreImgs"></image>
-								</view>
-								<view class="responsespeed">
-									{{ item.responsespeed }}
-								</view>
-							</view>
-						</view>
-					</view>
 
 					</view>
 
@@ -114,6 +114,9 @@
 </template>
 
 <script>
+	import {
+		getFinished
+	} from '../../src/ajax.js'
 	export default {
 		//获取到顶部高度数据
 		props: ['scrollTopChild'],
@@ -124,6 +127,12 @@
 				popupShow: false, //
 				topGapHeight: 0, //顶部间隙
 				// active:false,
+				status: 3,
+				currentPage: 1, //当前页数,
+				id: '1273804055990304770', //用户id
+				services: '',
+				time: '',
+				times: '',
 				orderList: [{
 					genre: '打扫卫生',
 					orderNumber: 'DABH23244743442342',
@@ -188,21 +197,43 @@
 						break;
 				}
 			},
-		//控制popup的显示
-		showPopup(){
-			this.popupShow = !this.popupShow
-		},
-		//处理蒙版显示时不允许屏幕滚动
-		moveHandle (){},
-		// 切换地点
-		changeLocation(index){
-			this.locationIndex = index;
-		}
+			//控制popup的显示
+			showPopup() {
+				this.popupShow = !this.popupShow
+			},
+			//处理蒙版显示时不允许屏幕滚动
+			moveHandle() {},
+			// 切换地点
+			changeLocation(index) {
+				this.locationIndex = index;
+			},
+			//获取已完成订单
+			getEnd() {
+				getFinished(
+					this.id,
+					this.status,
+					this.currentPage
+				).then(res => {
+					if (res.data.code === 2000) {
+						// console.log(res);
+						this.services = res.data.data.services.services
+						console.log(this.services);
+						this.time = new Date(new Date(new Date(res.data.data.services.services[0].createTime).toJSON()) + 8 * 3600 *
+							1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+						console.log(this.time);
+						this.times = new Date(new Date(new Date(res.data.data.services.services[0].beginTime).toJSON()) + 8 * 3600 *
+							1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+						console.log(this.times);
+					}
+				})
+			}
+
+
 
 		},
 
 		created() {
-
+			this.getEnd()
 		},
 		mounted() {
 			setTimeout(res => {
@@ -297,7 +328,7 @@
 				}
 
 				.bottomBox {
-				
+
 					padding-bottom: 40upx;
 
 					.title {
@@ -382,38 +413,41 @@
 			}
 		}
 	}
+
 	// 评价
-.base{
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-top: 30rpx;
-	.baseBox {
+	.base {
 		display: flex;
-	
-		.speed {
-			color: #878BA1;
-		}
-	
-		.score {
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 30rpx;
+
+		.baseBox {
 			display: flex;
-			justify-content: cenert;
-			margin-left: 10rpx;
-			.scoreImg {
-				width: 20rpx;
-				height: 20rpx;
-	
-				.scoreImgs {
+
+			.speed {
+				color: #878BA1;
+			}
+
+			.score {
+				display: flex;
+				justify-content: cenert;
+				margin-left: 10rpx;
+
+				.scoreImg {
 					width: 20rpx;
 					height: 20rpx;
+
+					.scoreImgs {
+						width: 20rpx;
+						height: 20rpx;
+					}
 				}
-			}
-	
-			.responsespeed {
-				font-size: 24rpx;
-				color: #FEB34A;
+
+				.responsespeed {
+					font-size: 24rpx;
+					color: #FEB34A;
+				}
 			}
 		}
 	}
-}
 </style>

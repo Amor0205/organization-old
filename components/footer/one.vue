@@ -34,6 +34,8 @@
 				</view>
 			</view>
 		</view>
+
+
 		<view class="contentBox">
 			<view class="orderListBox" v-for="(item,index) in services" :key='index'>
 				<!-- 间隔行 -->
@@ -74,6 +76,9 @@
 				</view>
 			</view>
 		</view>
+		<!-- <view class="" v-else>
+			暂无待服务订单
+		</view> -->
 	</view>
 
 </template>
@@ -95,10 +100,10 @@
 				topGapHeight: 0, //顶部间隙
 				status: 1,
 				currentPage: 1, //当前页数,
-				id: '1273804055990304770',
+				id: '1273804055990304770', //用户id
 				services: '',
-				time:'', //时间转换
-				date:'',
+				time: '', //时间转换
+				date: '',
 				orderList: [{
 					orderNumber: 'DABH23244743442342',
 					endTime: 1,
@@ -280,9 +285,9 @@
 						console.log(res);
 						this.services = res.data.data.services.services
 						console.log(this.services);
-						this.time = new Date(new Date(new Date(res.data.data.services.services[0].createTime).toJSON()) + 8 * 3600 *
-							1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
-						
+						// this.time = new Date(new Date(new Date(res.data.data.services.services[0].createTime).toJSON()) + 8 * 3600 *
+						// 	1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+
 					}
 				})
 			}
