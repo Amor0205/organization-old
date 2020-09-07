@@ -1,5 +1,5 @@
 <template>
-	<view class="container" >
+	<view class="container">
 		<!-- 未到指定距离 隐藏 -->
 		<view class="showTitleBox" v-if="scrollTopChild > 40">
 			<view class="leftBox">
@@ -17,7 +17,7 @@
 				<view class="leftBox">
 					<view class="imgbox" @click="goToPage('manageAccount')">
 						<!-- <image :src="headPortraitDefault" mode=""></image> -->
-							<image :src="userInfo.avatar ? userInfo.avatar : headPortraitDefault" mode=""></image>
+						<image :src="userInfo.avatar ? userInfo.avatar : headPortraitDefault" mode=""></image>
 					</view>
 					<view class="titleBox">
 						<view class="username" @click="goToPage('manageAccount')">
@@ -54,10 +54,10 @@
 				</view>
 			</view>
 		</view>
-		
+
 		<!-- 中间内容 -->
 		<view class="centerBox" ref='centerBox'>
-			<view class="title" >
+			<view class="title">
 				<view class="leftBox">
 					数据查看
 				</view>
@@ -83,16 +83,16 @@
 				<canvas canvas-id="canvasLineA" id="canvasLineA" class="charts" @touchstart="touchLineA"></canvas>
 				<!--#endif-->
 			</view>
-			
+
 		</view>
-		
+
 		<!-- 工作数据 -->
 		<view class="workData">
 			<!-- 总单数 -->
 			<view class="gross">
 				累计完成订单数量 <text class="number">{{' ' + completeSum }}</text>
 			</view>
-			
+
 			<!-- 评价详情 -->
 			<view class="evaluateDtl">
 				<view class="title">评价详情</view>
@@ -103,237 +103,264 @@
 				</view>
 			</view>
 		</view>
-		
+
 		<!-- 分割线 -->
 		<!-- <view class="cuttingLine"></view> -->
-		
-		
 
-			
-		
+
+
+
+
 	</view>
 </template>
 
 <script>
 	import uCharts from '@/components/u-charts/u-charts.js';
-	
+	import {
+		mine
+	} from '../../src/ajax.js'
 	var _this;
 	var canvaLineA = null;
 	export default {
 		//获取到顶部高度数据
-		props:['scrollTopChild'],
+		props: ['scrollTopChild'],
 		data() {
 			return {
-				userInfo:'',		//用户信息
-				headPortraitDefault:'../../static/imgs/default_touxiang.png',  //默认头像
-				cWidth:'',		//图表
-				cHeight:'',		//图表
-				pixelRatio:1,
-				index:0,		//用于时间选择
-				completeSum:0,	//完成总数
-				headList:{
-					collect:{
-						name:'好评',
-						number:21
+				userInfo: '', //用户信息
+				headPortraitDefault: '../../static/imgs/default_touxiang.png', //默认头像
+				cWidth: '', //图表
+				cHeight: '', //图表
+				pixelRatio: 1,
+				index: 0, //用于时间选择
+				completeSum: 0, //完成总数
+				year: 2020,
+				id: '1273804055990304770', //用户id
+				myData: '',
+				headList: {
+					collect: {
+						name: '好评',
+						number: 21
 					},
-					attention:{
-						name:'中评',
-						number:18
+					attention: {
+						name: '中评',
+						number: 18
 					},
-					redPacket:{
-						name:'差评',
-						number:9
+					redPacket: {
+						name: '差评',
+						number: 9
 					}
 				},
-				evaluateDtlList:[
-					{
-						name:'相应速度',
-						grade:4.6
-					},{
-						name:'服务效率',
-						grade:4.6
-					},{
-						name:'专业程度',
-						grade:4.6
-					}
-				],
-				
-				chartsData:[
-					{
-					categories:["1月","2月","3月","4月","5月","6月","7月","8月","9月","11月","12月"],
-					series:[{
-						name:"累计完成",
-						data:[100,80,95,150,112,132,122,422],
+				evaluateDtlList: [{
+					name: '相应速度',
+					grade: 4.6
+				}, {
+					name: '服务效率',
+					grade: 4.6
+				}, {
+					name: '专业程度',
+					grade: 4.6
+				}],
+
+				chartsData: [{
+						categories: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "11月", "12月"],
+						series: [{
+							name: "累计完成",
+							data: [100, 80, 95, 150, 112, 132, 122, 422],
 						}]
 					},
 					{
-					categories:["1月","2月","3月","4月","5月","6月","7月","8月","9月","11月","12月"],
-					series:[{
-						name:"累计完成",
-						data:[23,180,55,56,153,101,122,320,110,],
+						categories: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "11月", "12月"],
+						series: [{
+							name: "累计完成",
+							data: [23, 180, 55, 56, 153, 101, 122, 320, 110, ],
 						}]
 					}
 				],
-				chartsDataAll:{
-					categories:["2020","2019","2018"],
-					series:[{
-						name:"累计完成",
-						data:[231,210,642],
-						}]
+				chartsDataAll: {
+					categories: ["2020", "2019", "2018"],
+					series: [{
+						name: "累计完成",
+						data: [231, 210, 642],
+					}]
 				},
-				
+
 			}
 		},
 		methods: {
-			goToPage(res){
-				if(res == 'set'){
+			goToPage(res) {
+				if (res == 'set') {
 					uni.navigateTo({
-						url:'../../pages/set/set'
-					})					
-				}else if(res == 'manageAccount'){
+						url: '../../pages/set/set'
+					})
+				} else if (res == 'manageAccount') {
 					uni.navigateTo({
-						url:'../../pages/set/manageAccount'
-					})	
-				}else{
+						url: '../../pages/set/manageAccount'
+					})
+				} else {
 					uni.navigateTo({
-						url:res
+						url: res
 					})
 				}
 			},
 			//控制图标配置
-			showLineA(canvasId,chartData){
+			showLineA(canvasId, chartData) {
 				canvaLineA = new uCharts({
-					$this:_this,
+					$this: _this,
 					canvasId: canvasId,
 					type: 'line',
-					fontSize:11,
-					padding:[15,20,0,15],
-					legend:{
-						show:true,
-						padding:5,
-						lineHeight:11,
-						margin:0,
+					fontSize: 11,
+					padding: [15, 20, 0, 15],
+					legend: {
+						show: true,
+						padding: 5,
+						lineHeight: 11,
+						margin: 0,
 					},
-					dataLabel:true,
-					dataPointShape:true,
-					background:'#FFFFFF',
+					dataLabel: true,
+					dataPointShape: true,
+					background: '#FFFFFF',
 					// pixelRatio:_this.pixelRatio,
 					categories: chartData.categories,
 					series: chartData.series,
 					animation: true,
 					xAxis: {
-						type:'grid',
-						gridColor:'#CCCCCC',
-						gridType:'dash',
-						dashLength:8,
-						boundaryGap:'justify'
+						type: 'grid',
+						gridColor: '#CCCCCC',
+						gridType: 'dash',
+						dashLength: 8,
+						boundaryGap: 'justify'
 					},
 					yAxis: {
-						gridType:'dash',
-						gridColor:'#CCCCCC',
-						dashLength:10,
-						splitNumber:6,
-						format:(val)=>{return val.toFixed(0)}
+						gridType: 'dash',
+						gridColor: '#CCCCCC',
+						dashLength: 10,
+						splitNumber: 6,
+						format: (val) => {
+							return val.toFixed(0)
+						}
 					},
-					width: _this.cWidth*_this.pixelRatio,
-					height: _this.cHeight*_this.pixelRatio,
+					width: _this.cWidth * _this.pixelRatio,
+					height: _this.cHeight * _this.pixelRatio,
 					extra: {
-						line:{
+						line: {
 							type: 'curve'
 						}
 					}
 				});
 				//下面是默认选中索引
-				let cindex=3;
+				let cindex = 3;
 				//下面是自定义文案
 				// let textList=[{text:'我是一个标题',color:null},{text:'自定义3：值3',color:'#f04864'}];
-				let textList=[];
+				let textList = [];
 				//下面是event的模拟,tooltip的Y坐标值通过这个mp.changedTouches[0].y控制
-				let tmpevent={mp:{changedTouches:[{x: 0, y: 80}]}};
-				setTimeout(()=>{
-					canvaLineA.showToolTip( tmpevent , {
-						index:cindex,
-						textList:textList
+				let tmpevent = {
+					mp: {
+						changedTouches: [{
+							x: 0,
+							y: 80
+						}]
+					}
+				};
+				setTimeout(() => {
+					canvaLineA.showToolTip(tmpevent, {
+						index: cindex,
+						textList: textList
 					});
-				},200)
+				}, 200)
 			},
 			//点击切换内容
 			touchLineA(e) {
 				canvaLineA.touchLegend(e);
 				canvaLineA.showToolTip(e, {
-					format: function (item, category) {
+					format: function(item, category) {
 						return category + ' ' + item.name + ':' + item.data + '单'
 					}
 				});
-			},	
+			},
 			//切换图表展示内容
-			changeChart(e){
-				if(e == 'year'){
+			changeChart(e) {
+				if (e == 'year') {
 					this.changeYear()
-					this.showLineA("canvasLineA",this.chartsData[this.index])	
-				}else if(e == 'all'){
-					this.showLineA("canvasLineA",this.chartsDataAll)	
+					this.showLineA("canvasLineA", this.chartsData[this.index])
+				} else if (e == 'all') {
+					this.showLineA("canvasLineA", this.chartsDataAll)
 				}
 			},
 			//切换时间
-			changeYear(e){
-				if(e){
+			changeYear(e) {
+				if (e) {
 					this.index = e.target.value
-					this.showLineA("canvasLineA",this.chartsData[this.index])
+					this.showLineA("canvasLineA", this.chartsData[this.index])
 				}
-				
+
+			},
+			//获取我的数据
+			my() {
+				mine(
+					this.year,
+					this.id
+				).then(res => {
+					if (res.data.code === 2000) {
+						console.log(res);
+						this.myData = res.data.data.myData
+						console.log(this.myData);
+					}
+				})
 			}
-				
 		},
 		created() {
 			// this.commonColor = this.commonColorAll
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
-
+			// console.log(this.userInfo)
 			this.commonColor = this.commonColorAll
 			//获取userInfo
 			// this.userInfo = uni.getStorageSync('userInfo')
-			console.log(this.userInfo)
-			
+			// console.log(this.userInfo)
+
 			_this = this;
 			// #ifdef MP-ALIPAY
 			uni.getSystemInfo({
-				success: function (res) {
-					if(res.pixelRatio>1){
+				success: function(res) {
+					if (res.pixelRatio > 1) {
 						//正常这里给2就行，如果pixelRatio=3性能会降低一点
 						//_this.pixelRatio =res.pixelRatio;
-						_this.pixelRatio =2;
+						_this.pixelRatio = 2;
 					}
 				}
 			});
 			//#endif
-			this.cWidth=uni.upx2px(680);
-			this.cHeight=uni.upx2px(400);
+			this.cWidth = uni.upx2px(680);
+			this.cHeight = uni.upx2px(400);
+			this.my()
 		},
 		mounted() {
 			//显示图表 传入（图表名，图表数据）
-			this.showLineA("canvasLineA",this.chartsData[this.index])	
+			this.showLineA("canvasLineA", this.chartsData[this.index])
 			//计算总量
-			this.chartsDataAll.series[0].data.map(res=>{
+			this.chartsDataAll.series[0].data.map(res => {
 				this.completeSum += res
 			})
 		},
-		watch:{
-			userInfoChild:function(){
+		watch: {
+			userInfoChild: function() {
 				this.userInfo = this.$props.userInfoChild
 			}
 		},
-		onLoad() {
+		onLoad(option) {
+			// this.id = option.id
+			// console.log(this.id);
 			if (uni.getStorageSync('token').length == 0) {
 				uni.navigateTo({
 					url: '../login/login'
 				})
 			}
+
 		},
 		onShow() {
-			
+
 		}
-		
+
 	}
 </script>
 
@@ -341,13 +368,14 @@
 	.container {
 		min-height: 100%;
 		background: #ebeadf;
+
 		.showTitleBox {
 			width: 96%;
 			// width: 100%;
 			height: 100upx;
 			top: 0upx;
 			color: #282828;
-			background: rgba(235,234,223,1);
+			background: rgba(235, 234, 223, 1);
 			position: fixed;
 			display: flex;
 			justify-content: center;
@@ -355,11 +383,13 @@
 			align-items: flex-end;
 			padding: 20upx 2%;
 			z-index: 999;
+
 			.leftBox {
 				font-weight: 600;
 				font-size: 18px;
 			}
-			.rightBox{
+
+			.rightBox {
 				font-size: 16px;
 				position: fixed;
 				right: 20upx;
@@ -371,225 +401,260 @@
 				// }
 			}
 		}
-		.headBox{
-			padding-top:100upx ;
+
+		.headBox {
+			padding-top: 100upx;
 			// height: 280upx;
 			display: flex;
 			flex-direction: column;
+
 			// justify-content: space-between;
 			// 头部上方容器
-			.headTopBox{
+			.headTopBox {
 				display: flex;
 				justify-content: space-between;
-				.leftBox{
+
+				.leftBox {
 					display: flex;
 					margin-left: 22upx;
-					.imgbox{
+
+					.imgbox {
 						width: 128upx;
 						height: 128upx;
+
 						// background: #aaa;
 						// border-radius: 50%;
-						image{
+						image {
 							width: 100%;
 							height: 100%;
 							border-radius: 50%;
 						}
 					}
-					.titleBox{
+
+					.titleBox {
 						display: flex;
 						flex-direction: column;
 						justify-content: center;
-						padding-left:26upx ;
-						.username{
-							font-size:16px;
+						padding-left: 26upx;
+
+						.username {
+							font-size: 16px;
 							// font-weight: 600;
 						}
-						.tagBox{
-							font-size:12px;
+
+						.tagBox {
+							font-size: 12px;
 							min-width: 100upx;
 							height: 36upx;
 							display: flex;
 							margin: 8upx 0;
+
 							// align-items: center;
 							// align-self: flex-start;
 							// padding: 0 15upx;
 							// border-radius: 20upx;
 							// background: #EC7171;
 							// color: #FFFFFF;
-							.common{
+							.common {
 								border-radius: 6upx;
 								padding: 0 14upx;
-								
+
 							}
-							.tag_1{
+
+							.tag_1 {
 								background-color: #FEB34A;
 								color: #fff;
 								margin-right: 10upx;
-								
+
 							}
-							.tag_2{
+
+							.tag_2 {
 								background-color: #FFFFFF;
 								color: #2284FF;
 								border: 1px solid #2284FF;
 							}
 						}
-						.companyName{
-							font-size:12px;
+
+						.companyName {
+							font-size: 12px;
 							color: #878BA1;
 						}
 					}
 				}
-				.rightBox{
+
+				.rightBox {
 					width: 48upx;
 					height: 48upx;
 					margin-right: 22upx;
-					.imgBox{
+
+					.imgBox {
 						width: 48upx;
 						height: 48upx;
-						image{
+
+						image {
 							width: 100%;
 							height: 100%;
 						}
 					}
 				}
-			}	
-			
+			}
+
 			// 头部上方容器
-			.headBottomBox{
+			.headBottomBox {
 				display: flex;
 				justify-content: space-around;
 				margin: 40upx 2% 0;
 				background-color: #ffe300;
 				padding: 20upx;
 				border-radius: 16upx;
-				.contentBox{
+
+				.contentBox {
 					display: flex;
 					align-items: center;
 					flex-direction: column;
 					width: 25%;
 					height: 100upx;
 					font-size: 12px;
-					.numberBox{
+
+					.numberBox {
 						color: #282828;
-						font-size:20px;
-						font-weight:bold;
+						font-size: 20px;
+						font-weight: bold;
 					}
 				}
 			}
 		}
+
 		// 中间内容
-		.centerBox{
+		.centerBox {
 			// height: 220upx;
 			background: #fff;
-			border-radius:16upx;
+			border-radius: 16upx;
 			padding: 20upx;
-			margin:30upx 2% 0;
-			.title{
-				font-size:16px;
-				color:#282828;
+			margin: 30upx 2% 0;
+
+			.title {
+				font-size: 16px;
+				color: #282828;
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-				.rightBox{
+
+				.rightBox {
 					display: flex;
 					justify-content: space-between;
 					font-size: 12px;
 					color: #666666;
 					width: 40%;
-					.year{
+
+					.year {
 						display: flex;
 						align-items: center;
 					}
 				}
 			}
-			.chart{
-				width:680upx;
+
+			.chart {
+				width: 680upx;
 				height: 400upx;
+
 				.charts {
-					width:680upx;
+					width: 680upx;
 					height: 400upx;
 					background-color: #FFFFFF;
 				}
 			}
 		}
-		
+
 		// 工作数据
-		.workData{
+		.workData {
 			background: #fff;
-			border-radius:16upx;
+			border-radius: 16upx;
 			padding: 20upx;
-			margin:30upx 2% 0;
+			margin: 30upx 2% 0;
 			font-size: 16px;
 			color: #2f2f2f;
-			.gross{
-				margin-bottom:28upx ;
-				.number{
+
+			.gross {
+				margin-bottom: 28upx;
+
+				.number {
 					font-size: 20px;
 					color: #0a3ab3
 				}
 			}
-			.evaluateDtl{
-				.title{
-					margin-bottom:16upx ;
+
+			.evaluateDtl {
+				.title {
+					margin-bottom: 16upx;
 				}
-				.listBox{
+
+				.listBox {
 					display: flex;
 					justify-content: space-between;
 					font-size: 14px;
 					color: #707070;
-					text{
+
+					text {
 						font-size: 16px;
 						color: #0a3ab3;
 					}
 				}
 			}
 		}
-		
+
 		// 分割线
-		.cuttingLine{
+		.cuttingLine {
 			height: 18upx;
 			background: #f9f9f9;
 		}
-		
+
 		//功能列表
-		.functionListContainer{
+		.functionListContainer {
 			// padding: 0 24upx;
 			// height: 100%;
 			background: #FFFFFF;
-			.functionListBox{
+
+			.functionListBox {
 				height: 100%;
-				font-size:14px;
+				font-size: 14px;
 				color: #282828;
-				.functionList{
+
+				.functionList {
 					padding: 30upx 24upx;
 					display: flex;
 					justify-content: space-between;
-					.leftBox{
+
+					.leftBox {
 						display: flex;
-						.imgBox{
-							width:40upx;
+
+						.imgBox {
+							width: 40upx;
 							height: 40upx;
-							margin-right:32upx ;
-							image{
+							margin-right: 32upx;
+
+							image {
 								width: 100%;
 								height: 100%;
 							}
 						}
 					}
-					.arrowsBox{
-						
-						width:10upx;
+
+					.arrowsBox {
+
+						width: 10upx;
 						height: 20upx;
-						margin-right:32upx ;
-						image{
+						margin-right: 32upx;
+
+						image {
 							width: 100%;
 							height: 100%;
 						}
 					}
-						
+
 				}
 			}
-			
+
 		}
 	}
 </style>

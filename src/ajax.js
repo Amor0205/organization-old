@@ -82,6 +82,17 @@ export function getFinished(belongId, status, currentPage) {
 }
 
 
+// 我的
+export function mine( year,empId) {
+	return http.get('/service/myData', {
+		params: {
+			year,
+			empId
+
+		}
+	})
+}
+
 
 
 

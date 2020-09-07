@@ -157,9 +157,9 @@
 		</view>
 
 
-		<view class="">
-			定位{{nowLocation}}
-		</view>
+			<!-- <view class="">
+				定位{{nowLocation}}
+			</view> -->
 	</view>
 </template>
 
