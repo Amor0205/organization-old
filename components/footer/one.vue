@@ -1,83 +1,89 @@
 <template>
-	<view class="containerBox">
-		<!-- 蒙版 -->
-		<view class="mask" v-show="popupShow" @click="showPopup" @touchmove.stop.prevent='moveHandle'></view>
-		<!-- 头部 -->
-		<view class="titleBox">
-			<view class="inputBox" @click="goToPage('search')">
-				<view class="centerBox">
-					<image src="../../static/imgs/sousuo@2x.png" mode=""></image>
-					<text>请输入你想搜索的内容</text>
-				</view>
-			</view>
-			<view class="controlBox">
-				<view class="topBox">
-					<view class="leftBox" @click="showPopup">
-						<text>查看全部</text>
-						<image src="../../static/imgs/xx.png" style="width: 14upx;height: 12upx;margin-left: 4upx;" mode=""></image>
-					</view>
-					<view class="rightBox">
-						{{ locationList[locationIndex] }}
-					</view>
-				</view>
-
-				<view class="bottomBox" v-show="popupShow">
-					<text class="title">
-						城区筛选
-					</text>
-					<view class="locationBox">
-						<view class="locationList" @click="changeLocation(index)" :class="index == locationIndex?'active':''" v-for="(item,index) in locationList"
-						 :key='index'>
-							{{ item }}
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
-
-
-		<view class="contentBox">
-			<view class="orderListBox" v-for="(item,index) in services" :key='index'>
-				<!-- 间隔行 -->
-				<u-gap height="14" bg-color="#e5e5e5"></u-gap>
-				<view class="outerListBox">
-					<view class="topBox">
-						<text>{{ item.itemId }}</text>
-						<text class="endTime">截止时间{{ item.endTime }}天</text>
-					</view>
+	<view>
+		<!-- v-if="services.length>0" -->
+		<view class="containerBox">
+			<!-- 蒙版 -->
+			<view class="mask" v-show="popupShow" @click="showPopup" @touchmove.stop.prevent='moveHandle'></view>
+			<!-- 头部 -->
+			<view class="titleBox">
+				<view class="inputBox" @click="goToPage('search')">
 					<view class="centerBox">
-						<view class="listBox">
-							<view class="leftBox">服务对象</view>
-							<view class="rightBox">{{ item.consumer }}</view>
-						</view>
-						<view class="listBox">
-							<view class="leftBox">约定服务时间</view>
-							<view class="rightBox">{{ time}}</view>
-						</view>
-						<view class="listBox">
-							<view class="leftBox">服务内容</view>
-							<view class="rightBox">{{ item.products }}</view>
-						</view>
-						<view class="listBox">
-							<view class="leftBox">商品备注</view>
-							<view class="rightBox" style="color: #FF9500;">{{ item.bz }}</view>
-						</view>
-						<view class="listBox">
-							<view class="leftBox">服务约定地址</view>
-							<view class="rightBox">{{ item.address }}</view>
-						</view>
-
+						<image src="../../static/imgs/sousuo@2x.png" mode=""></image>
+						<text>请输入你想搜索的内容</text>
 					</view>
-					<view class="bottomBox">
-						<view class="buttonBox">提醒上门</view>
-						<view class="buttonBox" @click="goToPage('map',item)">地址导航</view>
-						<view class="buttonBox" @click="goToPage('makePhone',item)">电话联系</view>
+				</view>
+				<view class="controlBox">
+					<view class="topBox">
+						<view class="leftBox" @click="showPopup">
+							<text>查看全部</text>
+							<image src="../../static/imgs/xx.png" style="width: 14upx;height: 12upx;margin-left: 4upx;" mode=""></image>
+						</view>
+						<view class="rightBox">
+							{{ locationList[locationIndex] }}
+						</view>
+					</view>
+
+					<view class="bottomBox" v-show="popupShow">
+						<text class="title">
+							城区筛选
+						</text>
+						<view class="locationBox">
+							<view class="locationList" @click="changeLocation(index)" :class="index == locationIndex?'active':''" v-for="(item,index) in locationList"
+							 :key='index'>
+								{{ item }}
+							</view>
+						</view>
 					</view>
 				</view>
 			</view>
+
+
+			<view class="contentBox">
+				<view class="orderListBox" v-for="(item,index) in services" :key='index'>
+					<!-- 间隔行 -->
+					<u-gap height="14" bg-color="#e5e5e5"></u-gap>
+					<view class="outerListBox">
+						<view class="topBox">
+							<text>{{ item.itemId }}</text>
+							<text class="endTime">截止时间天</text>
+						</view>
+						<view class="centerBox" @click="StartService(item.id)">
+							<view class="listBox">
+								<view class="leftBox">服务对象</view>
+								<view class="rightBox">{{ item.consumer }}</view>
+							</view>
+							<view class="listBox">
+								<view class="leftBox">约定服务时间</view>
+								<view class="rightBox">{{ time}}</view>
+							</view>
+							<view class="listBox">
+								<view class="leftBox">服务内容</view>
+								<view class="rightBox">{{ item.content }}</view>
+							</view>
+							<view class="listBox">
+								<view class="leftBox">商品备注</view>
+								<view class="rightBox" style="color: #FF9500;">{{ item.bz }}</view>
+							</view>
+							<view class="listBox">
+								<view class="leftBox">服务约定地址</view>
+								<view class="rightBox">{{ item.address }}</view>
+							</view>
+
+						</view>
+						<view class="bottomBox">
+							<!-- <view class="buttonBox">提醒上门</view> -->
+							<view class="buttonBox" @click="goToPage('map',item)">地址导航</view>
+							<view class="buttonBox" @click="goToPage('makePhone',item)">电话联系</view>
+						</view>
+					</view>
+				</view>
+			</view>
+
 		</view>
-		<!-- <view class="" v-else>
-			暂无待服务订单
+		<!-- <view class="availables" v-else>
+			<view class="available" >
+				暂无待开始服务订单
+			</view>
 		</view> -->
 	</view>
 
@@ -104,6 +110,7 @@
 				services: '',
 				time: '', //时间转换
 				date: '',
+				userInfo:'',
 				orderList: [{
 					orderNumber: 'DABH23244743442342',
 					endTime: 1,
@@ -146,7 +153,6 @@
 		},
 		methods: {
 			goToPage(e, data) {
-
 				switch (e) {
 					case 'search':
 						uni.navigateTo({
@@ -161,7 +167,7 @@
 						break;
 					case 'makePhone':
 						uni.makePhoneCall({
-							phoneNumber: JSON.stringify(data.phoneNum)
+							phoneNumber: JSON.stringify(data.phone)
 						});
 
 						break;
@@ -187,17 +193,17 @@
 						key: '698bd4e0ca6ef47bd4f84da21cc4d8fd',
 						s: 'rsv3',
 						city: 35,
-						address: site
+						address: '四川省眉山市彭山区凤鸣镇丽景苑二栋二单元2204'
 					},
 					header: {
 
 					},
 					success: (res) => {
-						// var locations = res.data.geocodes[0].location
-						// var longitude = locations.match(/(\S*),/)[1] //经度
-						// var latitude = locations.match(/,(\S*)/)[1] 	//纬度
-						// this.toMapAPP(longitude,latitude,site)
-						// console.log()
+						var locations = res.data.geocodes[0].location
+						var longitude = locations.match(/(\S*),/)[1] //经度
+						var latitude = locations.match(/,(\S*)/)[1] //纬度
+						this.toMapAPP(longitude, latitude, site)
+						console.log()
 					}
 				});
 			},
@@ -276,26 +282,46 @@
 			},
 			//获取待开始订单
 			getStart() {
+				
 				getBegin(
-					this.id,
+					this.userInfo.id,
 					this.status,
 					this.currentPage
 				).then(res => {
 					if (res.data.code === 2000) {
 						console.log(res);
+							uni.setStorageSync('services', res.data.data.services.services)
 						this.services = res.data.data.services.services
-						console.log(this.services);
-						// this.time = new Date(new Date(new Date(res.data.data.services.services[0].createTime).toJSON()) + 8 * 3600 *
-						// 	1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+						// console.log(this.services);
+						this.time = new Date(new Date(new Date(res.data.data.services.services[0].createTime).toJSON()) + 8 * 3600 *
+							1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
 
 					}
 				})
+			},
+			//跳转开始服务订单页面
+			StartService(res) {
+				console.log(res);
+				// console.log(res);
+				// 获取当前页
+				var pages = getCurrentPages(); //当前页
+				// console.log(pages);
+				// 改变页面（h5页面跟app不一样）
+				pages[0].$vm.activeData(1)
+				// 改变底部组件index
+				pages[0].$vm.changeBar(1)
+				 // 保存点击的订单
+				uni.setStorageSync('id', res)
+				
 			}
 
 		},
 
 		created() {
+			this.userInfo = uni.getStorageSync('userInfo')
+			console.log(this.userInfo);
 			this.getStart()
+			
 		},
 		mounted() {
 			setTimeout(res => {
@@ -305,9 +331,12 @@
 				}).exec();
 			});
 		},
-		onLoad(option) {
-			this.id = option.id
-			console.log(this.id);
+		onShow() {
+		
+		},
+		onLoad() {
+			// this.id = option.id
+			// console.log(this.id);
 		},
 
 	};
@@ -467,5 +496,16 @@
 
 			}
 		}
+	}
+
+	//暂无数据显示
+	.availables {
+		// position:relative;
+	}
+
+	.available {
+		font-size: 16px;
+		text-align: center;
+		margin-top: 50%;
 	}
 </style>

@@ -157,7 +157,7 @@
 		</view>
 
 
-			<!-- <view class="">
+		<!-- <view class="">
 				定位{{nowLocation}}
 			</view> -->
 	</view>
@@ -186,10 +186,12 @@
 				nowLocation: '', //定位
 				location: 1,
 				tokens: '',
-				belongId:1273804055990304770,
-				id: '1273804055990304770', //用户id
+				belongId: 1273804055990304770,
+				id: '', //用户id
 				time: '', //时间转换
 				jxz: {},
+				userInfo:'',
+				ids:'',
 				orderList: [{
 					imgs: '../../static/imgs/photo.png',
 					orderNumber: 'DABH23244743442342',
@@ -247,7 +249,7 @@
 				var _this = this;
 				uni.uploadFile({
 					url: 'http://110.187.88.70:11801/service/startService', //仅为示例，非真实的接口地址
-					filePath:'',
+					filePath: '',
 					name: 'file',
 					header: {
 						'Authorization': 'Bearer ' + _this.tokens
@@ -266,14 +268,9 @@
 						})
 						if (data.code == 2000) {
 							uni.setStorageSync('userInfo', data.data.consumer)
-							uni.navigateTo({
-								url: '../index/index'
-							})
 						}
 					}
 				})
-
-
 			},
 			//前往页面
 			goToPage(res) {
@@ -308,7 +305,7 @@
 				var _this = this;
 				uni.uploadFile({
 					url: 'http://110.187.88.70:11801/service/submitService', //仅为示例，非真实的接口地址
-					filePath:'',
+					filePath: '',
 					name: 'file',
 					header: {
 						'Authorization': 'Bearer ' + _this.tokens
@@ -320,24 +317,23 @@
 					success: (res) => {
 						if (res.code == 2000) {
 							uni.showToast({
-								title:'提交成功'
+								title: '提交成功'
 							})
 						}
 					}
-				})	
+				})
 			},
 			//进行中订单
 			gethand() {
 				getProceed(
-					this.id,
+					this.userInfo.id,
 				).then(res => {
 					if (res.data.code === 2000) {
-						// console.log(res);
 						this.jxz = res.data.data.jxz
 						console.log(this.jxz);
 						this.time = new Date(new Date(new Date(res.data.data.jxz.createTime).toJSON()) + 8 * 3600 *
 							1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
-						console.log(this.time);
+						// console.log(this.time);
 
 					}
 				})
@@ -375,10 +371,17 @@
 		},
 
 		created() {
+			// this.id = uni.getStorageSync('id');
+			// console.log(this.id);	
+			this.userInfo = uni.getStorageSync('userInfo')
+			console.log(this.userInfo);
 			this.gethand()
-			this.getNowLocation()
+			// this.getNowLocation()
 			this.tokens = uni.getStorageSync('token')
 			console.log(this.tokens);
+			this.ids = uni.getStorageSync('id')
+			console.log(this.ids);
+			
 		},
 		mounted() {
 			setTimeout(res => {
@@ -388,6 +391,9 @@
 				}).exec();
 			})
 
+		},
+		onShow() {
+				
 		},
 		watch: {
 			topGapHeight: function() {
@@ -401,8 +407,8 @@
 			}
 		},
 		onLoad(option) {
-			this.id = option.id
-			console.log(this.id);
+			this.ids = option.id
+			console.log(this.ids);
 		},
 
 

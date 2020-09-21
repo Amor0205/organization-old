@@ -131,6 +131,9 @@ export function register(phone, password, verifyCode) {
 	})
 }
 
+
+
+
 //登录
 export function login(username, password) {
 	return http.post('/oauth/login', {
@@ -145,9 +148,6 @@ export function login(username, password) {
 		},
 	})
 }
-
-
-
 
 
 

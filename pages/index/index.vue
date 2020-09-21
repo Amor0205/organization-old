@@ -2,22 +2,22 @@
   <!-- 首页 -->
 <template>
 	<view class="container" :style="{ height:containerHeight + 'px' }" >
-		<one v-if="actives == 0" class="moduleBox" :SelectFamily = 'familyInfo' ></one>
-		<two v-if="actives == 1" class="moduleBox" ></two>
-		<three v-if="actives == 2" class="moduleBox" :scrollTopChild='scrollTopData' ></three>
-		<mine v-if="actives == 3" class="moduleBox" :scrollTopChild='scrollTopData'></mine>
+		<family v-if="actives == 0" class="moduleBox"  :SelectFamily = 'familyInfo' ></family>
+		<live v-if="actives == 1" class="moduleBox" ></live>
+		<shopCar v-if="actives == 2" class="moduleBox" :scrollTopChild='scrollTopData' :userInfoChild = 'userInfo' ></shopCar>
+		<mine v-if="actives == 3" class="moduleBox" :userInfoChild = 'userInfo'></mine>
 		
 		<footerBar ref='footerBar' class='footerBar' @childActive = "activeData"></footerBar>
 	</view>
 </template>
 
 <script>
-import one from '../../components/footer/one.vue'					//引入组件 one
-import two from '../../components/footer/two.vue'					//引入组件 two
-import three from '../../components/footer/three.vue'				//引入组件 three
+import family from '../../components/footer/one.vue'				//引入家人组件 family
+import live from '../../components/footer/two.vue'					//引入生活组件 live
+import shopCar from '../../components/footer/three.vue'			//引入购物车组件 shopCar
 import mine from '../../components/footer/mine.vue'					//引入我的航组件 mine
 import footerBar from '../../components/footer/footerBar.vue'		//引入底部导航组件 footerBar
-
+import { getUserInfo } from '../../src/ajax.js'
 
 // var src = 'https://cdn.staticfile.org/eruda/1.5.8/eruda.min.js';
 // var script = document.createElement('script');
@@ -35,20 +35,53 @@ import footerBar from '../../components/footer/footerBar.vue'		//引入底部导
 				containerHeight:0,		//window高度
 				scrollTopData:0,		//据顶部高度
 				userInfo:'',			//用户信息
-				familyInfo:'',			//家人信息		
+				familyInfo:'',			//家人信息	
 			}
 		},
 		components:{
 			footerBar,
-			one,
-			three,
-			two,
+			family,
+			shopCar,
+			live,
 			mine
 		},
 		methods: {
 			//切换页面内容
 			activeData(num){
 				this.actives = num;
+			},
+			//改变footerBar
+			changeBar(num){
+				this.$refs.footerBar.active(num)
+				// console.log(this)
+			},
+			//获取个人信息  并判定token是否过期
+			getUserInfoFun(){
+				var tokens = uni.getStorageSync('token')
+				getUserInfo(
+					tokens
+				).then(res => {
+					// console.log(res.data)
+					// 保存用户信息
+					// uni.setStorageSync('userInfo',res.data.data.userInfo)
+					if(res.data.code == 4000){
+						// 清除token
+						uni.setStorageSync('token','')
+						// 清除userInfo
+						uni.setStorageSync("userInfo",'')
+						uni.navigateTo({
+							url:'../login/login'
+						})
+					}else if(res.data.code == 2000){
+						// if(uni.getStorageSync('userInfo').consId != res.data.data.userInfo.consId ){
+						// 	this.userInfo = res.data.data.userInfo;
+						// 	// 保存用户信息
+						// 	uni.setStorageSync('userInfo',res.data.data.userInfo)
+						// 	console.log('更新用户信息')
+						// }
+						
+					}
+				})
 			}
 		},
 		
@@ -58,10 +91,10 @@ import footerBar from '../../components/footer/footerBar.vue'		//引入底部导
 					url: '../login/login'
 				})
 			}
-			//获取用户信息
-			this.userInfo = uni.getStorageSync('userInfo');
 		},
 		onShow() {
+			//获取用户信息
+			this.userInfo = uni.getStorageSync('userInfo');
 			var selectF = uni.getStorageSync('selectFamily')
 			//默认展示登录用户信息  选择后使用选中用户信息
 			if(selectF.length == 0){
@@ -71,8 +104,10 @@ import footerBar from '../../components/footer/footerBar.vue'		//引入底部导
 				this.familyInfo = selectF;
 				// console.log(this.familyInfo)
 			}
+			this.getUserInfoFun()
 		},
 		created() {
+			
 			
 		},
 		mounted() {
@@ -91,8 +126,6 @@ import footerBar from '../../components/footer/footerBar.vue'		//引入底部导
 					// console.log(res.windowHeight)
 				}
 			})
-			
-			
 		},
 		onPageScroll(e) {
 			this.scrollTopData = e.scrollTop;

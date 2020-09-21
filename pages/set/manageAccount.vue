@@ -50,7 +50,6 @@
 				</view>
 			</view>
 		</view>
-		<image style="width: 200rpx;height: 200rpx;" :src="imgss" mode=""></image>
 		<u-button 
 		class="custom-style" 
 		type="warning" 
@@ -68,7 +67,6 @@
 	export default {
 		data() {
 			return {
-				imgss:'',
 				userInfo:'',		//用户信息
 				selectSex:'男',		//性别选择
 				userName:'',		//用户名
@@ -124,7 +122,7 @@
 							'Authorization':'Bearer '+ _this.tokens
 						},
 						formData:{
-							consId:_this.userInfo.consId,
+							consId:_this.userInfo.id,
 							nikeName:_this.userName,
 							sex:_this.selectSex
 						},
@@ -135,8 +133,6 @@
 								icon:'none',
 								title:data.message
 							})
-							this.imgss = data.data.consumer.avatar;
-							console.log(data.data.consumer.avatar)
 							if(data.code == 2000){
 								uni.setStorageSync('userInfo',data.data.consumer)
 								uni.navigateTo({
@@ -180,8 +176,10 @@
 			if(uni.getStorageSync('userInfo')){
 				//获取userInfo
 				this.userInfo = uni.getStorageSync('userInfo');
+				console.log(this.userInfo);
 				this.selectSex = this.userInfo.sex;
-				this.userName = this.userInfo.nikeName;
+				this.userName = this.userInfo.name;
+				console.log(this.userName);
 				// this.headPortraitDefault = this.userInfo.avatar;
 				console.log(this.userInfo.avatar)
 			}

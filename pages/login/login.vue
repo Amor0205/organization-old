@@ -34,26 +34,35 @@
 					</view>
 				</u-form>
 			</view>
-			<view class="flex j-content">
-				<view class=""></view>
-				<view class="f-size forget" @click="forgetPassword">
+			<view class="sign">
+				<view class="two">
+					<text>还没账号？</text>
+					<text class="register" @click="register">去注册</text>
+				</view>
+				<view class="forges" @click="forgetPassword">
 					忘记密码？
 				</view>
 			</view>
 			<button type="default" class="logins" @click="submit">登录</button>
-			<view class="two">
-				<text>还没账号？</text>
-				<text class="register" @click="register">去注册</text>
+			<!-- 登录身份选项 -->
+			<view class="radio-group">
+				<u-radio-group v-model="value" @change="radioGroupChange">
+					<u-radio @change="radioChange" v-for="(item, index) in list" :key="index" :name="item.name" :disabled="item.disabled"  shape="circle" >
+						{{item.name}}
+					</u-radio>
+				</u-radio-group>
 			</view>
 		</view>
+
 	</view>
 </template>
 
 <script>
-
 	import uniIcons from "@/components/uni-icons/uni-icons.vue"
-	import { login , getUserInfo } from '../../src/ajax.js'
-
+	import {
+		login,
+		getUserInfo
+	} from '../../src/ajax.js'
 	export default {
 		name: "",
 		components: {
@@ -64,12 +73,12 @@
 		data() {
 
 			return {
-				windowHeights:0,
-				tag:'',		//控制登录结束后前往的页面（ 0 前往上级页面
+				windowHeights: 0,
+				tag: '', //控制登录结束后前往的页面（ 0 前往上级页面
 				form: {
 
-					mobile: '',
-					password: ''
+					mobile: '17608130109',
+					password: '123456'
 				},
 				rules: {
 					mobile: [{
@@ -96,7 +105,15 @@
 							message: '密码不正确'
 						},
 					],
-				}
+				},
+				list: [{
+					name: '工作人员',
+					disabled: false
+				}, {
+					name: '志愿者',
+					disabled: false
+				}],
+				value: '',
 			}
 		},
 		methods: {
@@ -112,69 +129,93 @@
 					url: '../register/register'
 				})
 			},
+			// 登录身份选择
+			// 选中某个单选框时，由radio时触发
+			radioChange(e) {
+				// console.log(e);
+			},
+			// 选中任一radio时，由radio-group触发
+			radioGroupChange(e) {
+				// console.log(e);
+			},
+		
 			//点击登录
 			submit() {
-				this.$refs.uForm.validate(valid => {
-					if (valid && this.form.mobile.length != 0 && this.form.password.length != 0) {
-						var ajaxPromise = new Promise(function (resolve,reject){
-							resolve();
-						});
-						uni.showLoading({
-							title:'登录中。。。'
-						})
-						ajaxPromise.then(()=>{
-							//请求 -- 登录
-							return login(
-								this.form.mobile,
-								this.form.password
-							).then(res => {
-								if(res.data.code == 2000){
-									return res.data
-								}else if(res.data.code == 4000){
+				if(this.value!==''){
+					
+					this.$refs.uForm.validate(valid => {
+						if (valid && this.form.mobile.length != 0 && this.form.password.length != 0) {
+							var ajaxPromise = new Promise(function (resolve,reject){
+								resolve();
+							});
+							uni.showLoading({
+								title:'登录中'
+							})
+							ajaxPromise.then(()=>{
+								//请求 -- 登录
+								return login(
+									this.form.mobile,
+									this.form.password,
+									this.value
+								).then(res => {
+									if(res.data.code == 2000){
+										return res.data
+									}else if(res.data.code == 4000){
+										uni.showToast({
+											icon:"none",
+											title:res.data.message
+										})
+										return res.data
+									}	
+								}).catch(err => {
 									uni.showToast({
 										icon:"none",
-										title:res.data.message
+										title: '网络错误'
 									})
-									return res.data
-								}	
-							}).catch(err => {
-								uni.showToast({
-									icon:"none",
-									title: '网络错误'
+								}).then((res)=>{
+									// console.log(res)
+									if(res.code === 2000){
+										// 保存token getUserInfo
+										uni.setStorageSync('token',res.data.token)
+											//请求 -- 获取用户信息
+										return getUserInfo(
+											res.data.token
+										).then(res => {
+											console.log(res.data)
+											uni.hideLoading()
+											// 保存用户信息
+											uni.setStorageSync('userInfo',res.data.data.userInfo)
+											//登录成功 且没有特殊要求前往首页  tag = 0 返回上一页
+											if(this.tag == '' || this.tag == undefined){
+												uni.reLaunch({
+													url:'../index/index'
+												})
+											}else if(this.tag == 0){
+												uni.navigateBack({
+													delta:1
+												})
+											}
+										})
+									}
 								})
-							}).then((res)=>{
-								// console.log(res)
-								if(res.code === 2000){
-									// 保存token getUserInfo
-									uni.setStorageSync('token',res.data.token)
-										//请求 -- 获取用户信息
-									return getUserInfo(
-										res.data.token
-									).then(res => {
-										uni.hideLoading()
-										// 保存用户信息
-										uni.setStorageSync('userInfo',res.data.data.userInfo)
-										//登录成功 且没有特殊要求前往首页  tag = 0 返回上一页
-										if(this.tag == ''){
-											uni.navigateTo({
-												url:'../index/index'
-											})
-										}else if(this.tag == 0){
-											uni.navigateBack({
-												delta:1
-											})
-										}
-									})
-								}
-							})
-						});
-					}
-				})
-			}
-		},	
+							});
+						}
+					})
+				
+				}else{
+					uni.showModal({
+						content:'请选择身份类型',
+						showCancel:false
+					})
+				}	
+			},
+
+		
+
+		},
 		onLoad(option) {
-			if(option.tag){
-				this.tag = option.tag	
+			if (option.tag) {
+				this.tag = option.tag
 			}
 			// // 清除token
 			// uni.setStorageSync('token','')
@@ -185,16 +226,16 @@
 		},
 		created() {
 			//获取userInfo
-			if(uni.getStorageSync('userInfo')){
+			if (uni.getStorageSync('userInfo')) {
 				console.log(1)
 				uni.redirectTo({
-					url:'../index/index'
+					url: '../index/index'
 				})
 			}
 		},
 		mounted() {
 			uni.getSystemInfo({
-				success:(res)=>{
+				success: (res) => {
 					this.windowHeights = res.windowHeight - res.statusBarHeight - 44;
 					// console.log(res,res.windowHeight )
 				}
@@ -310,13 +351,26 @@
 	}
 
 	.two {
-		text-align: center;
+		// text-align: center;
 		font-size: 28rpx;
-		margin-top: 36rpx;
 
+		// margin-top: 60rpx;
+		// margin-left: 50rpx;
 		.register {
 			color: skyblue;
 		}
+	}
+
+	.sign {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		padding: 20rpx 30rpx 0rpx 30rpx;
+	}
+
+	.forges {
+		font-size: 28rpx;
 	}
 
 	.input {
@@ -331,11 +385,16 @@
 		display: flex;
 		align-items: center;
 	}
-	
+
 	.inputs {
 		height: 150rpx;
 		margin-left: 50rpx;
 		font-size: 28rpx;
 	}
-	
+
+	//登录身份选项
+	.radio-group {
+		text-align: center;
+		margin-top: 40rpx;
+	}
 </style>

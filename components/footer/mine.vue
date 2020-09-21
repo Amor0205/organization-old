@@ -21,7 +21,7 @@
 					</view>
 					<view class="titleBox">
 						<view class="username" @click="goToPage('manageAccount')">
-							{{ userInfo.nikeName == null ? '点击头像设置昵称' : userInfo.nikeName }}
+							{{ userInfo.name == null ? '点击头像设置昵称' : userInfo.name }}
 						</view>
 						<view class="tagBox">
 							<view class="tag_1 common">
