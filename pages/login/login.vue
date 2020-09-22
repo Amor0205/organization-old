@@ -47,7 +47,8 @@
 			<!-- 登录身份选项 -->
 			<view class="radio-group">
 				<u-radio-group v-model="value" @change="radioGroupChange">
-					<u-radio @change="radioChange" v-for="(item, index) in list" :key="index" :name="item.name" :disabled="item.disabled"  shape="circle" >
+					<u-radio @change="radioChange" v-for="(item, index) in list" :key="index" :name="item.name" :disabled="item.disabled"
+					 shape="circle">
 						{{item.name}}
 					</u-radio>
 				</u-radio-group>
@@ -75,9 +76,10 @@
 			return {
 				windowHeights: 0,
 				tag: '', //控制登录结束后前往的页面（ 0 前往上级页面
+				client_id: '',
 				form: {
 
-					mobile: '17608130109',
+					mobile: '13778887148',
 					password: '123456'
 				},
 				rules: {
@@ -108,12 +110,14 @@
 				},
 				list: [{
 					name: '工作人员',
-					disabled: false
+					disabled: false,
+
 				}, {
 					name: '志愿者',
-					disabled: false
+					disabled: false,
+
 				}],
-				value: '',
+				value: 'employee/volunteer',
 			}
 		},
 		methods: {
@@ -132,67 +136,75 @@
 			// 登录身份选择
 			// 选中某个单选框时，由radio时触发
 			radioChange(e) {
-				// console.log(e);
+				console.log(e);
+				if (this.value === '工作人员') {
+					this.client_id = 'employee'
+				} else {
+					this.client_id = "volunteer"
+				}
 			},
 			// 选中任一radio时，由radio-group触发
 			radioGroupChange(e) {
-				// console.log(e);
+				console.log(e);
+				
 			},
-		
+
 			//点击登录
 			submit() {
-				if(this.value!==''){
-					
+				if (this.value !== '') {
+
 					this.$refs.uForm.validate(valid => {
 						if (valid && this.form.mobile.length != 0 && this.form.password.length != 0) {
-							var ajaxPromise = new Promise(function (resolve,reject){
+							var ajaxPromise = new Promise(function(resolve, reject) {
 								resolve();
 							});
 							uni.showLoading({
-								title:'登录中'
+								title: '登录中'
 							})
-							ajaxPromise.then(()=>{
+							ajaxPromise.then(() => {
 								//请求 -- 登录
 								return login(
 									this.form.mobile,
 									this.form.password,
-									this.value
+									this.client_id
+
 								).then(res => {
-									if(res.data.code == 2000){
+									if (res.data.code == 2000) {
 										return res.data
-									}else if(res.data.code == 4000){
+									} else if (res.data.code == 4000) {
 										uni.showToast({
-											icon:"none",
-											title:res.data.message
+											icon: "none",
+											title: res.data.message
 										})
 										return res.data
-									}	
+									}
 								}).catch(err => {
 									uni.showToast({
-										icon:"none",
+										icon: "none",
 										title: '网络错误'
 									})
-								}).then((res)=>{
+								}).then((res) => {
 									// console.log(res)
-									if(res.code === 2000){
+									if (res.code === 2000) {
 										// 保存token getUserInfo
-										uni.setStorageSync('token',res.data.token)
-											//请求 -- 获取用户信息
+										uni.setStorageSync('token', res.data.token)
+										uni.setStorageSync('identity', this.value)
+										//请求 -- 获取用户信息
 										return getUserInfo(
 											res.data.token
 										).then(res => {
 											console.log(res.data)
 											uni.hideLoading()
 											// 保存用户信息
-											uni.setStorageSync('userInfo',res.data.data.userInfo)
+											uni.setStorageSync('userInfo', res.data.data.userInfo)
 											//登录成功 且没有特殊要求前往首页  tag = 0 返回上一页
-											if(this.tag == '' || this.tag == undefined){
+											if (this.tag == '' || this.tag == undefined) {
 												uni.reLaunch({
-													url:'../index/index'
+													url: '../index/index'
 												})
-											}else if(this.tag == 0){
+											} else if (this.tag == 0) {
 												uni.navigateBack({
-													delta:1
+													delta: 1
 												})
 											}
 										})
@@ -201,16 +213,16 @@
 							});
 						}
 					})
-				
-				}else{
+
+				} else {
 					uni.showModal({
-						content:'请选择身份类型',
-						showCancel:false
+						content: '请选择身份类型',
+						showCancel: false
 					})
-				}	
+				}
 			},
 
-		
+
 
 		},
 		onLoad(option) {

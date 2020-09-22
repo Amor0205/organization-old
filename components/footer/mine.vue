@@ -15,24 +15,29 @@
 			<!-- 头部上方容器 -->
 			<view class="headTopBox">
 				<view class="leftBox">
-					<view class="imgbox" @click="goToPage('manageAccount')">
+					<view class="imgbox" >
 						<!-- <image :src="headPortraitDefault" mode=""></image> -->
 						<image :src="userInfo.avatar ? userInfo.avatar : headPortraitDefault" mode=""></image>
 					</view>
 					<view class="titleBox">
-						<view class="username" @click="goToPage('manageAccount')">
+						<view class="username" >
 							{{ userInfo.name == null ? '点击头像设置昵称' : userInfo.name }}
 						</view>
-						<view class="tagBox">
-							<view class="tag_1 common">
-								巡查人员
-							</view>
-							<view class="tag_2 common">
-								· 上班
-							</view>
+						<view class="volunteer" v-if="identity">
+							志愿服务人员
 						</view>
-						<view class="companyName">
-							四川省微壹科技发展有限责任公司
+						<view class="" v-else>
+							<view class="tagBox">
+								<view class="tag_1 common">
+									巡查人员
+								</view>
+								<view class="tag_2 common">
+									· 上班
+								</view>
+							</view>
+							<view class="companyName">
+								四川省微壹科技发展有限责任公司
+							</view>
 						</view>
 					</view>
 				</view>
@@ -136,6 +141,7 @@
 				year: 2020,
 				id: '1273804055990304770', //用户id
 				myData: '',
+				identity:'',
 				headList: {
 					collect: {
 						name: '好评',
@@ -313,6 +319,8 @@
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
 			// console.log(this.userInfo)
+			this.identity = uni.getStorageSync('identity')
+			console.log(this.identity)
 			this.commonColor = this.commonColorAll
 			//获取userInfo
 			// this.userInfo = uni.getStorageSync('userInfo')
@@ -654,7 +662,11 @@
 
 				}
 			}
-
 		}
+	}
+	.volunteer{
+		margin-top: 20rpx;
+		font-size: 16px;
+		color: #ad891d;
 	}
 </style>

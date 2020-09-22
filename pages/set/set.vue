@@ -21,11 +21,11 @@
 		data() {
 			return {
 				functionList:[
-					{title:'常用地址',url:'../../pages/set/site'},
+					// {title:'常用地址',url:'../../pages/set/site'},
 					{title:'账号管理',url:'../../pages/set/manageAccount'},
 					{title:'问题反馈',url:'../../pages/set/feedback'},
 					{title:'通用设置',url:'../../pages/set/commonSet'},
-					{title:'关于孝敬邦',url:'../../pages/set/about'}
+					{title:'关于孝兴邦',url:'../../pages/set/about'}
 					]
 			}
 		},

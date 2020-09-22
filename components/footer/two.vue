@@ -58,7 +58,7 @@
 						<view class="centerBox">
 							<view class="listBox">
 								<view class="leftBox">服务内容</view>
-								<view class="rightBox">{{jxz.products}}</view>
+								<view class="rightBox">{{jxz.content}}</view>
 							</view>
 							<view class="listBox">
 								<view class="leftBox">约定服务时间</view>
@@ -83,9 +83,9 @@
 					<view class="orderLeft">
 						订单服务状态
 					</view>
-					<view class="orderRight">
+					<view class="orderRight" @click="departAnimation">
 						<view class="refresh">
-							<image src="../../static/imgs/shuaxin.png" mode="" class="refreshImg"></image>
+							<image src="../../static/imgs/shuaxin.png" mode="" class="refreshImg" :class=" animationTag?'rotation':'' "></image>
 						</view>
 						<view class="renewal">
 							更新状态
@@ -93,19 +93,25 @@
 					</view>
 				</view>
 
-				<view class="order">
-					<view class="orderLeft">
-						定位
+				<view class="order" @click="goToPage('verification')">
+					<view class="orderLeft" >
+						用户验证
 					</view>
 					<!-- <view class="" style="font-size: 28rpx; color: #00DB39;">
-						定位成功
+						验证成功
 					</view> -->
-					<view class="" style="font-size: 28rpx; color: #878BA1; ">
-						未定位
+					<view class="orderRight">
+						<view class="decided">
+							去验证
+						</view>
+						<view class="arrows">
+							<image src="../../static/imgs/arrows_r@2x.png" mode="" class="arrowsImg"></image>
+						</view>
+					
 					</view>
 				</view>
 
-				<view class="order" @click="goToPage('confirmProject')">
+				<view class="order" @click="goToPage('confirmProject')" v-if="identity">
 					<view class="orderLeft">
 						确定服务项目
 					</view>
@@ -116,12 +122,14 @@
 						<view class="arrows">
 							<image src="../../static/imgs/arrows_r@2x.png" mode="" class="arrowsImg"></image>
 						</view>
-
 					</view>
+				</view>
+				<view class="" v-else>
+					
 				</view>
 				<view class="order" @click="goToPage('beforeShooting')">
 					<view class="orderLeft">
-						拍摄服务前照片
+						拍摄服务前视频
 					</view>
 					<view class="orderRight">
 						<view class="decided">
@@ -135,7 +143,7 @@
 				</view>
 				<view class="order" @click="goToPage('selectiveFocus')">
 					<view class="orderLeft">
-						拍摄服务后照片
+						拍摄服务后视频
 					</view>
 					<view class="orderRight">
 						<view class="decided">
@@ -186,12 +194,13 @@
 				nowLocation: '', //定位
 				location: 1,
 				tokens: '',
-				belongId: 1273804055990304770,
 				id: '', //用户id
 				time: '', //时间转换
 				jxz: {},
-				userInfo:'',
-				ids:'',
+				userInfo: '',
+				identity:'',//登录身份的区分
+				ids: '',
+				animationTag: false, //动画标识
 				orderList: [{
 					imgs: '../../static/imgs/photo.png',
 					orderNumber: 'DABH23244743442342',
@@ -217,6 +226,9 @@
 		methods: {
 			// 开始服务按钮
 			start() {
+				uni.showLoading({
+					title: '开始服务'
+				})
 				this.serves = !this.serves
 				this.rockon = true
 				//计时器开始计数
@@ -229,13 +241,11 @@
 					if (millisecond >= 1000) {
 						millisecond = 0;
 						second = second + 1;
-
 					}
 					if (second >= 60) {
 						second = 0;
 						minute = minute + 1;
 					}
-
 					if (minute >= 60) {
 						minute = 0;
 						hour = hour + 1;
@@ -260,21 +270,19 @@
 						products: this.jxz.products,
 					},
 					success: (res) => {
-						var data = JSON.parse(res.data)
 						uni.hideLoading()
-						uni.showToast({
-							icon: 'none',
-							title: data.message
-						})
-						if (data.code == 2000) {
-							uni.setStorageSync('userInfo', data.data.consumer)
-						}
 					}
 				})
 			},
 			//前往页面
 			goToPage(res) {
 				switch (res) {
+					case 'verification':
+						//确认项目
+						uni.navigateTo({
+							url: '../../pages/two/verification'
+						})
+						break;
 					case 'confirmProject':
 						//确认项目
 						uni.navigateTo({
@@ -316,9 +324,10 @@
 					},
 					success: (res) => {
 						if (res.code == 2000) {
-							uni.showToast({
-								title: '提交成功'
+							uni.showLoading({
+								title:'提交成功'
 							})
+								uni.hideLoading()
 						}
 					}
 				})
@@ -326,15 +335,17 @@
 			//进行中订单
 			gethand() {
 				getProceed(
-					this.userInfo.id,
+					this.ids,
+					this.userInfo.id
 				).then(res => {
+					console.log(res);
 					if (res.data.code === 2000) {
+						console.log(res);
 						this.jxz = res.data.data.jxz
 						console.log(this.jxz);
 						this.time = new Date(new Date(new Date(res.data.data.jxz.createTime).toJSON()) + 8 * 3600 *
 							1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
 						// console.log(this.time);
-
 					}
 				})
 			},
@@ -366,22 +377,33 @@
 				})
 
 			},
-
+			//更新数据旋转动画
+			departAnimation() {
+				if (this.animationTag == false) {
+					this.animationTag = true;
+					console.log(this.animationTag)
+					setTimeout(res => {
+						this.animationTag = false;
+					}, 2000)
+				}
+			},
 
 		},
 
 		created() {
-			// this.id = uni.getStorageSync('id');
-			// console.log(this.id);	
+			//获取从待开始订单传过来的数据
+		
 			this.userInfo = uni.getStorageSync('userInfo')
 			console.log(this.userInfo);
+			this.ids = uni.getStorageSync('ids')
+			console.log(this.ids);	
 			this.gethand()
 			// this.getNowLocation()
 			this.tokens = uni.getStorageSync('token')
 			console.log(this.tokens);
-			this.ids = uni.getStorageSync('id')
-			console.log(this.ids);
-			
+			this.identity = uni.getStorageSync('identity')
+			console.log(this.identity)
+
 		},
 		mounted() {
 			setTimeout(res => {
@@ -393,7 +415,7 @@
 
 		},
 		onShow() {
-				
+
 		},
 		watch: {
 			topGapHeight: function() {
@@ -613,5 +635,20 @@
 		line-height: 100rpx;
 		text-align: center;
 		border-radius: 50rpx;
+	}
+
+	// 动画旋转
+	@keyframes rotation {
+		0% {
+			transform: rotate(0deg);
+		}
+
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
+	.rotation {
+		animation: rotation 1.3s linear 2;
 	}
 </style>

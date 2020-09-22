@@ -179,9 +179,8 @@
 				console.log(this.userInfo);
 				this.selectSex = this.userInfo.sex;
 				this.userName = this.userInfo.name;
-				console.log(this.userName);
 				// this.headPortraitDefault = this.userInfo.avatar;
-				console.log(this.userInfo.avatar)
+				// console.log(this.userInfo.avatar)
 			}
 			
 		},

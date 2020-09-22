@@ -156,6 +156,16 @@
 				}
 			}
 		},
+		//two -- 用户验证
+		{
+			"path": "pages/two/verification",
+			"style": {
+				"navigationBarTitleText": "验证方式",
+				"app-plus": {
+					"titleNView": true
+				}
+			}
+		},
 		//two -- 确认项目
 		{
 			"path": "pages/two/confirmProject",

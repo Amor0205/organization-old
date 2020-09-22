@@ -1,7 +1,7 @@
 <template>
 	<view class="box">
 		<!-- 顶部订单介绍 -->
-		<view class="topBox">
+		<!-- <view class="topBox">
 			<view class="project">
 				订单项目
 			</view>
@@ -10,15 +10,15 @@
 					{{item}}
 				</view>
 			</view>
-		</view>
+		</view> -->
 		<!-- 中间部分项目分类 -->
 		<view class="centreBox">
-			<view class="employ">
+			<!-- <view class="employ">
 				使用这些服务
 			</view>
 			<view class="initiative">
 				主动服务
-			</view>
+			</view> -->
 			<view class="collapse">
 				<u-collapse>
 					<u-collapse-item :title="item.head" v-for="(item, index) in itemList" :key="index" :open="item.open" :disabled="item.disabled"

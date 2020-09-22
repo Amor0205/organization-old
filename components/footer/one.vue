@@ -44,7 +44,7 @@
 					<u-gap height="14" bg-color="#e5e5e5"></u-gap>
 					<view class="outerListBox">
 						<view class="topBox">
-							<text>{{ item.itemId }}</text>
+							<text>{{ item.id }}</text>
 							<text class="endTime">截止时间天</text>
 						</view>
 						<view class="centerBox" @click="StartService(item.id)">
@@ -311,7 +311,7 @@
 				// 改变底部组件index
 				pages[0].$vm.changeBar(1)
 				 // 保存点击的订单
-				uni.setStorageSync('id', res)
+				uni.setStorageSync('ids', res)
 				
 			}
 

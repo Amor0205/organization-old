@@ -41,7 +41,7 @@
 				<u-gap height="14" bg-color="#e5e5e5"></u-gap>
 				<view class="outerListBox">
 					<view class="topBox">
-						<text>{{ item.products }}</text>
+						<text>{{ item.id }}</text>
 
 					</view>
 					<view class="centerBox">
@@ -129,7 +129,7 @@
 				// active:false,
 				status: 3,
 				currentPage: 1, //当前页数,
-				id: '1273804055990304770', //用户id
+			userInfo: '', //获取用户
 				services: '',
 				time: '',
 				times: '',
@@ -210,7 +210,7 @@
 			//获取已完成订单
 			getEnd() {
 				getFinished(
-					this.id,
+					this.userInfo.id,
 					this.status,
 					this.currentPage
 				).then(res => {
@@ -233,6 +233,8 @@
 		},
 
 		created() {
+			this.userInfo = uni.getStorageSync('userInfo')
+			console.log(this.userInfo);
 			this.getEnd()
 		},
 		mounted() {

@@ -58,15 +58,26 @@ export function getBegin(belongId, status, currentPage) {
 }
 
 
-// 进行中订单
-export function getProceed(belongId) {
-	return http.get('/service/serviceGoing', {
-		params: {
-			belongId,
+// // 进行中订单
+// export function getProceed(serviceId,belongId) {
+// 	return http.get('/service/serviceToUse', {
+// 			serviceId,
+// 			belongId
+		
+// 	})
+// }
 
+// 进行中订单
+export function getProceed(serviceId,belongId) {
+	return http.get('/service/serviceToUse', {
+		params: {
+		serviceId,
+			belongId
+		
 		}
 	})
 }
+
 
 // 已完成订单
 export function getFinished(belongId, status, currentPage) {
@@ -135,11 +146,11 @@ export function register(phone, password, verifyCode) {
 
 
 //登录
-export function login(username, password) {
+export function login(username, password,client_id) {
 	return http.post('/oauth/login', {
 		username,
 		password,
-		client_id: 'server',
+		client_id,
 		client_secret: '123456',
 		grant_type: 'password'
 	}, {
@@ -154,6 +165,8 @@ export function login(username, password) {
 /* 
 	upLoad
  */
+
+
 
 //修改 上传 个人信息
 export function setUserInfo(consId, nikeName, sex) {
