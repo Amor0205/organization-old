@@ -9,7 +9,7 @@
 					<uni-icons type="contact-filled" size="25"></uni-icons>
 					<u-form-item label="" prop="phone">
 						<view class="" style="width: 550rpx;height: 50rpx; display: flex;align-items: center;">
-							<u-input v-model="form.phone" type="phone" placeholder='请输入手机号' maxlength='11' />
+							<u-input v-model="ids.phone" type="phone" placeholder='请输入手机号' maxlength='11' :disabled='disabled' />
 						</view>
 					</u-form-item>
 				</view>
@@ -29,7 +29,7 @@
 			</u-form>
 			<!-- 底部 -->
 			<view class="">
-				<button type="default" class="button" @click="submit">提交</button>
+				<button type="default" class="button" @click="submit">发起验证</button>
 			</view>
 		</view>
 		<view class="" v-else>
@@ -47,6 +47,10 @@
 </template>
 
 <script>
+	import {
+		getCode,
+		getverification
+	} from '../../src/ajax.js'
 	export default {
 		name: "",
 		components: {
@@ -57,29 +61,33 @@
 			return {
 				activeTab: 0,
 				codeTime: 0,
+				ids: '',
+				disabled: true,
 				form: {
-					phone: '',
+
 					code: '', //验证码
 				},
 				rules: {
-					phone: [{
-							required: true,
-							message: '请输入手机号',
-							// 可以单个或者同时写两个触发验证方式 
-							trigger: ['change', 'blur'],
-						},
-						{
-							// 自定义验证函数，见上说明
-							validator: (rule, value, callback) => {
-								// 上面有说，返回true表示校验通过，返回false表示不通过
-								// this.$u.test.mobile()就是返回true或者false的
-								return this.$u.test.mobile(value);
-							},
-							message: '手机号码格式不正确',
-							// 触发器可以同时用blur和change
-							trigger: ['change', 'blur'],
-						},
-					],
+					// phone: [{
+					// 		required: true,
+					// 		message: '请输入手机号',
+					// 		// 可以单个或者同时写两个触发验证方式 
+					// 		trigger: ['change', 'blur'],
+					// 	},
+					// 	{
+					// 		// 自定义验证函数，见上说明
+					// 		validator: (rule, value, callback) => {
+					// 			// 上面有说，返回true表示校验通过，返回false表示不通过
+					// 			// this.$u.test.mobile()就是返回true或者false的
+					// 			return this.$u.test.mobile(value);
+					// 		},
+					// 		message: '手机号码格式不正确',
+					// 		// 触发器可以同时用blur和change
+					// 		trigger: ['change', 'blur'],
+					// 	},
+
+
+					// ],
 					code: [{
 							required: true,
 							message: '请输入验证码',
@@ -91,6 +99,7 @@
 							trigger: ['change', 'blur'],
 						}
 					],
+
 
 				}
 			}
@@ -108,7 +117,7 @@
 					});
 					return;
 				} else {
-					this.codeTime = 60
+					this.codeTime = 300
 					let timer = setInterval(() => {
 						this.codeTime--;
 						if (this.codeTime < 1) {
@@ -116,7 +125,7 @@
 							this.codeTime = 0
 						}
 					}, 1000)
-					getVerificationCode(this.form.phone).then(res => {
+					getCode(this.ids.phone, 7).then(res => {
 						if (res.data.code == 2000) {
 							uni.showToast({
 								title: '获取验证码成功'
@@ -136,25 +145,29 @@
 
 				}
 			},
-			// 点击注册
+			// 点击验证
 			submit() {
 				console.log(this.$refs.uForm)
 				this.$refs.uForm.validate(valid => {
-					if (valid && this.form.phone.length != 0 && this.form.code.length != 0) {
-						// 请求 -- 注册
-						register(
-							this.form.phone,
-							this.form.code
+					if (valid && this.ids.phone.length != 0 && this.form.code.length != 0) {
+						// 验证
+						getverification(
+							this.ids.phone,
+							this.form.code,
+							this.ids.id,
 						).then(res => {
 							console.log(res.data)
 							if (res.data.code == 2000) {
 								uni.showToast({
-									title: res.data.message
+									title: '验证成功'
 								})
+								//获取当前页面（返回index页面）
+								var pages = getCurrentPages(); //当前页
+								//用scode来接收成功的值
+								pages[0].$vm.scode = true
+								// console.log(pages)
 								setTimeout(() => {
-									uni.navigateTo({
-										url: '../../components/footer/two'
-									})
+										uni.navigateBack()
 								}, 1500)
 							} else if (res.data.code == 4000) {
 								uni.showToast({
@@ -165,7 +178,7 @@
 						}).catch(err => {
 							uni.showToast({
 								icon: "none",
-								title: '注册失败'
+								title: '验证失败'
 							})
 						})
 
@@ -181,6 +194,10 @@
 		},
 		mounted() {
 
+		},
+		created() {
+			this.ids = uni.getStorageSync('id')
+			console.log(this.ids);
 		},
 		onLoad() {
 

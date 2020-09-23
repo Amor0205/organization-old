@@ -5,20 +5,20 @@
 			<view>
 				<!-- 第一个位置 -->
 				<view class="input">
-					<u-input v-model="value1" type="text" placeholder='请输入位置标题名称' :clearable='clearable' />
+					<u-input v-model="value" type="text" placeholder='请输入位置标题名称' :clearable='clearable' />
 				</view>
 				<!-- 信息提交 -->
 				<view class="burst-info">
 					<view class="uni-uploader-body">
 						<view class="uni-uploader__files">
 							<!-- 图片 -->
-							<!-- <block v-for="(image,index) in imageList" :key="index">
+							<block v-for="(image,index) in imageList" :key="index">
 								<view class="uni-uploader__file">
 									<view class="icon iconfont icon-cuo" @tap="delect(index)"></view>
 									<image class="uni-uploader__img" :src="image" :data-src="image" @tap="previewImage">
 									</image>
 								</view>
-							</block> -->
+							</block>
 							<!-- 视频 -->
 							<view class="uni-uploader__file" v-if="src" v-for="(item,index) in src" :key="index">
 								<view class="uploader_video">
@@ -38,9 +38,9 @@
 					</view>
 				</view>
 				<!-- 第二个位置 -->
-				<view class="input">
+				<!-- <view class="input">
 					<u-input v-model="value1" type="text" placeholder='请输入位置标题名称' :clearable='clearable' />
-				</view>
+				</view> -->
 				<!-- 信息提交 -->
 				<view class="burst-info">
 					<view class="uni-uploader-body">
@@ -54,27 +54,27 @@
 								</view>
 							</block> -->
 							<!-- 视频 -->
-							<view class="uni-uploader__file" v-if="src" v-for="(item,index) in src" :key="index">
+							<!-- <view class="uni-uploader__file" v-if="src" v-for="(item,index) in src" :key="index">
 								<view class="uploader_video">
 									<view class="icon iconfont icon-cuo" @tap="delectVideo"></view>
 									<video :src="item" class="video"></video>
 								</view>
-							</view>
+							</view> -->
 
-							<view class="uni-uploader__input-box" v-if="VideoOfImagesShow">
+							<!-- <view class="uni-uploader__input-box" v-if="VideoOfImagesShow">
 								<view class="uni-uploader__input" @tap="chooseVideoImage">
 									<view class="jiahaos">
 										<image src="../../static/imgs/jiahaos.png" mode="" class="jiahaosimg"></image>
 									</view>
 								</view>
-							</view>
+							</view> -->
 						</view>
 					</view>
 				</view>
 				<!-- 第三个位置 -->
-				<view class="input">
+				<!-- <view class="input">
 					<u-input v-model="value1" type="text" placeholder='请输入位置标题名称' :clearable='clearable' />
-				</view>
+				</view> -->
 				<!-- 信息提交 -->
 				<view class="burst-info">
 					<view class="uni-uploader-body">
@@ -88,20 +88,20 @@
 								</view>
 							</block> -->
 							<!-- 视频 -->
-							<view class="uni-uploader__file" v-if="src" v-for="(item,index) in src" :key="index">
+							<!-- <view class="uni-uploader__file" v-if="src" v-for="(item,index) in src" :key="index">
 								<view class="uploader_video">
 									<view class="icon iconfont icon-cuo" @tap="delectVideo"></view>
 									<video :src="item" class="video"></video>
 								</view>
-							</view>
+							</view> -->
 
-							<view class="uni-uploader__input-box" v-if="VideoOfImagesShow">
+							<!-- <view class="uni-uploader__input-box" v-if="VideoOfImagesShow">
 								<view class="uni-uploader__input" @tap="chooseVideoImage">
 									<view class="jiahaos">
 										<image src="../../static/imgs/jiahaos.png" mode="" class="jiahaosimg"></image>
 									</view>
 								</view>
-							</view>
+							</view> -->
 						</view>
 					</view>
 				</view>
@@ -119,15 +119,16 @@
 	export default {
 		data() {
 			return {
+				value: '',
 				value1: '',
 				value2: '',
-				value3: '',
 				clearable: false,
 				imageList: [], //图片
 				src: [], //视频存放
 				sourceTypeIndex: 2,
 				checkedValue: true,
 				checkedIndex: 0,
+				userInfo:'',
 				sourceType: ['拍摄', '相册', '拍摄或相册'],
 				cameraList: [{
 						value: 'back',
@@ -141,6 +142,7 @@
 				],
 				cameraIndex: 0,
 				VideoOfImagesShow: true,
+				location:1
 			}
 		},
 		onUnload() {
@@ -191,6 +193,7 @@
 						// this.src = res.tempFilePath;
 						console.log(res.tempFilePath)
 						this.src = this.src.concat(res.tempFilePath)
+						// this.src = res.tempFilePath
 						console.log(this.src)
 
 					}
@@ -226,7 +229,59 @@
 					}
 				})
 			}
-		}
+		},
+		created() {
+			this.userInfo = uni.getStorageSync('userInfo')
+			console.log(this.userInfo);
+			this.tokens = uni.getStorageSync('token')
+			// console.log(this.tokens);
+			this.ids = uni.getStorageSync('ids')
+			console.log(this.ids);
+		},
+		onNavigationBarButtonTap(res){
+			console.log(res)
+			var _this = this;
+			// uni.showLoading({
+			// 	title:'正在上传信息..'
+			// })
+			// uni.hideLoading()
+			// console.log(this.uploadPicData)
+			// if(this.uploadPicData){
+			this.src.map((item)=>{
+				console.log(item);
+				uni.uploadFile({
+					url: 'http://110.187.88.70:11801/service/startService', //仅为示例，非真实的接口地址
+					filePath:item,
+					name: 'file',
+					// fileType:'video',
+					methods:'POST',
+					header:{
+						'Authorization':'Bearer '+ _this.tokens
+					},
+					formData:{
+						products:_this.value,
+						serviceId:_this.ids,
+						location:this.location
+					},
+					success: (res) => {
+						console.log(res)
+						var data = JSON.parse(res.data)
+						// uni.hideLoading()
+						uni.showToast({
+							icon:'none',
+							title:data.message
+						})
+						// if(data.code == 2000){
+						// 	uni.setStorageSync('userInfo',data.data.consumer)
+						// 	uni.navigateTo({
+						// 		url:'../index/index'
+						// 	})
+						// }
+					}
+				});	
+				
+			})
+		},
 	}
 </script>
 

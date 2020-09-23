@@ -1,6 +1,7 @@
 <template>
 	<view class="box">
 		<!-- 头部 -->
+		{{ success }}
 		<view class="headBox">
 			<!-- 头部服务时间 -->
 			<view class="headBoxLeft">
@@ -94,38 +95,40 @@
 				</view>
 
 				<view class="order" @click="goToPage('verification')">
-					<view class="orderLeft" >
+					
+					<view class="orderLeft"  >
 						用户验证
 					</view>
-					<!-- <view class="" style="font-size: 28rpx; color: #00DB39;">
+					<view class="" style="font-size: 28rpx; color: #00DB39;" v-if="verify==true">
 						验证成功
-					</view> -->
-					<view class="orderRight">
+					</view>
+					<view class="orderRight" v-else>
 						<view class="decided">
 							去验证
 						</view>
 						<view class="arrows">
 							<image src="../../static/imgs/arrows_r@2x.png" mode="" class="arrowsImg"></image>
 						</view>
-					
 					</view>
 				</view>
+				<view class="" v-if="identity==true">
 
-				<view class="order" @click="goToPage('confirmProject')" v-if="identity">
+				</view>
+				<view class="order" @click="goToPage('confirmProject')" v-else>
 					<view class="orderLeft">
 						确定服务项目
 					</view>
 					<view class="orderRight">
 						<view class="decided">
-							待确定
+							待选择
 						</view>
 						<view class="arrows">
 							<image src="../../static/imgs/arrows_r@2x.png" mode="" class="arrowsImg"></image>
 						</view>
 					</view>
 				</view>
-				<view class="" v-else>
-					
+				<view class="" v-if="identity==true">
+
 				</view>
 				<view class="order" @click="goToPage('beforeShooting')">
 					<view class="orderLeft">
@@ -198,9 +201,10 @@
 				time: '', //时间转换
 				jxz: {},
 				userInfo: '',
-				identity:'',//登录身份的区分
+				identity: '', //登录身份的区分
 				ids: '',
 				animationTag: false, //动画标识
+				verify:false,//判断是否验证成功
 				orderList: [{
 					imgs: '../../static/imgs/photo.png',
 					orderNumber: 'DABH23244743442342',
@@ -226,53 +230,62 @@
 		methods: {
 			// 开始服务按钮
 			start() {
-				uni.showLoading({
-					title: '开始服务'
-				})
-				this.serves = !this.serves
-				this.rockon = true
-				//计时器开始计数
-				var hour, minute, second; /*时 分 秒*/
-				hour = minute = second = 0; //初始化
-				var millisecond = 0; //毫秒
-				this.timer = setInterval(() => {
-					millisecond = millisecond + 50;
-					// console.log("---millisecond----"+millisecond);
-					if (millisecond >= 1000) {
-						millisecond = 0;
-						second = second + 1;
-					}
-					if (second >= 60) {
-						second = 0;
-						minute = minute + 1;
-					}
-					if (minute >= 60) {
-						minute = 0;
-						hour = hour + 1;
-					}
-					// this.nums = hour+'时'+minute+'分'+second+'秒';
-					this.hours = hour + '时';
-					this.minutes = minute + '分';
-					this.seconds = second + '秒'
-					// console.log(this.seconds);
-				}, 50);
-				var _this = this;
-				uni.uploadFile({
-					url: 'http://110.187.88.70:11801/service/startService', //仅为示例，非真实的接口地址
-					filePath: '',
-					name: 'file',
-					header: {
-						'Authorization': 'Bearer ' + _this.tokens
-					},
-					formData: {
-						serviceId: this.jxz.id,
-						location: this.jxz.location,
-						products: this.jxz.products,
-					},
-					success: (res) => {
-						uni.hideLoading()
-					}
-				})
+			
+				if(this.verify==true){
+					uni.showLoading({
+						title: '开始服务'
+					})
+					this.serves = !this.serves
+					this.rockon = true
+					//计时器开始计数
+					var hour, minute, second; /*时 分 秒*/
+					hour = minute = second = 0; //初始化
+					var millisecond = 0; //毫秒
+					this.timer = setInterval(() => {
+						millisecond = millisecond + 50;
+						// console.log("---millisecond----"+millisecond);
+						if (millisecond >= 1000) {
+							millisecond = 0;
+							second = second + 1;
+						}
+						if (second >= 60) {
+							second = 0;
+							minute = minute + 1;
+						}
+						if (minute >= 60) {
+							minute = 0;
+							hour = hour + 1;
+						}
+						// this.nums = hour+'时'+minute+'分'+second+'秒';
+						this.hours = hour + '时';
+						this.minutes = minute + '分';
+						this.seconds = second + '秒'
+						// console.log(this.seconds);
+					}, 50);
+					var _this = this;
+					uni.uploadFile({
+						url: 'http://110.187.88.70:11801/service/startService', //仅为示例，非真实的接口地址
+						filePath: '',
+						name: 'file',
+						header: {
+							'Authorization': 'Bearer ' + _this.tokens
+						},
+						formData: {
+							serviceId: this.jxz.id,
+							location: this.jxz.location,
+							products: this.jxz.products,
+						},
+						success: (res) => {
+							uni.hideLoading()
+						}
+					})
+				}else{
+					uni.showToast({
+						title:'请先验证',
+						icon:'none'
+					})
+				}
+				
 			},
 			//前往页面
 			goToPage(res) {
@@ -325,9 +338,9 @@
 					success: (res) => {
 						if (res.code == 2000) {
 							uni.showLoading({
-								title:'提交成功'
+								title: '提交成功'
 							})
-								uni.hideLoading()
+							uni.hideLoading()
 						}
 					}
 				})
@@ -336,46 +349,19 @@
 			gethand() {
 				getProceed(
 					this.ids,
-					this.userInfo.id
+					// this.userInfo.id
 				).then(res => {
-					console.log(res);
+					// console.log(res);
 					if (res.data.code === 2000) {
-						console.log(res);
+						// console.log(res);
+						uni.setStorageSync('id', res.data.data.jxz)
 						this.jxz = res.data.data.jxz
-						console.log(this.jxz);
+						// console.log(this.jxz);
 						this.time = new Date(new Date(new Date(res.data.data.jxz.createTime).toJSON()) + 8 * 3600 *
 							1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
 						// console.log(this.time);
 					}
 				})
-			},
-			// 获取当前位置
-			getNowLocation() {
-				var _this = this;
-				uni.getLocation({
-					type: 'wgs84',
-					geocode: true,
-					success: function(res) {
-						//本地储存定位位置
-						// uni.setStorageSync('nowLocation',_this.nowLocation)
-						// if(_this.nowLocation != res.address.city){
-						// uni.showToast({
-						// 	icon:'none',
-						// 	title:'定位成功'
-						// })
-						console.log(res)
-						_this.nowLocation = res.address.province + res.address.city + res.address.district + res.address.poiName
-						console.log(_this.nowLocation);
-						// }
-					},
-					fail: function() {
-						uni.showToast({
-							icon: 'none',
-							title: '定位失败'
-						})
-					}
-				})
-
 			},
 			//更新数据旋转动画
 			departAnimation() {
@@ -392,24 +378,25 @@
 
 		created() {
 			//获取从待开始订单传过来的数据
-		
 			this.userInfo = uni.getStorageSync('userInfo')
-			console.log(this.userInfo);
+			// console.log(this.userInfo);
 			this.ids = uni.getStorageSync('ids')
-			console.log(this.ids);	
+			// console.log(this.ids);
+			this.success = uni.getStorageSync('success')
+			// console.log(this.success);
 			this.gethand()
 			// this.getNowLocation()
 			this.tokens = uni.getStorageSync('token')
-			console.log(this.tokens);
+			// console.log(this.tokens);
 			this.identity = uni.getStorageSync('identity')
-			console.log(this.identity)
-
+			// console.log(this.identity)
+			
 		},
 		mounted() {
 			setTimeout(res => {
 				uni.createSelectorQuery().in(this).select('.headBox').boundingClientRect(data => {
 					this.topGapHeight = data.height
-					console.log(this.topGapHeight)
+					// console.log(this.topGapHeight)
 				}).exec();
 			})
 

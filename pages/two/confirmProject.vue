@@ -44,10 +44,10 @@
 					服务确认
 				</view>
 				<view class="choice">
-					<view :class="{'btn': rSelect.indexOf(index)!=-1}" v-for="(item,index) in countersign" :key="index" @tap="tapInfo(index)"
+					<view :class="{'btn': rSelect.indexOf(index)!=-1}" v-for="(item,index) in number" :key="index" @tap="tapInfo(index)"
 					 class="button">
 						<view class="names" :style="item.style">
-							{{item}}
+							{{item.name}}
 						</view>
 					</view>
 				</view>
@@ -144,6 +144,7 @@
 					open: false,
 				}],
 				rSelect: [], //点击标签添加的数组
+				number:[]
 
 			}
 		},
@@ -151,6 +152,12 @@
 			// 选中某个复选框时，由checkbox时触发
 			checkboxChange(e) {
 				//console.log(e);
+				if (e.value==true) {
+					// console.log(e)//打印下标
+					this.number.push(e); //选中添加到数组里
+				} else {
+					this.number.splice(this.number.indexOf(e), 1); //取消
+				}
 			},
 			// 选中任一checkbox时，由checkbox-group触发
 			checkboxGroupChange(e) {

@@ -282,7 +282,6 @@
 			},
 			//获取待开始订单
 			getStart() {
-				
 				getBegin(
 					this.userInfo.id,
 					this.status,
@@ -319,7 +318,7 @@
 
 		created() {
 			this.userInfo = uni.getStorageSync('userInfo')
-			console.log(this.userInfo);
+			// console.log(this.userInfo);
 			this.getStart()
 			
 		},

@@ -58,22 +58,13 @@ export function getBegin(belongId, status, currentPage) {
 }
 
 
-// // 进行中订单
-// export function getProceed(serviceId,belongId) {
-// 	return http.get('/service/serviceToUse', {
-// 			serviceId,
-// 			belongId
-		
-// 	})
-// }
+
 
 // 进行中订单
-export function getProceed(serviceId,belongId) {
-	return http.get('/service/serviceToUse', {
+export function getProceed(serviceId) {
+	return http.get('/service/serviceGoing', {
 		params: {
-		serviceId,
-			belongId
-		
+			serviceId
 		}
 	})
 }
@@ -94,7 +85,7 @@ export function getFinished(belongId, status, currentPage) {
 
 
 // 我的
-export function mine( year,empId) {
+export function mine(year, empId) {
 	return http.get('/service/myData', {
 		params: {
 			year,
@@ -105,10 +96,25 @@ export function mine( year,empId) {
 }
 
 
-
-
-
-
+// 获取验证码 type：7
+export function getCode(phone, type) {
+	return http.get('/consumer/sendVerifyCode', {
+		params: {
+			phone,
+			type
+		}
+	})
+}
+// 用户验证
+export function getverification(phone, code, serviceId) {
+	return http.get('/service/locationChecck/code', {
+		params: {
+			phone,
+			code,
+			serviceId
+		}
+	})
+}
 
 
 
@@ -146,7 +152,7 @@ export function register(phone, password, verifyCode) {
 
 
 //登录
-export function login(username, password,client_id) {
+export function login(username, password, client_id) {
 	return http.post('/oauth/login', {
 		username,
 		password,

@@ -180,7 +180,7 @@
 		{
 			"path": "pages/two/beforeShooting",
 			"style": {
-				"navigationBarTitleText": "服务前照片",
+				"navigationBarTitleText": "服务前视频",
 				"app-plus": {
 					"titleNView": {
 						"buttons": [{
@@ -196,7 +196,7 @@
 		{
 			"path": "pages/two/selectiveFocus",
 			"style": {
-				"navigationBarTitleText": "服务后照片",
+				"navigationBarTitleText": "服务后视频",
 				"app-plus": {
 					"titleNView": {
 						"buttons": [{
