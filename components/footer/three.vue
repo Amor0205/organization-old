@@ -217,7 +217,7 @@
 					if (res.data.code === 2000) {
 						// console.log(res);
 						this.services = res.data.data.services.services
-						console.log(this.services);
+						// console.log(this.services);
 						this.time = new Date(new Date(new Date(res.data.data.services.services[0].createTime).toJSON()) + 8 * 3600 *
 							1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
 						console.log(this.time);

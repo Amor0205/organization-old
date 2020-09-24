@@ -163,7 +163,7 @@
 						// uni.navigateTo({
 						// 	url:'../../pages/map'
 						// })
-						this.getLocationFun(data.serviceSite)
+						this.getLocationFun(data.address)
 						break;
 					case 'makePhone':
 						uni.makePhoneCall({
@@ -188,22 +188,24 @@
 			//获取地址经纬度
 			getLocationFun(site) {
 				uni.request({
-					url: 'http://restapi.amap.com/v3/geocode/geo', //仅为示例，并非真实接口地址。
+					url: 'http://api.map.baidu.com/geocoder', //仅为示例，并非真实接口地址。
 					data: {
-						key: '698bd4e0ca6ef47bd4f84da21cc4d8fd',
-						s: 'rsv3',
-						city: 35,
+						key: '8vesGZPwD3jD0EDSx8b9rkaFseT4d3vD',
+						output:"json",
 						address: '四川省眉山市彭山区凤鸣镇丽景苑二栋二单元2204'
 					},
 					header: {
-
+						
 					},
 					success: (res) => {
-						var locations = res.data.geocodes[0].location
-						var longitude = locations.match(/(\S*),/)[1] //经度
-						var latitude = locations.match(/,(\S*)/)[1] //纬度
+						var location = res.data.result.location;
+						var longitude = location.lng
+						var latitude = location.lat
 						this.toMapAPP(longitude, latitude, site)
-						console.log()
+						console.log(longitude,latitude)
+						// var locations = res.data.geocodes[0].location
+						// var longitude = locations.match(/(\S*),/)[1] //经度
+						// var latitude = locations.match(/,(\S*)/)[1] //纬度
 					}
 				});
 			},
