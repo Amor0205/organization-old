@@ -1,17 +1,22 @@
 {
-    "name" : "孝敬邦_服务端",
+    "name" : "孝兴邦_服务端",
     "appid" : "__UNI__AB02923",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,
     "app-plus" : {
+        "compatible" : {
+            "ignoreVersion" : true //true表示忽略版本检查提示框，HBuilderX1.9.0及以上版本支持  
+        },
+        "usingComponents" : true,
         "nvueCompiler" : "uni-app",
         "compilerVersion" : 3,
         "modules" : {
             "Maps" : {},
             "OAuth" : {},
-            "Payment" : {}
+            "Payment" : {},
+            "VideoPlayer" : {}
         },
         "distribute" : {
             "android" : {

@@ -1,6 +1,7 @@
-<!-- 服务前 -->
+<!-- 服务后 -->
 <template>
 	<view class="burst-wrap">
+	
 		<view class="burst-wrap-bg">
 			<view>
 				<!-- 第一个位置 -->
@@ -22,7 +23,8 @@
 							<!-- 视频 -->
 							<view class="uni-uploader__file" v-if="src" v-for="(item,index) in src" :key="index">
 								<view class="uploader_video">
-									<view class="icon iconfont icon-cuo" @tap="delectVideo"></view>
+									<view class="icon iconfont icon-cuo" ></view>
+									<image src="../../static/imgs/copy.png" class="copy"  @tap="delectVideo(index)"></image>
 									<video :src="item" class="video"></video>
 								</view>
 							</view>
@@ -218,7 +220,7 @@
 					}
 				})
 			},
-			delectVideo() {
+			delectVideo(index) {
 				uni.showModal({
 					title: "提示",
 					content: "是否要删除此视频",
@@ -235,8 +237,8 @@
 			console.log(this.userInfo);
 			this.tokens = uni.getStorageSync('token')
 			// console.log(this.tokens);
-			this.ids = uni.getStorageSync('ids')
-			console.log(this.ids);
+			this.all = uni.getStorageSync('all')
+			console.log(this.all);
 		},
 		onNavigationBarButtonTap(res){
 			console.log(res)
@@ -252,31 +254,36 @@
 				uni.uploadFile({
 					url: 'http://110.187.88.70:11801/service/startService', //仅为示例，非真实的接口地址
 					filePath:item,
-					name: 'file',
-					// fileType:'video',
+					name: 'files',
+					fileType:'video',
 					methods:'POST',
 					header:{
 						'Authorization':'Bearer '+ _this.tokens
 					},
 					formData:{
-						products:_this.value,
-						serviceId:_this.ids,
-						location:this.location
+					products: _this.value,
+					      serviceId: _this.all.id,
+					      location: this.location
 					},
 					success: (res) => {
-						console.log(res)
-						var data = JSON.parse(res.data)
-						// uni.hideLoading()
-						uni.showToast({
-							icon:'none',
-							title:data.message
-						})
-						// if(data.code == 2000){
-						// 	uni.setStorageSync('userInfo',data.data.consumer)
-						// 	uni.navigateTo({
-						// 		url:'../index/index'
-						// 	})
-						// }
+						// console.log(JSON.parse(res.data));
+						if(JSON.parse(res.data).code == 2000){
+								uni.setStorageSync('front',true)
+							uni.hideLoading()
+							uni.showToast({
+								title:'上传成功'
+							})
+							//获取当前页面（返回index页面）
+							var pages = getCurrentPages(); //当前页
+							//用scode来接收成功的值
+							pages[0].$vm.front = true
+					
+							// console.log(pages)
+							setTimeout(() => {
+									uni.navigateBack()
+							}, 1500)
+							
+						}
 					}
 				});	
 				
@@ -432,5 +439,13 @@
 	.jiahaosimg {
 		width: 98rpx;
 		height: 98rpx;
+	}
+	.copy {
+		position: absolute;
+		left: 175rpx;
+		top: -20rpx;
+			z-index: 9999;
+		width: 50rpx;
+		height: 50rpx;
 	}
 </style>

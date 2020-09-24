@@ -6,12 +6,13 @@
 			<view class="mask" v-show="popupShow" @click="showPopup" @touchmove.stop.prevent='moveHandle'></view>
 			<!-- 头部 -->
 			<view class="titleBox">
-				<view class="inputBox" @click="goToPage('search')">
+				<!-- 输入框 -->
+				<!-- <view class="inputBox" @click="goToPage('search')">
 					<view class="centerBox">
 						<image src="../../static/imgs/sousuo@2x.png" mode=""></image>
 						<text>请输入你想搜索的内容</text>
 					</view>
-				</view>
+				</view> -->
 				<view class="controlBox">
 					<view class="topBox">
 						<view class="leftBox" @click="showPopup">
@@ -47,7 +48,7 @@
 							<text>{{ item.id }}</text>
 							<text class="endTime">截止时间天</text>
 						</view>
-						<view class="centerBox" @click="StartService(item.id)">
+						<view class="centerBox" @click="StartService(item)">
 							<view class="listBox">
 								<view class="leftBox">服务对象</view>
 								<view class="rightBox">{{ item.consumer }}</view>
@@ -106,7 +107,7 @@
 				topGapHeight: 0, //顶部间隙
 				status: 1,
 				currentPage: 1, //当前页数,
-				id: '1273804055990304770', //用户id
+				// id: '1273804055990304770', //用户id
 				services: '',
 				time: '', //时间转换
 				date: '',
@@ -163,7 +164,7 @@
 						// uni.navigateTo({
 						// 	url:'../../pages/map'
 						// })
-						this.getLocationFun(data.serviceSite)
+						this.getLocationFun(data.address)
 						break;
 					case 'makePhone':
 						uni.makePhoneCall({
@@ -188,22 +189,24 @@
 			//获取地址经纬度
 			getLocationFun(site) {
 				uni.request({
-					url: 'http://restapi.amap.com/v3/geocode/geo', //仅为示例，并非真实接口地址。
+					url: 'http://api.map.baidu.com/geocoder', //仅为示例，并非真实接口地址。
 					data: {
-						key: '698bd4e0ca6ef47bd4f84da21cc4d8fd',
-						s: 'rsv3',
-						city: 35,
+						key: '8vesGZPwD3jD0EDSx8b9rkaFseT4d3vD',
+						output:"json",
 						address: '四川省眉山市彭山区凤鸣镇丽景苑二栋二单元2204'
 					},
 					header: {
-
+						
 					},
 					success: (res) => {
-						var locations = res.data.geocodes[0].location
-						var longitude = locations.match(/(\S*),/)[1] //经度
-						var latitude = locations.match(/,(\S*)/)[1] //纬度
+						var location = res.data.result.location;
+						var longitude = location.lng
+						var latitude = location.lat
 						this.toMapAPP(longitude, latitude, site)
-						console.log()
+						console.log(longitude,latitude)
+						// var locations = res.data.geocodes[0].location
+						// var longitude = locations.match(/(\S*),/)[1] //经度
+						// var latitude = locations.match(/,(\S*)/)[1] //纬度
 					}
 				});
 			},
@@ -283,7 +286,8 @@
 			//获取待开始订单
 			getStart() {
 				getBegin(
-					this.userInfo.id,
+				this.userInfo.id,
+					this.userInfo.belong,
 					this.status,
 					this.currentPage
 				).then(res => {
@@ -310,17 +314,13 @@
 				// 改变底部组件index
 				pages[0].$vm.changeBar(1)
 				 // 保存点击的订单
-				uni.setStorageSync('ids', res)
-				
+				uni.setStorageSync('all', res)
 			}
-
 		},
-
 		created() {
 			this.userInfo = uni.getStorageSync('userInfo')
-			// console.log(this.userInfo);
+			console.log(this.userInfo);
 			this.getStart()
-			
 		},
 		mounted() {
 			setTimeout(res => {
@@ -334,8 +334,8 @@
 		
 		},
 		onLoad() {
-			// this.id = option.id
-			// console.log(this.id);
+			this.id = option.id
+			console.log(this.id);
 		},
 
 	};

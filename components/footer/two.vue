@@ -1,7 +1,7 @@
 <template>
 	<view class="box">
 		<!-- 头部 -->
-		{{ success }}
+		<!-- {{ success }} -->
 		<view class="headBox">
 			<!-- 头部服务时间 -->
 			<view class="headBoxLeft">
@@ -37,11 +37,9 @@
 		</view>
 		<!-- 服务详细情况 -->
 		<view class="particular">
-			<view class="cylinder">
-			</view>
 			<view class="information">
 				<view class="specific">
-					<view class="orderList">
+					<view class="orderList" v-if="this.jxz">
 						<view class="orderListTop">
 							<view class="orderListLeft">
 								<image :src="jxz.beImg" mode="" class="orderListimgs"></image>
@@ -75,8 +73,14 @@
 							</view>
 						</view>
 					</view>
-
+					<view class="available" style="" v-else>
+						<view class="availables">
+							暂无进行中订单
+						</view>
+					</view>
 				</view>
+
+
 			</view>
 			<!-- 服务项目记录 -->
 			<view class="baseBox">
@@ -95,8 +99,8 @@
 				</view>
 
 				<view class="order" @click="goToPage('verification')">
-					
-					<view class="orderLeft"  >
+
+					<view class="orderLeft">
 						用户验证
 					</view>
 					<view class="" style="font-size: 28rpx; color: #00DB39;" v-if="verify==true">
@@ -111,7 +115,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="" v-if="identity==true">
+				<view class="" v-if="flag==1">
 
 				</view>
 				<view class="order" @click="goToPage('confirmProject')" v-else>
@@ -127,14 +131,15 @@
 						</view>
 					</view>
 				</view>
-				<view class="" v-if="identity==true">
 
-				</view>
 				<view class="order" @click="goToPage('beforeShooting')">
 					<view class="orderLeft">
 						拍摄服务前视频
 					</view>
-					<view class="orderRight">
+					<view class="" style="font-size: 28rpx; color: #00DB39;" v-if="fronts==true">
+						上传成功
+					</view>
+					<view class="orderRight" v-else>
 						<view class="decided">
 							待拍摄
 						</view>
@@ -148,7 +153,10 @@
 					<view class="orderLeft">
 						拍摄服务后视频
 					</view>
-					<view class="orderRight">
+					<view class="" style="font-size: 28rpx; color: #00DB39;" v-if="queens==true">
+						上传成功
+					</view>
+					<view class="orderRight" v-else>
 						<view class="decided">
 							待拍摄
 						</view>
@@ -159,15 +167,14 @@
 					</view>
 				</view>
 			</view>
-			<view class="refer" v-show="!serves" @click="start">
-				开始服务
-			</view>
-			<view class="refer" v-show="serves" @click="present">
+			<view class="refer" v-if='serves==true' @click="present">
 				提交服务
 			</view>
+			<view class="refer" v-else @click="start">
+				开始服务
+			</view>
+			
 		</view>
-
-
 		<!-- <view class="">
 				定位{{nowLocation}}
 			</view> -->
@@ -188,7 +195,7 @@
 				commonColor: '', //全局颜色
 				popupShow: false, //
 				topGapHeight: 0, //顶部间隙
-				serves: false,
+				serves: '',
 				nums: '',
 				rockon: false,
 				hours: '',
@@ -201,10 +208,12 @@
 				time: '', //时间转换
 				jxz: {},
 				userInfo: '',
-				identity: '', //登录身份的区分
+				flag: '', //登录身份的区分
 				ids: '',
 				animationTag: false, //动画标识
-				verify:false,//判断是否验证成功
+				verify: '', //判断是否验证成功
+				fronts: '', //判断是否上传成功服务前视频
+				queens: '', //判断是否上传成功服务后视频
 				orderList: [{
 					imgs: '../../static/imgs/photo.png',
 					orderNumber: 'DABH23244743442342',
@@ -228,13 +237,41 @@
 
 		},
 		methods: {
+			//前往页面
+			goToPage(res) {
+				switch (res) {
+					case 'verification':
+						//确认项目
+						uni.navigateTo({
+							url: '../../pages/two/verification'
+						})
+						break;
+					case 'confirmProject':
+						//确认项目
+						uni.navigateTo({
+							url: '../../pages/two/confirmProject'
+						})
+						break;
+					case 'beforeShooting':
+						//确认项目
+						uni.navigateTo({
+							url: '../../pages/two/beforeShooting'
+						})
+						break;
+					case 'selectiveFocus':
+						//确认项目
+						uni.navigateTo({
+							url: '../../pages/two/selectiveFocus'
+						})
+						break;
+
+					default:
+						break;
+				}
+			},
 			// 开始服务按钮
 			start() {
-			
-				if(this.verify==true){
-					uni.showLoading({
-						title: '开始服务'
-					})
+				if (this.verify == true || this.front == true) {
 					this.serves = !this.serves
 					this.rockon = true
 					//计时器开始计数
@@ -276,93 +313,88 @@
 							products: this.jxz.products,
 						},
 						success: (res) => {
-							uni.hideLoading()
+							console.log(res.data);
+							if (JSON.parse(res.data).code == 2000) {
+								uni.setStorageSync('serves',true)
+								uni.hideLoading()
+								uni.showToast({
+									title: '开始服务'
+								})
+							}
 						}
 					})
-				}else{
+				} else {
 					uni.showToast({
-						title:'请先验证',
-						icon:'none'
+						title: '请先验证和上传服务前的视频',
+						icon: 'none'
 					})
 				}
-				
-			},
-			//前往页面
-			goToPage(res) {
-				switch (res) {
-					case 'verification':
-						//确认项目
-						uni.navigateTo({
-							url: '../../pages/two/verification'
-						})
-						break;
-					case 'confirmProject':
-						//确认项目
-						uni.navigateTo({
-							url: '../../pages/two/confirmProject'
-						})
-						break;
-					case 'beforeShooting':
-						//确认项目
-						uni.navigateTo({
-							url: '../../pages/two/beforeShooting'
-						})
-						break;
-					case 'selectiveFocus':
-						//确认项目
-						uni.navigateTo({
-							url: '../../pages/two/selectiveFocus'
-						})
-						break;
 
-					default:
-						break;
-				}
 			},
 			// 提交服务按钮
 			present() {
-				clearInterval(this.timer);
-				this.timer = null;
-				var _this = this;
-				uni.uploadFile({
-					url: 'http://110.187.88.70:11801/service/submitService', //仅为示例，非真实的接口地址
-					filePath: '',
-					name: 'file',
-					header: {
-						'Authorization': 'Bearer ' + _this.tokens
-					},
-					formData: {
-						serviceId: this.jxz.id,
-						belongId: this.belongId,
-					},
-					success: (res) => {
-						if (res.code == 2000) {
-							uni.showLoading({
-								title: '提交成功'
-							})
-							uni.hideLoading()
+				// console.log(res);
+				if (this.queens == true) {
+					clearInterval(this.timer);
+					this.timer = null;
+					var _this = this;
+					uni.uploadFile({
+						url: 'http://110.187.88.70:11801/service/submitService', //仅为示例，非真实的接口地址
+						filePath: '',
+						name: 'file',
+						header: {
+							'Authorization': 'Bearer ' + _this.tokens
+						},
+						formData: {
+							serviceId: this.jxz.id,
+							belongId: this.belongId,
+						},
+						success: (res) => {
+							console.log(res.data);
+							if (JSON.parse(res.data).code == 2000) {
+								uni.hideLoading()
+								uni.showToast({
+									title: '提交成功'
+								})
+								uni.removeStorageSync('all');
+								uni.removeStorageSync('scode');
+								uni.removeStorageSync('front');
+								uni.removeStorageSync('queen');
+								uni.removeStorageSync('serves');
+								// this.gethand()
+								// 获取当前页
+								var pages = getCurrentPages(); //当前页
+								// console.log(pages);
+								// 改变页面（h5页面跟app不一样）
+								pages[0].$vm.activeData(2)
+								// 改变底部组件index
+								pages[0].$vm.changeBar(2)
+							}
 						}
-					}
-				})
+					})
+				} else {
+					uni.showToast({
+						title: '请先上传服务后的视频',
+						icon: 'none'
+					})
+				}
 			},
-			//进行中订单
-			gethand() {
-				getProceed(
-					this.ids,
-					// this.userInfo.id
-				).then(res => {
-					// console.log(res);
-					if (res.data.code === 2000) {
-						// console.log(res);
-						uni.setStorageSync('id', res.data.data.jxz)
-						this.jxz = res.data.data.jxz
-						// console.log(this.jxz);
-						this.time = new Date(new Date(new Date(res.data.data.jxz.createTime).toJSON()) + 8 * 3600 *
-							1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
-						// console.log(this.time);
-					}
-				})
-			},
+			// //进行中订单
+			// gethand() {
+			// 	getProceed(
+			// 		this.ids,
+			// 		// this.userInfo.id
+			// 	).then(res => {
+			// 		// console.log(res);
+			// 		if (res.data.code === 2000) {
+			// 			// console.log(res);
+			// 			uni.setStorageSync('id', res.data.data.jxz)
+			// 			this.jxz = res.data.data.jxz
+			// 			// console.log(this.jxz);
+
+			// 		}
+			// 	})
+			// },
 			//更新数据旋转动画
 			departAnimation() {
 				if (this.animationTag == false) {
@@ -377,20 +409,35 @@
 		},
 
 		created() {
+			//获取验证成功以后的状态
+			this.verify = uni.getStorageSync('scode')
+		
+			//获取上传服务前视频成功以后的状态
+			this.fronts = uni.getStorageSync('front')
+		
+			//获取上传服务后视频成功以后的状态
+			this.queens = uni.getStorageSync('queen')
+			
+			//获取开始服务成功以后的状态
+			this.serves = uni.getStorageSync('serves')
+			console.log(this.serves);
+		
 			//获取从待开始订单传过来的数据
 			this.userInfo = uni.getStorageSync('userInfo')
 			// console.log(this.userInfo);
-			this.ids = uni.getStorageSync('ids')
-			// console.log(this.ids);
+			this.jxz = uni.getStorageSync('all')
+			console.log(this.jxz);
 			this.success = uni.getStorageSync('success')
 			// console.log(this.success);
-			this.gethand()
+
 			// this.getNowLocation()
 			this.tokens = uni.getStorageSync('token')
 			// console.log(this.tokens);
-			this.identity = uni.getStorageSync('identity')
-			// console.log(this.identity)
-			
+			this.flag = uni.getStorageSync('flag')
+			// console.log(this.flag)
+			this.time = new Date(new Date(new Date(this.jxz.createTime).toJSON()) + 8 * 3600 *
+				1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+			console.log(this.time);
 		},
 		mounted() {
 			setTimeout(res => {
@@ -399,7 +446,7 @@
 					// console.log(this.topGapHeight)
 				}).exec();
 			})
-
+			// this.gethand()
 		},
 		onShow() {
 
@@ -415,10 +462,10 @@
 				this.timer = null;
 			}
 		},
-		onLoad(option) {
-			this.ids = option.id
-			console.log(this.ids);
-		},
+		// onLoad(option) {
+		// 	this.ids = option.id
+		// 	console.log(this.ids);
+		// },
 
 
 
@@ -637,5 +684,17 @@
 
 	.rotation {
 		animation: rotation 1.3s linear 2;
+	}
+
+	//暂无订单显示
+	.available {
+		width: 345rpx;
+		height:500rpx;
+		text-align: center;
+		line-height: 500rpx;
+		.availables{
+			width: 345rpx;
+			height: 500rpx;
+		margin-left: 170rpx;	}
 	}
 </style>

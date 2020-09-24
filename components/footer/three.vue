@@ -4,12 +4,13 @@
 		<view class="mask" v-show="popupShow" @click="showPopup" @touchmove.stop.prevent='moveHandle'></view>
 		<!-- 头部 -->
 		<view class="titleBox">
-			<view class="inputBox" @click="goToPage('search')">
+			
+			<!-- <view class="inputBox" @click="goToPage('search')">
 				<view class="centerBox">
 					<image src="../../static/imgs/sousuo@2x.png" mode=""></image>
 					<text>请输入你想搜索的内容</text>
 				</view>
-			</view>
+			</view> -->
 			<!-- 查看全部 -->
 			<view class="controlBox">
 				<view class="topBox">
@@ -210,14 +211,15 @@
 			//获取已完成订单
 			getEnd() {
 				getFinished(
-					this.userInfo.id,
+				this.userInfo.id,
+					this.userInfo.belong,
 					this.status,
 					this.currentPage
 				).then(res => {
 					if (res.data.code === 2000) {
 						// console.log(res);
 						this.services = res.data.data.services.services
-						console.log(this.services);
+						// console.log(this.services);
 						this.time = new Date(new Date(new Date(res.data.data.services.services[0].createTime).toJSON()) + 8 * 3600 *
 							1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
 						console.log(this.time);

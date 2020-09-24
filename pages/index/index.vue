@@ -38,6 +38,8 @@ import { getUserInfo } from '../../src/ajax.js'
 				userInfo:'',			//用户信息
 				familyInfo:'',			//家人信息	
 				scode:'',	//需要用来接收请求成功后的值
+				front:'',//拍摄前
+				queen:'',//拍摄后
 			}
 		},
 		components:{
@@ -95,12 +97,26 @@ import { getUserInfo } from '../../src/ajax.js'
 			}
 		},
 		onShow() {
-			
+			 // 进行中订单用户验证
 			if(this.$refs.two){
 				//用scode=true的值  赋给需要判断的页面
 				this.$refs.two.verify = this.scode
 				// console.log(this.$refs);
 			}
+			//进行中订单拍摄服务前视频
+			if(this.$refs.two){
+				//用front=true的值  赋给需要判断的页面
+				this.$refs.two.fronts = this.front
+				// console.log(this.$refs);
+			}
+			//进行中订单拍摄服务后视频
+			if(this.$refs.two){
+				//用front=true的值  赋给需要判断的页面
+				this.$refs.two.queens = this.queen
+				// console.log(this.$refs);
+			}
+			
+			
 			//获取用户信息
 			this.userInfo = uni.getStorageSync('userInfo');
 			var selectF = uni.getStorageSync('selectFamily')

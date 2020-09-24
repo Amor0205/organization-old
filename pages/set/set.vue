@@ -11,7 +11,7 @@
 			</navigator>
 		</view>
 		
-		<navigator url=""  class="bottomControl">切换账户</navigator>
+		<!-- <navigator url=""  class="bottomControl">切换账户</navigator> -->
 		<view class="bottomControl" @click="goToPage()">退出登录</view>
 	</view>
 </template>

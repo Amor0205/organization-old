@@ -9,7 +9,7 @@
 					<uni-icons type="contact-filled" size="25"></uni-icons>
 					<u-form-item label="" prop="phone">
 						<view class="" style="width: 550rpx;height: 50rpx; display: flex;align-items: center;">
-							<u-input v-model="ids.phone" type="phone" placeholder='请输入手机号' maxlength='11' :disabled='disabled' />
+							<u-input v-model="all.phone" type="phone" placeholder='请输入手机号' maxlength='11' :disabled='disabled' />
 						</view>
 					</u-form-item>
 				</view>
@@ -61,7 +61,7 @@
 			return {
 				activeTab: 0,
 				codeTime: 0,
-				ids: '',
+				all: '',
 				disabled: true,
 				form: {
 
@@ -125,7 +125,7 @@
 							this.codeTime = 0
 						}
 					}, 1000)
-					getCode(this.ids.phone, 7).then(res => {
+					getCode(this.all.phone, 7).then(res => {
 						if (res.data.code == 2000) {
 							uni.showToast({
 								title: '获取验证码成功'
@@ -149,15 +149,16 @@
 			submit() {
 				console.log(this.$refs.uForm)
 				this.$refs.uForm.validate(valid => {
-					if (valid && this.ids.phone.length != 0 && this.form.code.length != 0) {
+					if (valid && this.all.phone.length != 0 && this.form.code.length != 0) {
 						// 验证
 						getverification(
-							this.ids.phone,
+							this.all.phone,
 							this.form.code,
-							this.ids.id,
+							this.all.id,
 						).then(res => {
 							console.log(res.data)
 							if (res.data.code == 2000) {
+								uni.setStorageSync('scode',true)
 								uni.showToast({
 									title: '验证成功'
 								})
@@ -196,8 +197,8 @@
 
 		},
 		created() {
-			this.ids = uni.getStorageSync('id')
-			console.log(this.ids);
+			this.all = uni.getStorageSync('all')
+			console.log(this.all);
 		},
 		onLoad() {
 

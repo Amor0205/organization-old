@@ -15,18 +15,15 @@
 			<!-- 头部上方容器 -->
 			<view class="headTopBox">
 				<view class="leftBox">
-					<view class="imgbox" >
+					<view class="imgbox">
 						<!-- <image :src="headPortraitDefault" mode=""></image> -->
 						<image :src="userInfo.avatar ? userInfo.avatar : headPortraitDefault" mode=""></image>
 					</view>
 					<view class="titleBox">
-						<view class="username" >
+						<view class="username">
 							{{ userInfo.name == null ? '点击头像设置昵称' : userInfo.name }}
 						</view>
-						<view class="volunteer" v-if="identity">
-							志愿服务人员
-						</view>
-						<view class="" v-else>
+						<view class="" v-if="this.flag==1">
 							<view class="tagBox">
 								<view class="tag_1 common">
 									巡查人员
@@ -39,6 +36,11 @@
 								四川省微壹科技发展有限责任公司
 							</view>
 						</view>
+						<view class="volunteer"  v-else> 
+							志愿服务人员
+						</view>
+						
+						
 					</view>
 				</view>
 				<view class="rightBox" @click="goToPage('set')">
@@ -49,12 +51,28 @@
 			</view>
 			<!-- 头部下方容器 -->
 			<view class="headBottomBox">
-				<view class="contentBox" v-for="(item,index) in headList" :key='index'>
+				<view class="contentBox">
 					<view class="numberBox">
-						{{ item.number }}
+						{{ myData.good }}
 					</view>
 					<view class="titleBox">
-						{{ item.name }}
+						好评
+					</view>
+				</view>
+				<view class="contentBox">
+					<view class="numberBox">
+						{{ myData.med }}
+					</view>
+					<view class="titleBox">
+						中评
+					</view>
+				</view>
+				<view class="contentBox">
+					<view class="numberBox">
+						{{ myData.bad }}
+					</view>
+					<view class="titleBox">
+						差评
 					</view>
 				</view>
 			</view>
@@ -81,12 +99,7 @@
 			</view>
 			<!-- 展示图表 -->
 			<view class="chart">
-				<!--#ifdef MP-ALIPAY -->
-				<!-- <canvas canvas-id="canvasLineA" id="canvasLineA" class="charts" :width="cWidth*pixelRatio" :height="cHeight*pixelRatio" :style="{'width':cWidth+'px','height':cHeight+'px'}" @touchstart="touchLineA"></canvas> -->
-				<!--#endif-->
-				<!--#ifndef MP-ALIPAY -->
 				<canvas canvas-id="canvasLineA" id="canvasLineA" class="charts" @touchstart="touchLineA"></canvas>
-				<!--#endif-->
 			</view>
 
 		</view>
@@ -95,27 +108,28 @@
 		<view class="workData">
 			<!-- 总单数 -->
 			<view class="gross">
-				累计完成订单数量 <text class="number">{{' ' + completeSum }}</text>
+				累计完成订单数量 <text class="number">{{' ' + myData.totalNum }}</text>
 			</view>
 
 			<!-- 评价详情 -->
 			<view class="evaluateDtl">
 				<view class="title">评价详情</view>
 				<view class="listBox">
-					<view class="" v-for="(item,index) in evaluateDtlList" :key='index'>
+					<!-- <view class="" v-for="(item,index) in evaluateDtlList" :key='index'>
 						{{ item.name }}<text>{{ item.grade }}</text>分
+					</view> -->
+					<view class="">
+						相应速度<text>{{ myData.speed }}</text>分
+					</view>
+					<view class="">
+						服务效率<text>{{ myData.resTime }}</text>分
+					</view>
+					<view class="">
+						专业程度<text>{{ myData.majar }}</text>分
 					</view>
 				</view>
 			</view>
 		</view>
-
-		<!-- 分割线 -->
-		<!-- <view class="cuttingLine"></view> -->
-
-
-
-
-
 	</view>
 </template>
 
@@ -141,7 +155,7 @@
 				year: 2020,
 				id: '1273804055990304770', //用户id
 				myData: '',
-				identity:'',
+				identity: '',
 				headList: {
 					collect: {
 						name: '好评',
@@ -168,22 +182,15 @@
 				}],
 
 				chartsData: [{
-						categories: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "11月", "12月"],
+						categories: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
 						series: [{
 							name: "累计完成",
-							data: [100, 80, 95, 150, 112, 132, 122, 422],
-						}]
-					},
-					{
-						categories: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "11月", "12月"],
-						series: [{
-							name: "累计完成",
-							data: [23, 180, 55, 56, 153, 101, 122, 320, 110, ],
+							data: [],
 						}]
 					}
 				],
 				chartsDataAll: {
-					categories: ["2020", "2019", "2018"],
+					categories: [],
 					series: [{
 						name: "累计完成",
 						data: [231, 210, 642],
@@ -210,6 +217,7 @@
 			},
 			//控制图标配置
 			showLineA(canvasId, chartData) {
+				// console.log(chartData)
 				canvaLineA = new uCharts({
 					$this: _this,
 					canvasId: canvasId,
@@ -302,14 +310,29 @@
 			},
 			//获取我的数据
 			my() {
+				var _this = this;
 				mine(
 					this.year,
-					this.id
+					this.userInfo.id,
+					this.userInfo.belong,
 				).then(res => {
 					if (res.data.code === 2000) {
-						console.log(res);
+						// console.log(res);
 						this.myData = res.data.data.myData
-						console.log(this.myData);
+						var years = res.data.data.years.splice(",")
+						this.chartsDataAll.categories = years
+						// console.log(this.chartsDataAll.categories);
+						var mouthTotals = eval('(' + res.data.data.myData.mouthTotal + ')')
+						// console.log(mouthTotals);
+						var arr = []
+						for (let i in mouthTotals) {
+						    arr.push(mouthTotals[i]); //属性
+						}
+						_this.chartsData[0].series[0].data = arr	
+						//显示图表 传入（图表名，图表数据）
+						// _this.showLineA("canvasLineA", this.chartsData[0])
+						// console.log(this.chartsData[0]);
+						
 					}
 				})
 			}
@@ -319,8 +342,8 @@
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
 			// console.log(this.userInfo)
-			this.identity = uni.getStorageSync('identity')
-			console.log(this.identity)
+			this.flag = uni.getStorageSync('flag')
+			console.log(this.flag)
 			this.commonColor = this.commonColorAll
 			//获取userInfo
 			// this.userInfo = uni.getStorageSync('userInfo')
@@ -341,10 +364,11 @@
 			this.cWidth = uni.upx2px(680);
 			this.cHeight = uni.upx2px(400);
 			this.my()
+			
 		},
 		mounted() {
 			//显示图表 传入（图表名，图表数据）
-			this.showLineA("canvasLineA", this.chartsData[this.index])
+			this.showLineA("canvasLineA", this.chartsData[this.index])	
 			//计算总量
 			this.chartsDataAll.series[0].data.map(res => {
 				this.completeSum += res
@@ -664,7 +688,8 @@
 			}
 		}
 	}
-	.volunteer{
+
+	.volunteer {
 		margin-top: 20rpx;
 		font-size: 16px;
 		color: #ad891d;

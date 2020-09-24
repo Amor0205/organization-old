@@ -46,9 +46,10 @@ export function getUserInfo(token) {
 	})
 }
 // 待开始订单
-export function getBegin(belongId, status, currentPage) {
+export function getBegin(uId,belongId, status, currentPage) {
 	return http.get('/service/selectService', {
 		params: {
+			uId,
 			belongId,
 			status,
 			currentPage,
@@ -71,9 +72,10 @@ export function getProceed(serviceId) {
 
 
 // 已完成订单
-export function getFinished(belongId, status, currentPage) {
+export function getFinished(uId,belongId, status, currentPage) {
 	return http.get('service/selectService', {
 		params: {
+			uId,
 			belongId,
 			status,
 			currentPage,
@@ -85,12 +87,12 @@ export function getFinished(belongId, status, currentPage) {
 
 
 // 我的
-export function mine(year, empId) {
+export function mine(year, empId,belong) {
 	return http.get('/service/myData', {
 		params: {
 			year,
-			empId
-
+			empId,
+			belong
 		}
 	})
 }
