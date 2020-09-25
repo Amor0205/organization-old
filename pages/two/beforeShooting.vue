@@ -266,24 +266,6 @@
 					      location: this.location
 					},
 					success: (res) => {
-						// console.log(JSON.parse(res.data));
-						if(JSON.parse(res.data).code == 2000){
-								uni.setStorageSync('front',true)
-							uni.hideLoading()
-							uni.showToast({
-								title:'上传成功'
-							})
-							//获取当前页面（返回index页面）
-							var pages = getCurrentPages(); //当前页
-							//用scode来接收成功的值
-							pages[0].$vm.front = true
-					
-							// console.log(pages)
-							setTimeout(() => {
-									uni.navigateBack()
-							}, 1500)
-							
-						}
 					}
 				});	
 				

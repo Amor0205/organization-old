@@ -37,8 +37,10 @@
 		</view>
 		<!-- 服务详细情况 -->
 		<view class="particular">
-			<view class="information">
-				<view class="specific">
+			
+			<view class="information" >
+				<!-- v-if="this.jxz.length>0" -->
+				<view class="specific" >
 					<view class="orderList" v-if="this.jxz">
 						<view class="orderListTop">
 							<view class="orderListLeft">
@@ -81,6 +83,10 @@
 				</view>
 
 
+			
+		<!-- 	<view class="" v-else>
+				暂无进行中订单
+			</view> -->
 			</view>
 			<!-- 服务项目记录 -->
 			<view class="baseBox">
@@ -211,9 +217,6 @@
 				flag: '', //登录身份的区分
 				ids: '',
 				animationTag: false, //动画标识
-				verify: '', //判断是否验证成功
-				fronts: '', //判断是否上传成功服务前视频
-				queens: '', //判断是否上传成功服务后视频
 				orderList: [{
 					imgs: '../../static/imgs/photo.png',
 					orderNumber: 'DABH23244743442342',
@@ -313,14 +316,6 @@
 							products: this.jxz.products,
 						},
 						success: (res) => {
-							console.log(res.data);
-							if (JSON.parse(res.data).code == 2000) {
-								uni.setStorageSync('serves',true)
-								uni.hideLoading()
-								uni.showToast({
-									title: '开始服务'
-								})
-							}
 						}
 					})
 				} else {
@@ -333,43 +328,6 @@
 			},
 			// 提交服务按钮
 			present() {
-				// console.log(res);
-				if (this.queens == true) {
-					clearInterval(this.timer);
-					this.timer = null;
-					var _this = this;
-					uni.uploadFile({
-						url: 'http://110.187.88.70:11801/service/submitService', //仅为示例，非真实的接口地址
-						filePath: '',
-						name: 'file',
-						header: {
-							'Authorization': 'Bearer ' + _this.tokens
-						},
-						formData: {
-							serviceId: this.jxz.id,
-							belongId: this.belongId,
-						},
-						success: (res) => {
-							console.log(res.data);
-							if (JSON.parse(res.data).code == 2000) {
-								uni.hideLoading()
-								uni.showToast({
-									title: '提交成功'
-								})
-								uni.removeStorageSync('all');
-								uni.removeStorageSync('scode');
-								uni.removeStorageSync('front');
-								uni.removeStorageSync('queen');
-								uni.removeStorageSync('serves');
-								// this.gethand()
-								// 获取当前页
-								var pages = getCurrentPages(); //当前页
-								// console.log(pages);
-								// 改变页面（h5页面跟app不一样）
-								pages[0].$vm.activeData(2)
-								// 改变底部组件index
-								pages[0].$vm.changeBar(2)
-							}
 						}
 					})
 				} else {
@@ -429,15 +387,9 @@
 			console.log(this.jxz);
 			this.success = uni.getStorageSync('success')
 			// console.log(this.success);
-
-			// this.getNowLocation()
+			this.gethand()			// this.getNowLocation()
 			this.tokens = uni.getStorageSync('token')
 			// console.log(this.tokens);
-			this.flag = uni.getStorageSync('flag')
-			// console.log(this.flag)
-			this.time = new Date(new Date(new Date(this.jxz.createTime).toJSON()) + 8 * 3600 *
-				1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
-			console.log(this.time);
 		},
 		mounted() {
 			setTimeout(res => {
@@ -446,7 +398,11 @@
 					// console.log(this.topGapHeight)
 				}).exec();
 			})
+<<<<<<< .mine
 			// this.gethand()
+=======
+		this.gethand()
+>>>>>>> .theirs
 		},
 		onShow() {
 

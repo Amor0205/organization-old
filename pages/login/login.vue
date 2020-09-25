@@ -197,8 +197,6 @@
 										).then(res => {
 											console.log(res.data)
 											uni.hideLoading()
-											//判断登录的身份
-											uni.setStorageSync('flag', res.data.data.userInfo.flag)
 											// 保存用户信息
 											uni.setStorageSync('userInfo', res.data.data.userInfo)
 											//登录成功 且没有特殊要求前往首页  tag = 0 返回上一页

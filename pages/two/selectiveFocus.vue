@@ -1,112 +1,5 @@
-<!-- 服务后 -->
+<!-- 服务前 -->
 <template>
-	<view class="burst-wrap">
-	
-		<view class="burst-wrap-bg">
-			<view>
-				<!-- 第一个位置 -->
-				<view class="input">
-					<u-input v-model="value" type="text" placeholder='请输入位置标题名称' :clearable='clearable' />
-				</view>
-				<!-- 信息提交 -->
-				<view class="burst-info">
-					<view class="uni-uploader-body">
-						<view class="uni-uploader__files">
-							<!-- 图片 -->
-							<block v-for="(image,index) in imageList" :key="index">
-								<view class="uni-uploader__file">
-									<view class="icon iconfont icon-cuo" @tap="delect(index)"></view>
-									<image class="uni-uploader__img" :src="image" :data-src="image" @tap="previewImage">
-									</image>
-								</view>
-							</block>
-							<!-- 视频 -->
-							<view class="uni-uploader__file" v-if="src" v-for="(item,index) in src" :key="index">
-								<view class="uploader_video">
-									<view class="icon iconfont icon-cuo" ></view>
-									<image src="../../static/imgs/copy.png" class="copy"  @tap="delectVideo(index)"></image>
-									<video :src="item" class="video"></video>
-								</view>
-							</view>
-
-							<view class="uni-uploader__input-box" v-if="VideoOfImagesShow">
-								<view class="uni-uploader__input" @tap="chooseVideoImage">
-									<view class="jiahaos">
-										<image src="../../static/imgs/jiahaos.png" mode="" class="jiahaosimg"></image>
-									</view>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
-				<!-- 第二个位置 -->
-				<!-- <view class="input">
-					<u-input v-model="value1" type="text" placeholder='请输入位置标题名称' :clearable='clearable' />
-				</view> -->
-				<!-- 信息提交 -->
-				<view class="burst-info">
-					<view class="uni-uploader-body">
-						<view class="uni-uploader__files">
-							<!-- 图片 -->
-							<!-- <block v-for="(image,index) in imageList" :key="index">
-								<view class="uni-uploader__file">
-									<view class="icon iconfont icon-cuo" @tap="delect(index)"></view>
-									<image class="uni-uploader__img" :src="image" :data-src="image" @tap="previewImage">
-									</image>
-								</view>
-							</block> -->
-							<!-- 视频 -->
-							<!-- <view class="uni-uploader__file" v-if="src" v-for="(item,index) in src" :key="index">
-								<view class="uploader_video">
-									<view class="icon iconfont icon-cuo" @tap="delectVideo"></view>
-									<video :src="item" class="video"></video>
-								</view>
-							</view> -->
-
-							<!-- <view class="uni-uploader__input-box" v-if="VideoOfImagesShow">
-								<view class="uni-uploader__input" @tap="chooseVideoImage">
-									<view class="jiahaos">
-										<image src="../../static/imgs/jiahaos.png" mode="" class="jiahaosimg"></image>
-									</view>
-								</view>
-							</view> -->
-						</view>
-					</view>
-				</view>
-				<!-- 第三个位置 -->
-				<!-- <view class="input">
-					<u-input v-model="value1" type="text" placeholder='请输入位置标题名称' :clearable='clearable' />
-				</view> -->
-				<!-- 信息提交 -->
-				<view class="burst-info">
-					<view class="uni-uploader-body">
-						<view class="uni-uploader__files">
-							<!-- 图片 -->
-							<!-- <block v-for="(image,index) in imageList" :key="index">
-								<view class="uni-uploader__file">
-									<view class="icon iconfont icon-cuo" @tap="delect(index)"></view>
-									<image class="uni-uploader__img" :src="image" :data-src="image" @tap="previewImage">
-									</image>
-								</view>
-							</block> -->
-							<!-- 视频 -->
-							<!-- <view class="uni-uploader__file" v-if="src" v-for="(item,index) in src" :key="index">
-								<view class="uploader_video">
-									<view class="icon iconfont icon-cuo" @tap="delectVideo"></view>
-									<video :src="item" class="video"></video>
-								</view>
-							</view> -->
-
-							<!-- <view class="uni-uploader__input-box" v-if="VideoOfImagesShow">
-								<view class="uni-uploader__input" @tap="chooseVideoImage">
-									<view class="jiahaos">
-										<image src="../../static/imgs/jiahaos.png" mode="" class="jiahaosimg"></image>
-									</view>
-								</view>
-							</view> -->
-						</view>
-					</view>
-				</view>
 			</view>
 		</view>
 	</view>
@@ -220,73 +113,9 @@
 					}
 				})
 			},
-			delectVideo(index) {
-				uni.showModal({
-					title: "提示",
-					content: "是否要删除此视频",
-					success: (res) => {
-						if (res.confirm) {
-							this.src.splice(index, 1)
-						}
-					}
-				})
 			}
 		},
-		created() {
-			this.userInfo = uni.getStorageSync('userInfo')
-			console.log(this.userInfo);
-			this.tokens = uni.getStorageSync('token')
-			// console.log(this.tokens);
-			this.all = uni.getStorageSync('all')
-			console.log(this.all);
 		},
-		onNavigationBarButtonTap(res){
-			console.log(res)
-			var _this = this;
-			// uni.showLoading({
-			// 	title:'正在上传信息..'
-			// })
-			// uni.hideLoading()
-			// console.log(this.uploadPicData)
-			// if(this.uploadPicData){
-			this.src.map((item)=>{
-				console.log(item);
-				uni.uploadFile({
-					url: 'http://110.187.88.70:11801/service/submitService', //仅为示例，非真实的接口地址
-					filePath:item,
-					name: 'file',
-					// fileType:'video',
-					methods:'POST',
-					header:{
-						'Authorization':'Bearer '+ _this.tokens
-					},
-					formData:{
-						// products:_this.value,
-						serviceId:_this.all.id,
-						belongId:_this.userInfo.id
-					},
-					success: (res) => {
-						// console.log(JSON.parse(res.data));
-						if(JSON.parse(res.data).code == 2000){
-							uni.setStorageSync('queen',true)
-							uni.hideLoading()
-							uni.showToast({
-								title:'上传成功'
-							})
-							//获取当前页面（返回index页面）
-							var pages = getCurrentPages(); //当前页
-							//用scode来接收成功的值
-							pages[0].$vm.queen = true
-							
-							// console.log(pages)
-							setTimeout(() => {
-									uni.navigateBack()
-							}, 1500)
-							
-						}
-					}
-				});	
-				
 			})
 		},
 	}
@@ -421,31 +250,5 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		align-content: space-between;
-	}
-
-	.burst-info{
-		margin-bottom: 50rpx;
-	}
-
-	.jiahaos {
-		width: 196rpx;
-		height: 196rpx;
-		border: 1rpx solid #dfddda;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.jiahaosimg {
-		width: 98rpx;
-		height: 98rpx;
-	}
-	.copy {
-		position: absolute;
-		left: 175rpx;
-		top: -20rpx;
-			z-index: 9999;
-		width: 50rpx;
-		height: 50rpx;
 	}
 </style>

@@ -23,7 +23,6 @@
 						<view class="username">
 							{{ userInfo.name == null ? '点击头像设置昵称' : userInfo.name }}
 						</view>
-						<view class="" v-if="this.flag==1">
 							<view class="tagBox">
 								<view class="tag_1 common">
 									巡查人员
@@ -313,8 +312,13 @@
 				var _this = this;
 				mine(
 					this.year,
+<<<<<<< .mine
 					this.userInfo.id,
 					this.userInfo.belong,
+=======
+					this.userInfo.id
+
+>>>>>>> .theirs
 				).then(res => {
 					if (res.data.code === 2000) {
 						// console.log(res);
@@ -342,8 +346,6 @@
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
 			// console.log(this.userInfo)
-			this.flag = uni.getStorageSync('flag')
-			console.log(this.flag)
 			this.commonColor = this.commonColorAll
 			//获取userInfo
 			// this.userInfo = uni.getStorageSync('userInfo')
