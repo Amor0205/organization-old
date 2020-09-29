@@ -111,7 +111,7 @@
 				services: '',
 				time: '', //时间转换
 				date: '',
-				userInfo:'',
+				userInfo: '',
 				orderList: [{
 					orderNumber: 'DABH23244743442342',
 					endTime: 1,
@@ -192,18 +192,18 @@
 					url: 'http://api.map.baidu.com/geocoder', //仅为示例，并非真实接口地址。
 					data: {
 						key: '8vesGZPwD3jD0EDSx8b9rkaFseT4d3vD',
-						output:"json",
+						output: "json",
 						address: '四川省眉山市彭山区凤鸣镇丽景苑二栋二单元2204'
 					},
 					header: {
-						
+
 					},
 					success: (res) => {
 						var location = res.data.result.location;
 						var longitude = location.lng
 						var latitude = location.lat
 						this.toMapAPP(longitude, latitude, site)
-						console.log(longitude,latitude)
+						console.log(longitude, latitude)
 						// var locations = res.data.geocodes[0].location
 						// var longitude = locations.match(/(\S*),/)[1] //经度
 						// var latitude = locations.match(/,(\S*)/)[1] //纬度
@@ -286,14 +286,14 @@
 			//获取待开始订单
 			getStart() {
 				getBegin(
-				this.userInfo.id,
+					this.userInfo.id,
 					this.userInfo.belong,
 					this.status,
 					this.currentPage
 				).then(res => {
 					if (res.data.code === 2000) {
 						console.log(res);
-							uni.setStorageSync('services', res.data.data.services.services)
+						uni.setStorageSync('services', res.data.data.services.services)
 						this.services = res.data.data.services.services
 						// console.log(this.services);
 						this.time = new Date(new Date(new Date(res.data.data.services.services[0].createTime).toJSON()) + 8 * 3600 *
@@ -313,7 +313,7 @@
 				pages[0].$vm.activeData(1)
 				// 改变底部组件index
 				pages[0].$vm.changeBar(1)
-				 // 保存点击的订单
+				// 保存点击的订单
 				uni.setStorageSync('all', res)
 			}
 		},
@@ -331,7 +331,7 @@
 			});
 		},
 		onShow() {
-		
+
 		},
 		onLoad() {
 			this.id = option.id

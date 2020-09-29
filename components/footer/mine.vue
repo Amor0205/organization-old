@@ -23,6 +23,9 @@
 						<view class="username">
 							{{ userInfo.name == null ? '点击头像设置昵称' : userInfo.name }}
 						</view>
+						
+						 
+						<view class=""  v-if="this.userInfo.flag==1" >
 							<view class="tagBox">
 								<view class="tag_1 common">
 									巡查人员
@@ -35,11 +38,10 @@
 								四川省微壹科技发展有限责任公司
 							</view>
 						</view>
-						<view class="volunteer"  v-else> 
+						<view class="volunteer" v-else>
+						 
 							志愿服务人员
 						</view>
-						
-						
 					</view>
 				</view>
 				<view class="rightBox" @click="goToPage('set')">
@@ -154,7 +156,7 @@
 				year: 2020,
 				id: '1273804055990304770', //用户id
 				myData: '',
-				identity: '',
+				flag: '',
 				headList: {
 					collect: {
 						name: '好评',
@@ -312,13 +314,8 @@
 				var _this = this;
 				mine(
 					this.year,
-<<<<<<< .mine
 					this.userInfo.id,
-					this.userInfo.belong,
-=======
-					this.userInfo.id
-
->>>>>>> .theirs
+					this.userInfo.belong
 				).then(res => {
 					if (res.data.code === 2000) {
 						// console.log(res);
@@ -346,6 +343,8 @@
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
 			// console.log(this.userInfo)
+			// this.flag = uni.getStorageSync('flag')
+			// console.log(this.flag)
 			this.commonColor = this.commonColorAll
 			//获取userInfo
 			// this.userInfo = uni.getStorageSync('userInfo')

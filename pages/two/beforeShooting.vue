@@ -1,4 +1,4 @@
-<!-- 服务后 -->
+<!-- 服务前 -->
 <template>
 	<view class="burst-wrap">
 	
@@ -13,18 +13,18 @@
 					<view class="uni-uploader-body">
 						<view class="uni-uploader__files">
 							<!-- 图片 -->
-							<block v-for="(image,index) in imageList" :key="index">
+							<!-- <block v-for="(image,index) in imageList" :key="index">
 								<view class="uni-uploader__file">
 									<view class="icon iconfont icon-cuo" @tap="delect(index)"></view>
 									<image class="uni-uploader__img" :src="image" :data-src="image" @tap="previewImage">
 									</image>
 								</view>
-							</block>
+							</block> -->
 							<!-- 视频 -->
 							<view class="uni-uploader__file" v-if="src" v-for="(item,index) in src" :key="index">
 								<view class="uploader_video">
 									<view class="icon iconfont icon-cuo" ></view>
-									<image src="../../static/imgs/copy.png" class="copy"  @tap="delectVideo(index)"></image>
+									<image src="../../static/imgs/copy.png" mode="" class="copy" @tap="delectVideo(index)"></image>
 									<video :src="item" class="video"></video>
 								</view>
 							</view>
@@ -127,11 +127,11 @@
 				clearable: false,
 				imageList: [], //图片
 				src: [], //视频存放
-				sourceTypeIndex: 2,
+				sourceTypeIndex: 0,
 				checkedValue: true,
 				checkedIndex: 0,
 				userInfo:'',
-				sourceType: ['拍摄', '相册', '拍摄或相册'],
+				sourceType: ['拍摄'],
 				cameraList: [{
 						value: 'back',
 						name: '后置摄像头',
@@ -144,44 +144,46 @@
 				],
 				cameraIndex: 0,
 				VideoOfImagesShow: true,
-				location:1
+				location:1,
+				flag:0
 			}
 		},
 		onUnload() {
 			this.src = '',
-				this.sourceTypeIndex = 2,
-				this.sourceType = ['拍摄', '相册', '拍摄或相册'];
+			console.log(11)
+				this.sourceTypeIndex = 0,
+				this.sourceType = ['拍摄'];
 		},
 		methods: {
 			chooseVideoImage() {
 				uni.showActionSheet({
 					title: "选择上传类型",
-					itemList: ['图片', '视频'],
+					itemList: [ '视频'],
 					success: (res) => {
 						console.log(res)
-						if (res.tapIndex == 0) {
-							this.chooseImages()
-						} else {
+						// if (res.tapIndex == 0) {
+						// 	this.chooseImages()
+						// } else {
 							this.chooseVideo()
-						}
+						// }
 					}
 				})
 			},
-			chooseImages() {
-				// 上传图片
-				uni.chooseImage({
-					count: 4, //默认9
-					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-					sourceType: ['album', 'camera'], //从相册选择
-					success: (res) => {
-						this.imageList = this.imageList.concat(res.tempFilePaths);
-						console.log(this.imageList);
-						if (this.imageList.length == 4) {
-							this.VideoOfImagesShow = false
-						}
-					}
-				});
-			},
+			// chooseImages() {
+			// 	// 上传图片
+			// 	uni.chooseImage({
+			// 		count: 4, //默认9
+			// 		sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+			// 		sourceType: ['album', 'camera'], //从相册选择
+			// 		success: (res) => {
+			// 			this.imageList = this.imageList.concat(res.tempFilePaths);
+			// 			console.log(this.imageList);
+			// 			if (this.imageList.length == 4) {
+			// 				this.VideoOfImagesShow = false
+			// 			}
+			// 		}
+			// 	});
+			// },
 			chooseVideo() {
 				// 上传视频
 				console.log('上传视频')
@@ -233,6 +235,9 @@
 			}
 		},
 		created() {
+			//储存提交后的视频
+			// this.src = uni.getStorageSync('srcs')
+			console.log(this.src);
 			this.userInfo = uni.getStorageSync('userInfo')
 			console.log(this.userInfo);
 			this.tokens = uni.getStorageSync('token')
@@ -241,31 +246,48 @@
 			console.log(this.all);
 		},
 		onNavigationBarButtonTap(res){
-			console.log(res)
+			uni.showLoading({
+				title:'正在上传'
+			})
+			// uni.setStorageSync('srcs',this.src)
+			// console.log(res)
 			var _this = this;
-			// uni.showLoading({
-			// 	title:'正在上传信息..'
-			// })
-			// uni.hideLoading()
-			// console.log(this.uploadPicData)
-			// if(this.uploadPicData){
 			this.src.map((item)=>{
-				console.log(item);
+				// console.log(item);
 				uni.uploadFile({
-					url: 'http://110.187.88.70:11801/service/startService', //仅为示例，非真实的接口地址
+					url: 'http://110.187.88.70:11801/service/upVideo', //仅为示例，非真实的接口地址
 					filePath:item,
-					name: 'files',
-					fileType:'video',
+					name: 'file',
+					// fileType:'video',
 					methods:'POST',
 					header:{
 						'Authorization':'Bearer '+ _this.tokens
 					},
 					formData:{
-					products: _this.value,
-					      serviceId: _this.all.id,
-					      location: this.location
+						serviceId:this.all.id,
+						flag:0,
+						// products:_this.value,
 					},
 					success: (res) => {
+						console.log(res);
+						console.log(JSON.parse(res.data));
+						if(JSON.parse(res.data).code == 2000){
+							uni.setStorageSync('front',true)
+							console.log(this.src);
+							uni.hideLoading()
+							uni.showToast({
+								title:'上传成功'
+							})
+							//获取当前页面（返回index页面）
+							var pages = getCurrentPages(); //当前页
+							//用scode来接收成功的值
+							pages[0].$vm.front = true
+							// pages[0].$vm.activeData(1)
+							// pages[0].$vm.changeBar(1)
+							setTimeout(() => {
+									uni.navigateBack()
+							}, 1500)
+						}
 					}
 				});	
 				
@@ -313,7 +335,7 @@
 	.uni-uploader__file,
 	.uploader_video {
 		position: relative;
-		z-index: 1;
+		/* z-index: 1; */
 		width: 200upx;
 		height: 200upx;
 		margin-right: 30rpx;
@@ -422,12 +444,13 @@
 		width: 98rpx;
 		height: 98rpx;
 	}
-	.copy {
+	.copy{
 		position: absolute;
-		left: 175rpx;
-		top: -20rpx;
-			z-index: 9999;
-		width: 50rpx;
-		height: 50rpx;
+		left: 170rpx;
+		top:-30rpx;
+		width: 70rpx;
+		height: 70rpx;
+		z-index: 999;
+		
 	}
 </style>

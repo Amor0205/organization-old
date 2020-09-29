@@ -40,6 +40,7 @@ import { getUserInfo } from '../../src/ajax.js'
 				scode:'',	//需要用来接收请求成功后的值
 				front:'',//拍摄前
 				queen:'',//拍摄后
+				select:"",//项目选择
 			}
 		},
 		components:{
@@ -113,6 +114,12 @@ import { getUserInfo } from '../../src/ajax.js'
 			if(this.$refs.two){
 				//用front=true的值  赋给需要判断的页面
 				this.$refs.two.queens = this.queen
+				// console.log(this.$refs);
+			}
+			//项目选择
+			if(this.$refs.two){
+				//用front=true的值  赋给需要判断的页面
+				this.$refs.two.selects = this.select
 				// console.log(this.$refs);
 			}
 			

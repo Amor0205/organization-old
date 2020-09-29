@@ -147,7 +147,7 @@
 			},
 			// 点击验证
 			submit() {
-				console.log(this.$refs.uForm)
+				// console.log(this.$refs.uForm)
 				this.$refs.uForm.validate(valid => {
 					if (valid && this.all.phone.length != 0 && this.form.code.length != 0) {
 						// 验证
@@ -165,7 +165,11 @@
 								//获取当前页面（返回index页面）
 								var pages = getCurrentPages(); //当前页
 								//用scode来接收成功的值
+								
 								pages[0].$vm.scode = true
+								//#ifdef H5
+								pages[0].scode = true
+								//#endif
 								// console.log(pages)
 								setTimeout(() => {
 										uni.navigateBack()

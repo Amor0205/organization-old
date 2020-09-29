@@ -118,7 +118,25 @@ export function getverification(phone, code, serviceId) {
 	})
 }
 
+//开始服务
+export function getservice( serviceId,products) {
+	return http.get('/service/startService', {
+		params: {
+			serviceId,
+			products
+		}
+	})
+}
 
+//结束服务
+export function getend( serviceId) {
+	return http.get('/service/submitService', {
+		params: {
+			serviceId,
+			
+		}
+	})
+}
 
 
 

@@ -44,7 +44,7 @@
 					服务确认
 				</view>
 				<view class="choice">
-					<view :class="{'btn': rSelect.indexOf(index)!=-1}" v-for="(item,index) in number" :key="index" @tap="tapInfo(index)"
+					<view :class="{'btn': rSelect.indexOf(index)!=-1}" v-for="(item,index) in number" :key="index" 
 					 class="button">
 						<view class="names" :style="item.style">
 							{{item.name}}
@@ -54,11 +54,10 @@
 			</view>
 		</view>
 		<!-- 提交按钮 -->
-		<view class="submit">
+		<view class="submit" @click="submit">
 			提交
 		</view>
 	</view>
-
 </template>
 
 <script>
@@ -155,6 +154,7 @@
 				if (e.value==true) {
 					// console.log(e)//打印下标
 					this.number.push(e); //选中添加到数组里
+					
 				} else {
 					this.number.splice(this.number.indexOf(e), 1); //取消
 				}
@@ -178,6 +178,19 @@
 					this.rSelect.splice(this.rSelect.indexOf(e), 1); //取消
 				}
 			},
+			submit(){
+				var select=true
+				//获取当前页面（返回index页面）
+				var pages = getCurrentPages(); //当前页
+				//用scode来接收成功的值
+				pages[0].$vm.select = true
+				console.log(pages[0].select);
+				setTimeout(() => {
+						uni.navigateBack()
+				}, 1500)
+				uni.setStorageSync('number',this.number)
+				uni.setStorageSync('select',true)
+			}
 
 
 		},

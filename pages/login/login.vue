@@ -189,7 +189,7 @@
 										// 保存token getUserInfo
 										uni.setStorageSync('token', res.data.token)
 										//判断登录的身份
-										uni.setStorageSync('flag', res.data.data)
+										// uni.setStorageSync('flag', res.data.data.userInfo.flag)
 										// uni.setStorageSync('flag', res.data.data.userInfo)
 										//请求 -- 获取用户信息
 										return getUserInfo(

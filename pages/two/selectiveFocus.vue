@@ -1,5 +1,112 @@
 <!-- 服务前 -->
 <template>
+	<view class="burst-wrap">
+	
+		<view class="burst-wrap-bg">
+			<view>
+				<!-- 第一个位置 -->
+				<view class="input">
+					<u-input v-model="value" type="text" placeholder='请输入位置标题名称' :clearable='clearable' />
+				</view>
+				<!-- 信息提交 -->
+				<view class="burst-info">
+					<view class="uni-uploader-body">
+						<view class="uni-uploader__files">
+							<!-- 图片 -->
+							<!-- <block v-for="(image,index) in imageList" :key="index">
+								<view class="uni-uploader__file">
+									<view class="icon iconfont icon-cuo" @tap="delect(index)"></view>
+									<image class="uni-uploader__img" :src="image" :data-src="image" @tap="previewImage">
+									</image>
+								</view>
+							</block> -->
+							<!-- 视频 -->
+							<view class="uni-uploader__file" v-if="src" v-for="(item,index) in src" :key="index">
+								<view class="uploader_video">
+									<view class="icon iconfont icon-cuo" ></view>
+									<image src="../../static/imgs/copy.png" mode="" class="copy" @tap="delectVideo(index)"></image>
+									<video :src="item" class="video"></video>
+								</view>
+							</view>
+
+							<view class="uni-uploader__input-box" v-if="VideoOfImagesShow">
+								<view class="uni-uploader__input" @tap="chooseVideoImage">
+									<view class="jiahaos">
+										<image src="../../static/imgs/jiahaos.png" mode="" class="jiahaosimg"></image>
+									</view>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+				<!-- 第二个位置 -->
+				<!-- <view class="input">
+					<u-input v-model="value1" type="text" placeholder='请输入位置标题名称' :clearable='clearable' />
+				</view> -->
+				<!-- 信息提交 -->
+				<view class="burst-info">
+					<view class="uni-uploader-body">
+						<view class="uni-uploader__files">
+							<!-- 图片 -->
+							<!-- <block v-for="(image,index) in imageList" :key="index">
+								<view class="uni-uploader__file">
+									<view class="icon iconfont icon-cuo" @tap="delect(index)"></view>
+									<image class="uni-uploader__img" :src="image" :data-src="image" @tap="previewImage">
+									</image>
+								</view>
+							</block> -->
+							<!-- 视频 -->
+							<!-- <view class="uni-uploader__file" v-if="src" v-for="(item,index) in src" :key="index">
+								<view class="uploader_video">
+									<view class="icon iconfont icon-cuo" @tap="delectVideo"></view>
+									<video :src="item" class="video"></video>
+								</view>
+							</view> -->
+
+							<!-- <view class="uni-uploader__input-box" v-if="VideoOfImagesShow">
+								<view class="uni-uploader__input" @tap="chooseVideoImage">
+									<view class="jiahaos">
+										<image src="../../static/imgs/jiahaos.png" mode="" class="jiahaosimg"></image>
+									</view>
+								</view>
+							</view> -->
+						</view>
+					</view>
+				</view>
+				<!-- 第三个位置 -->
+				<!-- <view class="input">
+					<u-input v-model="value1" type="text" placeholder='请输入位置标题名称' :clearable='clearable' />
+				</view> -->
+				<!-- 信息提交 -->
+				<view class="burst-info">
+					<view class="uni-uploader-body">
+						<view class="uni-uploader__files">
+							<!-- 图片 -->
+							<!-- <block v-for="(image,index) in imageList" :key="index">
+								<view class="uni-uploader__file">
+									<view class="icon iconfont icon-cuo" @tap="delect(index)"></view>
+									<image class="uni-uploader__img" :src="image" :data-src="image" @tap="previewImage">
+									</image>
+								</view>
+							</block> -->
+							<!-- 视频 -->
+							<!-- <view class="uni-uploader__file" v-if="src" v-for="(item,index) in src" :key="index">
+								<view class="uploader_video">
+									<view class="icon iconfont icon-cuo" @tap="delectVideo"></view>
+									<video :src="item" class="video"></video>
+								</view>
+							</view> -->
+
+							<!-- <view class="uni-uploader__input-box" v-if="VideoOfImagesShow">
+								<view class="uni-uploader__input" @tap="chooseVideoImage">
+									<view class="jiahaos">
+										<image src="../../static/imgs/jiahaos.png" mode="" class="jiahaosimg"></image>
+									</view>
+								</view>
+							</view> -->
+						</view>
+					</view>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -20,7 +127,7 @@
 				clearable: false,
 				imageList: [], //图片
 				src: [], //视频存放
-				sourceTypeIndex: 2,
+				sourceTypeIndex: 0,
 				checkedValue: true,
 				checkedIndex: 0,
 				userInfo:'',
@@ -37,26 +144,27 @@
 				],
 				cameraIndex: 0,
 				VideoOfImagesShow: true,
-				location:1
+					flag:1
 			}
 		},
 		onUnload() {
-			this.src = '',
-				this.sourceTypeIndex = 2,
-				this.sourceType = ['拍摄', '相册', '拍摄或相册'];
+			this.src = [],
+			console.log(11)
+				this.sourceTypeIndex = 0,
+				this.sourceType = ['拍摄'];
 		},
 		methods: {
 			chooseVideoImage() {
 				uni.showActionSheet({
 					title: "选择上传类型",
-					itemList: ['图片', '视频'],
+					itemList: [ '视频'],
 					success: (res) => {
 						console.log(res)
-						if (res.tapIndex == 0) {
-							this.chooseImages()
-						} else {
+						// if (res.tapIndex == 0) {
+						// 	this.chooseImages()
+						// } else {
 							this.chooseVideo()
-						}
+						// }
 					}
 				})
 			},
@@ -113,9 +221,73 @@
 					}
 				})
 			},
+			delectVideo(index) {
+				uni.showModal({
+					title: "提示",
+					content: "是否要删除此视频",
+					success: (res) => {
+						if (res.confirm) {
+							this.src.splice(index, 1)
+						}
+					}
+				})
 			}
 		},
+		created() {
+			//储存提交后的视频
+			// this.src = uni.getStorageSync('picture')
+			// console.log(this.src);
+			this.userInfo = uni.getStorageSync('userInfo')
+			// console.log(this.userInfo);
+			this.tokens = uni.getStorageSync('token')
+			// console.log(this.tokens);
+			this.all = uni.getStorageSync('all')
+			// console.log(this.all);
 		},
+		onNavigationBarButtonTap(res){
+			uni.showLoading({
+				title:'正在上传'
+			})
+			// uni.setStorageSync('picture',this.src)
+			var _this = this;
+			this.src.map((item)=>{
+				console.log(item);
+				uni.uploadFile({
+					url: 'http://110.187.88.70:11801/service/upVideo', //仅为示例，非真实的接口地址
+					filePath:item,
+					name: 'file',
+					// fileType:'video',
+					methods:'POST',
+					header:{
+						'Authorization':'Bearer '+ _this.tokens
+					},
+					formData:{
+						serviceId:_this.all.id,
+						flag:1,
+					},
+					success: (res) => {
+						console.log(res);
+						console.log(JSON.parse(res.data));
+						if(JSON.parse(res.data).code == 2000){
+							uni.setStorageSync('queen',true)
+							uni.hideLoading()
+							uni.showToast({
+								title:'上传成功'
+							})
+							//获取当前页面（返回index页面）
+							var pages = getCurrentPages(); //当前页
+							//用scode来接收成功的值
+							pages[0].$vm.queen = true
+							// pages[0].activeData(1)
+							// pages[0].$vm.changeBar(1)
+							// console.log(pages)
+							setTimeout(() => {
+									uni.navigateBack()
+							}, 1500)
+						}
+					}
+				});	
+				
 			})
 		},
 	}
@@ -160,7 +332,7 @@
 	.uni-uploader__file,
 	.uploader_video {
 		position: relative;
-		z-index: 1;
+		/* z-index: 1; */
 		width: 200upx;
 		height: 200upx;
 		margin-right: 30rpx;
@@ -250,5 +422,32 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		align-content: space-between;
+	}
+
+	.burst-info{
+		margin-bottom: 50rpx;
+	}
+
+	.jiahaos {
+		width: 196rpx;
+		height: 196rpx;
+		border: 1rpx solid #dfddda;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.jiahaosimg {
+		width: 98rpx;
+		height: 98rpx;
+	}
+	.copy{
+		position: absolute;
+		left: 170rpx;
+		top:-30rpx;
+		width: 70rpx;
+		height: 70rpx;
+		z-index: 999;
+		
 	}
 </style>
