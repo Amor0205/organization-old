@@ -1,179 +1,166 @@
-
-  <!-- 首页 -->
 <template>
-	<view class="container" :style="{ height:containerHeight + 'px' }" >
-		<family v-if="actives == 0" class="moduleBox"  :SelectFamily = 'familyInfo' ></family>
-		<live v-if="actives == 1" class="moduleBox" ref="two"></live>
-		<shopCar v-if="actives == 2" class="moduleBox" :scrollTopChild='scrollTopData' :userInfoChild = 'userInfo' ></shopCar>
-		<mine v-if="actives == 3" class="moduleBox" :userInfoChild = 'userInfo'></mine>
-		
-		<footerBar ref='footerBar' class='footerBar' @childActive = "activeData"></footerBar>
+	<view class="box" :style="{'padding-top':statusBarHeights + 'px'}">
+		<view class="top">
+			<view class="timg">
+				<image src="../../static/imgs/timg.jpg" class="timgImg"></image>
+			</view>
+			<view class="touxiang">
+				<image src='../../static/imgs/touxiang.png' class="touxiangImg"></image>
+			</view>
+		</view>
+		<view class="service">
+			服务人员管理系统
+		</view>
+		<!-- 四个按钮 -->
+		<view class="button">
+			<view class="" v-for="(item,index) in serve" :key='index'>
+				<u-button type="primary" shape="circle" class="u-button"  @click="goTo(item)">{{item.title}}</u-button>
+			</view>
+			
+		</view>
+
 	</view>
 </template>
 
 <script>
-import family from '../../components/footer/one.vue'				//引入家人组件 family
-import live from '../../components/footer/two.vue'					//引入生活组件 live
-import shopCar from '../../components/footer/three.vue'			//引入购物车组件 shopCar
-import mine from '../../components/footer/mine.vue'					//引入我的航组件 mine
-import footerBar from '../../components/footer/footerBar.vue'		//引入底部导航组件 footerBar
-import { getUserInfo } from '../../src/ajax.js'
-
-
-// var src = 'https://cdn.staticfile.org/eruda/1.5.8/eruda.min.js';
-// var script = document.createElement('script');
-// script.setAttribute('src', src);
-// document.body.appendChild(script);
-// script.onload = function () {
-// 	eruda.init()
-// }
-
-
 	export default {
-		data() {
-			return{
-				actives:0,				//默认激活类为0 及的一项
-				containerHeight:0,		//window高度
-				scrollTopData:0,		//据顶部高度
-				userInfo:'',			//用户信息
-				familyInfo:'',			//家人信息	
-				scode:'',	//需要用来接收请求成功后的值
-				front:'',//拍摄前
-				queen:'',//拍摄后
-				select:"",//项目选择
-			}
+		name: "",
+		components: {
+
+
 		},
-		components:{
-			footerBar,
-			family,
-			shopCar,
-			live,
-			mine
+		props: {},
+		data() {
+			return {
+				statusBarHeights: '',
+				serve:[
+					{
+						title:'进行中订单'
+					},{
+						title:'老人求助'
+					},{
+						title:'日常巡视'
+					},{
+						title:'主动服务'
+					},
+				]
+			}
 		},
 		methods: {
-			//切换页面内容
-			activeData(num){
-				this.actives = num;
-			},
-			//改变footerBar
-			changeBar(num){
-				this.$refs.footerBar.active(num)
-				// console.log(this)
-			},
-			//获取个人信息  并判定token是否过期
-			getUserInfoFun(){
-				var tokens = uni.getStorageSync('token')
-				getUserInfo(
-					tokens
-				).then(res => {
-					// console.log(res.data)
-					// 保存用户信息
-					// uni.setStorageSync('userInfo',res.data.data.userInfo)
-					if(res.data.code == 4000){
-						// 清除token
-						uni.setStorageSync('token','')
-						// 清除userInfo
-						uni.setStorageSync("userInfo",'')
-						uni.navigateTo({
-							url:'../login/login'
-						})
-					}else if(res.data.code == 2000){
-						// if(uni.getStorageSync('userInfo').consId != res.data.data.userInfo.consId ){
-						// 	this.userInfo = res.data.data.userInfo;
-						// 	// 保存用户信息
-						// 	uni.setStorageSync('userInfo',res.data.data.userInfo)
-						// 	console.log('更新用户信息')
-						// }
+		// 按钮跳转
+		goTo(res) {
+			switch (res.title) {
+				case '进行中订单':
+					uni.navigateTo({
+						url: '../underway/underway'
+					})
+					break;
+				case '老人求助':
+					uni.navigateTo({
+						url: '../seekHelp/present/present'
+					})
+					break;
+				case '日常巡视':
+					uni.navigateTo({
+						url: '../dailyPatrol/dailyPatrol'
 						
-					}
-				})
+					})
+					break;
+				case '主动服务':
+					uni.navigateTo({
+						url: '../initiative/initiative?'
+					})
+					break;
+				default:
+					break;
 			}
 		},
-		
-		onLoad() {
-			if( uni.getStorageSync('token').length == 0 ){
-				uni.navigateTo({
-					url: '../login/login'
-				})
-			}
-		},
-		onShow() {
-			 // 进行中订单用户验证
-			if(this.$refs.two){
-				//用scode=true的值  赋给需要判断的页面
-				this.$refs.two.verify = this.scode
-				// console.log(this.$refs);
-			}
-			//进行中订单拍摄服务前视频
-			if(this.$refs.two){
-				//用front=true的值  赋给需要判断的页面
-				this.$refs.two.fronts = this.front
-				// console.log(this.$refs);
-			}
-			//进行中订单拍摄服务后视频
-			if(this.$refs.two){
-				//用front=true的值  赋给需要判断的页面
-				this.$refs.two.queens = this.queen
-				// console.log(this.$refs);
-			}
-			//项目选择
-			if(this.$refs.two){
-				//用front=true的值  赋给需要判断的页面
-				this.$refs.two.selects = this.select
-				// console.log(this.$refs);
-			}
-			
-			
-			//获取用户信息
-			this.userInfo = uni.getStorageSync('userInfo');
-			var selectF = uni.getStorageSync('selectFamily')
-			//默认展示登录用户信息  选择后使用选中用户信息
-			if(selectF.length == 0){
-				this.familyInfo = this.userInfo;
-				// console.log(this.familyInfo)
-			}else{
-				this.familyInfo = selectF;
-				// console.log(this.familyInfo)
-			}
-			this.getUserInfoFun();
 		},
 		created() {
-			
-			
+			uni.getSystemInfo({
+				success: function(res) {
+					// console.log(res.statusBarHeight);
+					this.statusBarHeights = res.statusBarHeight
+					// console.log(this.statusBarHeights);
+
+
+
+				}
+			});
 		},
 		mounted() {
-			//保存footerBar元素高度
-			// uni.setStorageSync('footerBarHeight',this.$refs.footerBar.$el.clientHeight)
-			
-		　　uni.createSelectorQuery().in(this).select('.footerBar').boundingClientRect(res => {
-				uni.setStorageSync('footerBarHeight',res.height)
-		　　}).exec()
-			
-			// 获取设备信息
-			uni.getSystemInfo({
-				success:(res)=>{
-					// 获取设备可使用高度(res.windowHeight)
-					this.containerHeight = res.windowHeight - uni.getStorageSync('footerBarHeight');
-					// console.log(res.windowHeight)
-				}
-			})
+
 		},
-		onPageScroll(e) {
-			this.scrollTopData = e.scrollTop;
+
+		onLoad() {
+
+		},
+		onShow() {
+
+		},
+		filters: {
+
+		},
+		computed: {
+
+		},
+		watch: {
+
+		},
+		directives: {
+
 		}
 	}
 </script>
 
-<style lang="scss">
-	.container {
-		padding: 0;
-		margin: 0;
-		.moduleBox{
-			// padding-top: 100upx;
+<style scoped lang="scss">
+	.box {
+
+		.top {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 100rpx 20rpx 0rpx 20rpx;
+
+			.timg {
+				width: 200rpx;
+				height: 200rpx;
+				border-radius: 50%;
+
+				.timgImg {
+					width: 100%;
+					height: 100%;
+					border-radius: 50%;
+				}
+			}
+
+			.touxiang {
+				width: 80rpx;
+				height: 80rpx;
+
+				.touxiangImg {
+					width: 100%;
+					height: 100%;
+				}
+			}
+
+		}
+
+		.service {
+			text-align: center;
+			margin-top: 100rpx;
+		}
+
+		.button {
+			margin: 0 auto;
+			padding-top: 100rpx;
+			.u-button {
+				width: 450rpx;
+				height: 100rpx;
+				font-size: 18px;
+				margin-bottom: 80rpx;
+				color: black;
+			}
 		}
 	}
-	/* #ifdef APP-PLUS */
-	
-	/* #endif */
-	
 </style>

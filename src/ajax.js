@@ -23,8 +23,6 @@ if (uni.getStorageSync) {
 	tokens = uni.getStorageSync('token')
 	console.log(tokens)
 }
-
-
 // 获取验证码 1:用户注册 2:求助设备绑定 3:手环绑定 4:添加家人
 export function getVerificationCode(phone, type) {
 	return http.get('/consumer/sendVerifyCode', {
