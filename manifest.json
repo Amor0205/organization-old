@@ -1,5 +1,5 @@
 {
-    "name" : "孝兴邦_服务端",
+    "name" : "机构养老-员工",
     "appid" : "__UNI__AB02923",
     "description" : "",
     "versionName" : "1.0.0",
@@ -70,12 +70,7 @@
                         "appid" : "wxdcc745985d5b6df3"
                     }
                 },
-                "maps" : {
-                    "amap" : {
-                        "appkey_ios" : "ad051e9ef613775f0b23b2d7fb7bf2cd",
-                        "appkey_android" : "15c4c242476ae6ddd4f8584c2dc74c3b"
-                    }
-                },
+                "maps" : {},
                 "geolocation" : {
                     "amap" : {
                         "__platform__" : [ "ios", "android" ],

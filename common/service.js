@@ -9,7 +9,7 @@
  */
 import Request from '@/utils/luch-request/luch-request/index.js'
 
-const IP = 'http://110.187.88.70:11801';		//全局接口地址
+const IP = 'http://110.187.88.70:21605';		//全局接口地址
 
 const getTokenStorage = () => {
   let token = ''
@@ -86,6 +86,7 @@ http.interceptors.request.use((config) => { /* 请求之前拦截器。可以使
   var tokens = '';
   if(getTokenStorage()){
 	tokens = 'Bearer ' + getTokenStorage();
+	// console.log(tokens);
   }
   config.header = {
     ...config.header,

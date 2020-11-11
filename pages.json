@@ -3,6 +3,7 @@
 		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [
+		
 		//首页
 		{
 			"path": "pages/index/index",
@@ -21,6 +22,17 @@
 				"navigationBarTitleText": "",
 				"app-plus": {
 					"titleNView": false,
+					"bounce": "none"
+				}
+			}
+		},
+		//忘记密码
+		{
+			"path": "pages/forget/forget",
+			"style": {
+				"navigationBarTitleText": "修改密码",
+				"app-plus": {
+					"titleNView": true,
 					"bounce": "none"
 				}
 			}
@@ -51,7 +63,7 @@
 		{
 			"path": "pages/seekHelp/taskDetails/taskDetails",
 			"style": {
-				"navigationBarTitleText": "求助任务详情",
+				"navigationBarTitleText": "任务详情",
 				"app-plus": {
 					"titleNView": true,
 					"bounce": "none"
@@ -94,9 +106,51 @@
 		},	
 		// 老人求助---求助任务详情---情况登记---填写服务内容---选择服务内容
 		{
-			"path": "pages/seekHelp/registrations/options",
+			"path": "pages/seekHelp/options/option1",
 			"style": {
 				"navigationBarTitleText": "选择服务内容",
+				"app-plus": {
+					"titleNView": true,
+					"bounce": "none"
+				}
+			}
+		},// 老人求助---求助任务详情---情况登记---填写服务内容---选择服务内容（直接发布）
+		{
+			"path": "pages/seekHelp/options/option2",
+			"style": {
+				"navigationBarTitleText": "选择服务内容",
+				"app-plus": {
+					"titleNView": true,
+					"bounce": "none"
+				}
+			}
+		},// 老人求助---求助任务详情---情况登记---填写服务内容---选择服务内容(指定人员)
+		{
+			"path": "pages/seekHelp/options/option3",
+			"style": {
+				"navigationBarTitleText": "选择服务内容",
+				"app-plus": {
+					"titleNView": true,
+					"bounce": "none"
+				}
+			}
+		},
+		// 老人求助---求助任务详情---情况登记---协助直接发布
+		{
+			"path": "pages/seekHelp/assist/assist",
+			"style": {
+				"navigationBarTitleText": "求助人物详情",
+				"app-plus": {
+					"titleNView": true,
+					"bounce": "none"
+				}
+			}
+		},
+		// 老人求助---求助任务详情---情况登记---协助指定人员搜索
+		{
+			"path": "pages/seekHelp/registrations/searchs",
+			"style": {
+				"navigationBarTitleText": "指定人员搜索",
 				"app-plus": {
 					"titleNView": true,
 					"bounce": "none"
@@ -118,7 +172,52 @@
 		{
 			"path": "pages/initiative/initiative",
 			"style": {
-				"navigationBarTitleText": "主动服务",
+				"navigationBarTitleText": "服务搜索",
+				"app-plus": {
+					"titleNView": true,
+					"bounce": "none"
+				}
+			}
+		},
+		// 个人中心
+		{
+			"path": "pages/personal/personal",
+			"style": {
+				"navigationBarTitleText": "个人中心",
+				"app-plus": {
+					"titleNView": true,
+					"bounce": "none"
+				}
+			}
+		},
+		// 个人中心--关于我们
+		{
+			"path": "pages/personal/about",
+			"style": {
+				"navigationBarTitleText": "关于我们",
+				"app-plus": {
+					"titleNView": true,
+					"bounce": "none"
+				}
+			}
+		},
+		
+		// 个人中心--巡视已完成订单
+		{
+			"path": "pages/personal/tour",
+			"style": {
+				"navigationBarTitleText": "巡视已完成订单",
+				"app-plus": {
+					"titleNView": true,
+					"bounce": "none"
+				}
+			}
+		},
+		// 个人中心--求助已完成订单
+		{
+			"path": "pages/personal/recourse",
+			"style": {
+				"navigationBarTitleText": "求助已完成订单",
 				"app-plus": {
 					"titleNView": true,
 					"bounce": "none"
@@ -134,7 +233,7 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#FFFFFF",
-		"backgroundColor": "#FFFFFF"
+		"navigationBarBackgroundColor": "#e6e6e6",
+		"backgroundColor": "#e6e6e6"
 	}
 }
