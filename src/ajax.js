@@ -48,84 +48,29 @@ export function getsearchElder(regionId, searchContent) {
 }
 
 
+//  巡视订单
+export function getTour(regionId, employeeId) {
+	return http.get('/order', {
+		params: {
+			regionId, //区域id
+			type:0, 
+			employeeId,//员工id
+		}
+	})
+}
+
+//  老人求助
+export function getSeekhelp(regionId, employeeId) {
+	return http.get('/order', {
+		params: {
+			regionId, //区域id
+			type:1, 
+			employeeId,//员工id
+		}
+	})
+}
 
 
-// // 进行中订单
-// export function getProceed(serviceId) {
-// 	return http.get('/service/serviceGoing', {
-// 		params: {
-// 			serviceId
-// 		}
-// 	})
-// }
-
-
-// // 已完成订单
-// export function getFinished(uId,belongId, status, currentPage) {
-// 	return http.get('service/selectService', {
-// 		params: {
-// 			uId,
-// 			belongId,
-// 			status,
-// 			currentPage,
-// 			pageSize: 20
-
-// 		}
-// 	})
-// }
-
-
-// // 我的
-// export function mine(year, empId,belong) {
-// 	return http.get('/service/myData', {
-// 		params: {
-// 			year,
-// 			empId,
-// 			belong
-// 		}
-// 	})
-// }
-
-
-// // 获取验证码 type：7
-// export function getCode(phone, type) {
-// 	return http.get('/consumer/sendVerifyCode', {
-// 		params: {
-// 			phone,
-// 			type
-// 		}
-// 	})
-// }
-// // 用户验证
-// export function getverification(phone, code, serviceId) {
-// 	return http.get('/service/locationChecck/code', {
-// 		params: {
-// 			phone,
-// 			code,
-// 			serviceId
-// 		}
-// 	})
-// }
-
-// //开始服务
-// export function getservice( serviceId,products) {
-// 	return http.get('/service/startService', {
-// 		params: {
-// 			serviceId,
-// 			products
-// 		}
-// 	})
-// }
-
-// //结束服务
-// export function getend( serviceId) {
-// 	return http.get('/service/submitService', {
-// 		params: {
-// 			serviceId,
-
-// 		}
-// 	})
-// }
 
 
 
@@ -161,17 +106,6 @@ export function activeService(beImages, afImages,elderId, employeeId, content) {
 
 
 
-// //登录
-// export function login(userName, password) {
-// 	return http.post('/oauth/login', {
-// 		userName,
-// 		password
-// 	}, {
-// 		header: {
-// 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-// 		},
-// 	})
-// }
 
 
 
