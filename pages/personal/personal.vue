@@ -7,8 +7,20 @@
 				<view class="timg">
 					<image :src="this.userInfo.avatar" class="timgImg"></image>
 				</view>
-				<view class="serial">
+				<!-- <view class="serial">
 					{{this.userInfo.name}}
+				</view> -->
+				<!-- <view class="flowBox" :style="{color:item.color}" v-if="item.show == 0" v-for="(item,index) in flow" :key='index'>
+					{{ item.title }}
+				</view> -->
+				<view class="flowBox1" v-if="this.userInfo.status==0">
+					上班
+				</view>
+				<view class="flowBox2" v-else-if="this.userInfo.status==1">
+					休闲
+				</view>
+				<view class="flowBox3" v-else-if="this.userInfo.status==3">
+					下班
 				</view>
 			</view>
 		</view>
@@ -86,10 +98,16 @@
 				下班
 			</view>
 		</view>
-		<!-- 弹出层 -->  <!-- :closeable='closeable' -->
+		<!-- 弹出层 -->
 		<view class="">
-			<u-popup v-model="show" mode="center" border-radius="30"  :mask-close-able='close' width="500rpx" height="400rpx">
-				<view class="refresh">请到指定地点进行刷卡上班</view>
+			<!-- :mask-close-able='close' -->
+			<u-popup v-model="show" mode="center" border-radius="30" :closeable='closeable' width="500rpx" height="400rpx">
+				<view class="">
+					<view class="hint">
+						温馨提示
+					</view>
+					<view class="refresh">请到指定地点进行刷卡上班</view>
+				</view>
 			</u-popup>
 		</view>
 	</view>
@@ -108,8 +126,8 @@
 				userInfo: '', //用户信息
 				duty: true,
 				show: false,
-				closeable:false,
-				close:false,	
+				closeable: false,
+				close: false,
 				personal: [{
 					title: '修改密码',
 					imgs: '../../static/imgs/xiangyous.png'
@@ -139,12 +157,12 @@
 			//下班
 			offDuty() {
 				this.duty = true
-				
+
 			},
 			//上班
 			beDuty() {
 				this.duty = false
-				this.show=true
+				this.show = true
 			},
 
 			// 按钮跳转
@@ -313,13 +331,64 @@
 			margin-top: 50rpx;
 
 		}
-		
+
 	}
+
+	//状态显示
+	.flowBox1 {
+		width: 120rpx;
+		height: 40rpx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border: 1upx solid;
+		border-radius: 20rpx;
+		font-size: 12px;
+		line-height: 40rpx;
+		margin: 20rpx auto;
+			color: #70d95d
+	}
+
+	.flowBox2 {
+		width: 120rpx;
+		height: 40rpx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border: 1upx solid;
+		border-radius: 20rpx;
+		font-size: 12px;
+		line-height: 40rpx;
+		margin: 20rpx auto;
+		color: #3fbebe;
+	}
+
+	.flowBox3 {
+		width: 120rpx;
+		height: 40rpx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border: 1upx solid;
+		border-radius: 20rpx;
+		font-size: 12px;
+		line-height: 40rpx;
+		margin: 20rpx auto;
+		color: #c3c4c6;
+	}
+
 	//弹出层
-	.refresh{
-	text-align: center;
-	line-height: 400rpx;
-	font-size: 16px;
-	font-weight: 700;
+	.hint {
+		text-align: center;
+		padding-top: 20rpx;
+		font-size: 16px;
+	}
+
+	.refresh {
+		text-align: center;
+		margin-top: 150rpx;
+		font-size: 16px;
+		font-weight: 700;
+		color: #009c00;
 	}
 </style>
