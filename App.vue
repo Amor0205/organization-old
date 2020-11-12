@@ -2,6 +2,88 @@
 export default {
 	onLaunch: function() {
 		console.log('App Launch');
+		
+		
+		// const synth = window.speechSynthesis;
+		// const msg = new SpeechSynthesisUtterance();
+		
+		// console.log(this)
+		
+		
+		// android_isNotificationEnabled() {
+			// const jyJPush = uni.requireNativePlugin('JY-JPush');
+			const jyJPush = this.jyJPush
+			
+			//判定是否 正常链接
+			jyJPush.android_isNotificationEnabled(result => {
+				console.log(JSON.stringify(result));
+			});
+		// },
+		
+		//安卓检查是否开启通知权限
+		jyJPush.android_isNotificationEnabled(result=> {
+			/*
+			status = 0，关闭
+			status = 1, 开启
+			status = -1, 检测失败
+			*/
+			console.log(JSON.stringify(result));
+			if(result.status == 0){
+				jyJPush.android_goToAppNotificationSettings(result=> {
+					console.log(JSON.stringify(result));
+				});
+			}
+		});
+		
+		//获取registrationID
+		jyJPush.getRegistrationID(result => {
+			console.log(JSON.stringify(result));
+			uni.showToast({
+				icon: 'none',
+				title: JSON.stringify(result)
+			})
+		});
+		
+		//监听消息推送事件
+		jyJPush.addJYJPushReceiveNotificationListener(result=> {
+		//  监听成功后，若收到推送，会在result返回对应的数据；数据格式保持极光返回的安卓/iOS数据一致
+			console.log('收到消息'+ JSON.stringify(result));
+			uni.showToast({
+				icon:'none',
+				title: JSON.stringify(result)
+			})
+		});
+		
+		// //监听推送消息点击事件
+		// jyJPush.addJYJPushReceiveOpenNotificationListener(result=> {
+		// //  监听成功后，若点击推送消息，会触发result；数据格式保持极光返回的安卓/iOS数据一致
+		// 	console.log('点击消息'+ JSON.stringify(result));
+		// 	uni.showToast({
+		// 		icon:'none',
+		// 		title: JSON.stringify(result)
+		// 	})
+		// });
+		
+		//监听自定义消息（穿透消息）
+		jyJPush.addJYJPushCustomReceiveNotificationListener(result => {
+			var data =  JSON.stringify(result)
+			console.log('穿透消息'+ JSON.stringify(result));
+			uni.showToast({
+				icon: 'none',
+				title: JSON.stringify(result)
+			})
+		});
+		
+		//监听消息点击事件
+		jyJPush.addJYJPushReceiveNewOpenNotificationListener(result => {
+			uni.showToast({
+				icon: 'none',
+				title: JSON.stringify(result)
+			})
+		});
+		
+		
+		
 	},
 	onShow: function() {
 		console.log('App Show');

@@ -12,8 +12,12 @@ Vue.prototype.$eventHub = new Vue();
 //全局 主题色
 Vue.prototype.commonColorAll = '#FFE300';
 
+//挂载 推送实列
+Vue.prototype.jyJPush = uni.requireNativePlugin('JY-JPush');
+
 // // 引入全局uView
 import uView from 'uview-ui'
+
 Vue.use(uView)
 
 App.mpType = 'app'
