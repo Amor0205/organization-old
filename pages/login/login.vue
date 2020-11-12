@@ -134,6 +134,9 @@
 							).then(res => {
 								if (res.data.code == 2000) {
 									uni.hideLoading()
+									uni.showToast({
+										title:'登录成功'
+									})
 									//保存token
 									uni.setStorageSync('token', res.data.data.token)
 									// 保存用户信息

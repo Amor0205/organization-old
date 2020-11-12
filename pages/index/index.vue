@@ -95,7 +95,11 @@
 		},
 
 		onLoad() {
-
+		if( uni.getStorageSync('token').length == 0 ){
+			uni.navigateTo({
+				url: '../login/login'
+			})
+		}
 		},
 		onShow() {
 

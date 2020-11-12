@@ -157,7 +157,21 @@
 			//下班
 			offDuty() {
 				this.duty = true
-
+					uni.showModal({
+						title: '温馨提示',
+						success: function(res) {
+							if (res.confirm) {
+								
+								uni.navigateTo({
+									url:'../login/login'
+								})
+							} else if (res.cancel) {
+									uni.showToast({
+										title:'取消退出'
+									})
+							}
+						}
+					});
 			},
 			//上班
 			beDuty() {
