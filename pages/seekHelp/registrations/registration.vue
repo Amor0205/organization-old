@@ -201,6 +201,9 @@
 					1
 				).then(res => {
 					if(res.data.code==2000 ){
+						uni.showToast({
+							title:'提交成功'
+						})
 						uni.navigateTo({
 							url:'../../index/index'
 						})
@@ -215,6 +218,9 @@
 					2
 				).then(res => {
 				if(res.data.code==2000 ){
+					uni.showToast({
+						title:'提交成功'
+					})
 					uni.navigateTo({
 						url:'../../index/index'
 					})

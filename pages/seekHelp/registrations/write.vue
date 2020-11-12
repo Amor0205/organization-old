@@ -132,6 +132,9 @@
 							console.log(res);
 							uni.hideLoading()
 							if (JSON.parse(res.data).code == 2000) {
+								uni.showToast({
+									title:'上传成功'
+								})
 								var img = (JSON.parse(res.data)).data.url
 								this.img.push(img)
 							console.log(this.img);
@@ -198,6 +201,9 @@
 							uni.hideLoading()
 							if (JSON.parse(res.data).code == 2000) {
 								console.log(JSON.parse(res.data));
+								uni.showToast({
+									title:'上传成功'
+								})
 								var imgs = (JSON.parse(res.data)).data.url
 									this.imgs.push(imgs)
 								console.log(this.imgs)
@@ -262,8 +268,7 @@
 							uni.hideLoading()
 								if (JSON.parse(res.data).code == 2000) {
 									uni.showToast({
-										icon: 'none',
-										title: '提交成功'
+										title:'提交成功'
 									})
 								uni.setStorageSync('number','')
 								uni.setStorageSync('alls','')
@@ -301,8 +306,7 @@
 							uni.hideLoading()
 								if (JSON.parse(res.data).code == 2000) {
 									uni.showToast({
-										icon: 'none',
-										title: '提交成功'
+										title:'提交成功'
 									})
 								uni.setStorageSync('number','')
 								uni.setStorageSync('alls','')

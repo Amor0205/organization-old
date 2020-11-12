@@ -180,13 +180,16 @@
 				// setTimeout(() => {
 				// 		uni.navigateBack()
 				// }, 1500)
-				uni.setStorageSync('number', this.number)
-				// uni.navigateTo({
-				// 	url:'../registrations/write'
-				// })
-				uni.navigateBack({
-
+				uni.showToast({
+					title:'提交成功'
 				})
+				uni.setStorageSync('number', this.number)
+				uni.navigateTo({
+					url:'../registrations/write'
+				})
+				// uni.navigateBack({
+
+				// })
 			}
 
 

@@ -3,13 +3,13 @@
 	<view class="containerBox">
 		<!-- 头部 -->
 		<view class='head'>
-			请输入对象姓名或房间号：
+			请输入服务对象姓名或房间号：
 		</view>
 		<view class="titleBox">
 			<view class="inputBox">
 				<view class="centerBox">
 					<image src="../../static/imgs/sousuo@2x.png" mode=""></image>
-					<input style="color: #282828;width: 400upx;" placeholder="请输入服务号或者名字" placeholder-style="font-size:28upx"
+					<input style="color: #282828;width: 400upx; height: 100upx;" placeholder="请输入服务号或者名字" placeholder-style="font-size:30upx"
 					 confirm-type='search' v-model="inputValue" @input="inputFun" @confirm="confirm"></input>
 					<image @click="deleteValue" v-if="showDeletd" src="../../static/imgs/delete.png" mode=""></image>
 				</view>
@@ -106,7 +106,8 @@
 <style lang="scss">
 	.containerBox {
 		.head {
-			padding: 20rpx 0rpx 0rpx 20rpx;
+			font-size: 20px;
+			padding:30rpx 0rpx 0rpx 20rpx;
 		}
 
 		font-size: 14px;
@@ -117,7 +118,7 @@
 
 		.titleBox {
 			padding: 0 2%;
-			padding-top: 50upx;
+			padding-top: 20upx;
 			width: 96%;
 			color: #282828;
 			position: fixed;
