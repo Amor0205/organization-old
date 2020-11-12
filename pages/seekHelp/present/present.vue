@@ -132,15 +132,16 @@
 			display: flex;
 			margin-bottom: 20rpx;
 			// padding: 20rpx 20rpx 0rpx 20rpx;
-	padding-top: 10rpx;
+			padding-top: 10rpx;
 			.underwayLeft {
-				width: 250rpx;
+				width: 180rpx;
 				height: 50rpx;
-				// border: 1rpx  solid red;
+		
 			}
 
 			.underwayRight {
-				margin-left: 20rpx;
+				// margin-left: 20rpx;
+			
 			}
 		}
 

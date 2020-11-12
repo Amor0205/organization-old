@@ -6,7 +6,7 @@
 				被服务者信息
 			</view>
 			<!-- 中间个人信息部分 -->
-			<view class="underwayItem" v-if="underway.flag==1">
+			<view class="underwayItem" v-if="underway.type==0">
 
 				<!-- 被服务人员信息 -->
 				<view class="message">
@@ -31,15 +31,15 @@
 							巡视时间段 :
 						</view>
 						<view class="underwayRight">
-							{{underway.time}}
+							{{underway.tourTime}}前
 						</view>
 					</view>
-					<view class="underway">
+					<view class="underway" v-if="underway.type==0">
 						<view class="underwayLeft">
 							任务类型:
 						</view>
 						<view class="underwayRight">
-							{{underway.genre}}
+							日常巡视
 						</view>
 					</view>
 					<!-- <view class="underway">
@@ -55,25 +55,25 @@
 							巡视位置:
 						</view>
 						<view class="underwayRights">
-							{{underway.place}}
+							{{underway.location}}
 						</view>
 					</view>
 				</view>
 			</view>
-		
-		<view class="underwayItem"   v-else>
-		
-			<!-- 被服务人员信息 -->
-			<view class="message">
-				<view class="headportrait">
-					<image src="../../../static/imgs/timg.jpg" class="headportraitImg"></image>
+
+			<view class="underwayItem" v-else>
+
+				<!-- 被服务人员信息 -->
+				<view class="message">
+					<view class="headportrait">
+						<image src="../../../static/imgs/timg.jpg" class="headportraitImg"></image>
+					</view>
+					<view class="serial">
+						{{underway.name}}
+					</view>
 				</view>
-				<view class="serial">
-					{{underway.name}}
-				</view>
-			</view>
-			<view class="">
-				<!-- <view class="underway">
+				<view class="">
+					<!-- <view class="underway">
 					<view class="underwayLeft">
 						名字 :
 					</view>
@@ -81,58 +81,58 @@
 						{{underway.name}}
 					</view>
 				</view> -->
-				<view class="underway">
-					<view class="underwayLeft">
-						任务开始时间 :
+					<view class="underway">
+						<view class="underwayLeft">
+							任务开始时间 :
+						</view>
+						<view class="underwayRight">
+							{{underway.time}}
+						</view>
 					</view>
-					<view class="underwayRight">
-						{{underway.time}}
+					<view class="underway">
+						<view class="underwayLeft">
+							任务类型:
+						</view>
+						<view class="underwayRight">
+							{{underway.taskType}}
+						</view>
 					</view>
-				</view>
-				<view class="underway">
-					<view class="underwayLeft">
-						任务类型:
+					<view class="underway">
+						<view class="underwayLeft">
+							求助方式:
+						</view>
+						<view class="underwayRight">
+							{{underway.helpMethod}}
+						</view>
 					</view>
-					<view class="underwayRight">
-						{{underway.genre}}
-					</view>
-				</view>
-				<view class="underway">
-					<view class="underwayLeft">
-						求助方式:
-					</view>
-					<view class="underwayRight">
-						{{underway.way}}
-					</view>
-				</view>
-				<view class="underway">
-					<view class="underwayLeft">
-						求助位置:
-					</view>
-					<view class="underwayRights">
-						{{underway.place}}
+					<view class="underway">
+						<view class="underwayLeft">
+							求助位置:
+						</view>
+						<view class="underwayRights">
+							{{underway.location}}
+						</view>
 					</view>
 				</view>
 			</view>
-		</view>
-				
-		
+
+
 		</view>
 		<!-- 服务情况 -->
 		<view class="">
 			<view class="base">
-				<navigator class="options" url="../../index/index">
+				<view class="options" @click="unmanned">
 					无人
-				</navigator>
+				</view>
 				<view class="options" @click="proceed(underway)">
 					进行服务
 				</view>
 				<view class="options" @click="goTos">
 					发起同事协助
 				</view>
-				<navigator class="options" url="../../index/index">
+				<view class="options" @click="normal">
 					正常
-				</navigator>
+				</view>
 			</view>
 
 		</view>
@@ -154,6 +154,9 @@
 </template>
 
 <script>
+	import {
+		putordere
+	} from '../../../src/ajax.js'
 	export default {
 		name: "",
 		components: {
@@ -163,7 +166,7 @@
 		data() {
 			return {
 				show: false,
-				underway:'',
+				underway: '',
 				genres: [{
 					title: '无人',
 
@@ -190,6 +193,35 @@
 			}
 		},
 		methods: {
+			// 无人按钮
+			unmanned() {
+				putordere(
+					this.underway.id,
+					this.underway.type,
+					1
+				).then(res => {
+					if(res.data.code==2000 ){
+						uni.navigateTo({
+							url:'../../index/index'
+						})
+					}
+				})
+			},
+			//正常按钮
+			normal() {
+				putordere(
+					this.underway.id,
+					this.underway.type,
+					2
+				).then(res => {
+				if(res.data.code==2000 ){
+					uni.navigateTo({
+						url:'../../index/index'
+					})
+				}
+					
+				})
+			},
 			//进行服务按钮
 			proceed(res) {
 				console.log(res);
@@ -207,17 +239,17 @@
 				switch (res.title) {
 					case '直接发布':
 						this.show = false
-							// uni.setStorageSync('all',this.underway)
+						// uni.setStorageSync('all',this.underway)
 						uni.navigateTo({
 							// url: `./options?flag=${res.flag}`,
-							url:'../options/option2?data=' + JSON.stringify(res)+'&all='+JSON.stringify(this.underway)
+							url: '../options/option2?data=' + JSON.stringify(res) + '&all=' + JSON.stringify(this.underway)
 						})
-					
+
 						break;
 					case '指定人员':
 						this.show = false
 						uni.navigateTo({
-							url: './searchs?&all='+JSON.stringify(this.underway)
+							url: './searchs?&all=' + JSON.stringify(this.underway)
 						})
 						break;
 
@@ -232,12 +264,11 @@
 
 		},
 		onLoad(option) {
-
 			this.underway = JSON.parse(option.data)
 			console.log(this.underway);
 
 		},
-		
+
 		filters: {
 
 		},
@@ -255,7 +286,7 @@
 
 <style scoped lang="scss">
 	.boxs {
-			background: #f4f4f4;
+		background: #f4f4f4;
 	}
 
 	.information {
@@ -321,7 +352,7 @@
 		justify-content: space-around;
 		flex-wrap: wrap;
 		margin-top: 50rpx;
-		
+
 		.options {
 			width: 300rpx;
 			height: 100rpx;

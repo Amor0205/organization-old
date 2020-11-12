@@ -8,7 +8,7 @@
 						巡视有效时间 :
 					</view>
 					<view class="underwayRight">
-						{{item.time}} 前
+						{{item.tourTime}} 前
 					</view>
 				</view>
 				<view class="underway">
@@ -16,7 +16,7 @@
 						名字 :
 					</view>
 					<view class="underwayRight">
-						{{item.name}}
+						{{item.elderName}}
 					</view>
 				</view>
 				<view class="underway">
@@ -32,7 +32,7 @@
 						巡视位置:
 					</view>
 					<view class="underwayRight">
-						{{item.place}}
+						{{item.location}}
 					</view>
 				</view>
 			</view>
@@ -61,40 +61,7 @@
 		data() {
 			return {
 				userInfo:'',//个人信息
-				underway: [{
-					flag: 1,
-					img: '../../static/imgs/timg.jpg',
-					name: '王大爷',
-					time: '2020-10-01 18:30',
-					genre: '日常巡视',
-					state: '未超时/已超时2天2小时30分钟',
-					place: '福星楼3楼405号305A床'
-
-				}, {
-					flag: 1,
-					img: '../../static/imgs/timg.jpg',
-					name: '李大爷',
-					time: '2020-10-01 18:30',
-					genre: '日常巡视',
-					state: '未超时/已超时2天2小时30分钟',
-					place: '福星楼3楼405号305A床'
-				}, {
-					flag: 1,
-					img: '../../static/imgs/timg.jpg',
-					name: '张大爷',
-					time: '2020-10-01 18:30',
-					genre: '日常巡视',
-					state: '未超时/已超时2天2小时30分钟',
-					place: '福星楼3楼405号305A床'
-				}, {
-					flag: 1,
-					img: '../../static/imgs/timg.jpg',
-					name: '成大妈',
-					time: '2020-10-01 18:30',
-					genre: '日常巡视',
-					state: '未超时/已超时2天2小时30分钟',
-					place: '福星楼3楼405号305A床'
-				}]
+				underway: []
 			}
 		},
 		methods: {

@@ -86,7 +86,12 @@
 				下班
 			</view>
 		</view>
-
+		<!-- 弹出层 -->  <!-- :closeable='closeable' -->
+		<view class="">
+			<u-popup v-model="show" mode="center" border-radius="30"  :mask-close-able='close' width="500rpx" height="400rpx">
+				<view class="refresh">请到指定地点进行刷卡上班</view>
+			</u-popup>
+		</view>
 	</view>
 </template>
 
@@ -101,6 +106,9 @@
 			return {
 				userInfo: '', //用户信息
 				duty: true,
+				show: false,
+				closeable:false,
+				close:false,	
 				personal: [{
 					title: '修改密码',
 					imgs: '../../static/imgs/xiangyous.png'
@@ -120,9 +128,9 @@
 			//退出登录
 			goOut() {
 				// 清除token
-				uni.setStorageSync('token','')
+				uni.setStorageSync('token', '')
 				// 清除userInfo
-				uni.setStorageSync("userInfo",'')
+				uni.setStorageSync("userInfo", '')
 				uni.navigateTo({
 					url: '../login/login'
 				})
@@ -130,10 +138,12 @@
 			//下班
 			offDuty() {
 				this.duty = true
+				
 			},
 			//上班
 			beDuty() {
 				this.duty = false
+				this.show=true
 			},
 
 			// 按钮跳转
@@ -211,6 +221,8 @@
 				width: 150rpx;
 				height: 150rpx;
 				margin: 0 auto;
+				border: 1rpx solid gray;
+				border-radius: 50%;
 
 				.timgImg {
 					width: 150rpx;
@@ -268,37 +280,45 @@
 
 		.outlogin {
 			width: 80%;
-			height: 100rpx;
+			height: 80rpx;
 			background: #FFE300;
-			line-height: 100rpx;
+			line-height: 80rpx;
 			text-align: center;
 			margin: 0 auto;
 			border-radius: 50rpx;
-			border: 1rpx solid gray;
+
 		}
 
 		.offDuty {
 			width: 80%;
-			height: 100rpx;
+			height: 80rpx;
 			background: #FFE300;
-			line-height: 100rpx;
+			line-height: 80rpx;
 			text-align: center;
 			margin: 0 auto;
 			border-radius: 50rpx;
 			margin-top: 50rpx;
-			border: 1rpx solid gray;
+
 		}
 
 		.offDutys {
 			width: 80%;
-			height: 100rpx;
+			height: 80rpx;
 			background: #c7c7c7;
-			line-height: 100rpx;
+			line-height: 80rpx;
 			text-align: center;
 			margin: 0 auto;
 			border-radius: 50rpx;
 			margin-top: 50rpx;
-			border: 1rpx solid gray;
+
 		}
+		
+	}
+	//弹出层
+	.refresh{
+	text-align: center;
+	line-height: 400rpx;
+	font-size: 16px;
+	font-weight: 700;
 	}
 </style>

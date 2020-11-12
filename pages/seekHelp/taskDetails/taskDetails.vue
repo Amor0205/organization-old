@@ -5,14 +5,14 @@
 			被服务者信息
 		</view>
 		<!-- 中间个人信息部分 -->
-		<view class="underwayItem" v-if="underway.flag==1">
+		<view class="underwayItem" v-if="underway.type==0">
 			<!-- 被服务人员信息 -->
 			<view class="message">
 				<view class="headportrait">
 					<image src="../../../static/imgs/timg.jpg" class="headportraitImg"></image>
 				</view>
 				<view class="serial">
-					{{underway.name}}
+					{{underway.elderName}}
 				</view>
 			</view>
 			<view class="">
@@ -22,16 +22,16 @@
 						巡视时间段:
 					</view>
 					<view class="underwayRight">
-						{{underway.time}}
+						{{underway.tourTime}}前
 					</view>
 				</view>
 
-				<view class="underway">
+				<view class="underway" v-if="underway.type==0">
 					<view class="underwayLeft">
 						任务类型:
 					</view>
 					<view class="underwayRight">
-						{{underway.genre}}
+						日常巡视
 					</view>
 				</view>
 				<!-- <view class="underway">
@@ -47,12 +47,12 @@
 						巡视位置:
 					</view>
 					<view class="underwayRights">
-						{{underway.place}}
+						{{underway.location}}
 					</view>
 				</view>
 			</view>
 		</view>
-
+		
 		<view class="underwayItem" v-else>
 			<!-- 被服务人员信息 -->
 			<view class="message">
@@ -60,7 +60,7 @@
 					<image src="../../../static/imgs/timg.jpg" class="headportraitImg"></image>
 				</view>
 				<view class="serial">
-					{{underway.name}}
+					{{underway.elderName}}
 				</view>
 			</view>
 			<view class="">
@@ -79,7 +79,7 @@
 						任务类型:
 					</view>
 					<view class="underwayRight">
-						{{underway.genre}}
+						{{underway.taskType}}
 					</view>
 				</view>
 				<view class="underway">
@@ -87,7 +87,7 @@
 					求助方式:
 				</view>
 				<view class="underwayRight">
-					{{underway.way}}
+					{{underway.helpMethod}}
 				</view>
 			</view>
 				<view class="underway">
@@ -95,14 +95,14 @@
 						求助位置:
 					</view>
 					<view class="underwayRights">
-						{{underway.place}}
+						{{underway.location}}
 					</view>
 				</view>
 			</view>
 		</view>
 
 		<!-- 显示刷卡栏 -->
-		<view class="base" @click="goto(underway)" v-if="underway.flag==1">
+		<view class="base" @click="goto(underway)" v-if="underway.type==0">
 			<view class="show">
 				<!-- <view class="receiving">已接单</view> -->
 				<view class="wait">等待巡视刷卡</view>

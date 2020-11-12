@@ -104,6 +104,19 @@ export function activeService(beImages, afImages,elderId, employeeId, content) {
 }
 
 
+//提交主动服务(巡视)
+export function submitService(beImages, afImages,content, type, elderId,orderId) {
+	return http.post('/order/submitService', {
+		beImages,
+		afImages,
+		content,
+		type,
+		elderId,
+		orderId
+	})
+}
+
+
 
 
 
@@ -134,3 +147,15 @@ export function activeService(beImages, afImages,elderId, employeeId, content) {
 // 	})
 
 // }
+
+//更新订单状态
+export function putordere(orderId,type,status) {
+	return http.put('/order/changeOrderStatus', {
+		orderId,
+		type,
+		status
+	})
+}
+
+
+
