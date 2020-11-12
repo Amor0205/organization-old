@@ -148,6 +148,12 @@ export function submitService(beImages, afImages,content, type, elderId,orderId)
 
 // }
 
+
+/* 
+	PUT
+*/
+
+
 //更新订单状态
 export function putordere(orderId,type,status) {
 	return http.put('/order/changeOrderStatus', {
@@ -157,5 +163,15 @@ export function putordere(orderId,type,status) {
 	})
 }
 
+//更新员工状态
+// 登录
+export function workStatus(employeeId, status) {
+	return http.put('/employee/updateWordStatus', {
+		params: {
+			employeeId,
+			status
+		}
+	})
+}
 
 

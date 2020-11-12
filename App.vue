@@ -47,11 +47,48 @@ export default {
 		//监听消息推送事件
 		jyJPush.addJYJPushReceiveNotificationListener(result=> {
 		//  监听成功后，若收到推送，会在result返回对应的数据；数据格式保持极光返回的安卓/iOS数据一致
+			var type 
+			var content
+			if(JSON.parse(result.notificationExtras).type){
+				type = JSON.parse(result.notificationExtras).type
+				content = JSON.parse(result.notificationExtras).content
+			}
+			
+			//type   0老人求助 1同事求助
+			if(type == 0){
+				uni.showModal({
+					title: '老人求助',
+					content,
+					showCancel:false,
+					success: function (res) {
+						if (res.confirm) {
+							console.log('用户点击确定');
+						}
+					}
+				})
+			}else if(type == 1){
+				uni.showModal({
+					title: '同事求助',
+					content,
+					confirmText:'确认求助',
+					cancelText:'暂无时间',
+					success: function (res) {
+						if (res.confirm) {
+							console.log('用户点击确定');
+						}else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				})
+			}
+			
 			console.log('收到消息'+ JSON.stringify(result));
-			uni.showToast({
-				icon:'none',
-				title: JSON.stringify(result)
-			})
+			// uni.showToast({
+			// 	icon:'none',
+			// 	title: JSON.stringify(result)
+			// })
+			
+			
 		});
 		
 		// //监听推送消息点击事件

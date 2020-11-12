@@ -96,6 +96,7 @@
 </template>
 
 <script>
+	import { workStatus } from '../../src/ajax.js'
 	export default {
 		name: "",
 		components: {
