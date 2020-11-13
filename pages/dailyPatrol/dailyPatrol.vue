@@ -44,14 +44,18 @@
 						{{item.way}}
 					</view>
 				</view> -->
-
+					<view class="" @click="abc">
+						1212
+					</view>
 
 		</view>
 	</view>
 </template>
 
 <script>
-	import {getTour} from '../../src/ajax.js'
+	import {
+		getTour
+	} from '../../src/ajax.js'
 	export default {
 		name: "",
 		components: {
@@ -60,8 +64,10 @@
 		props: {},
 		data() {
 			return {
-				userInfo:'',//个人信息
-				underway: []
+				userInfo: '', //个人信息
+				underway: [],
+				awarry:[],
+				time:'',
 			}
 		},
 		methods: {
@@ -71,16 +77,41 @@
 				})
 			},
 			// 获取巡视订单列表
-			getlist(){
+			getlist() {
 				getTour(
-				this.userInfo.regionId,
-				this.userInfo.id
-				).then(res=>{
-					if(res.data.code==2000){
-						this.underway=res.data.data.tourOrders
+					this.userInfo.regionId,
+					this.userInfo.id
+				).then(res => {
+					if (res.data.code == 2000) {
+						this.underway = res.data.data.tourOrders
 						console.log(this.underway);
+						this.underway.map(item => {
+							this.awarry.push(item.tourTime)
+							console.log(this.awarry);
+						})
+						this.time = this.awarry.toString()
 					}
 				})
+			},
+			getTime: function() {
+
+				var date = new Date(),
+					year = date.getFullYear(),
+					month = date.getMonth() + 1,
+					day = date.getDate(),
+					hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(),
+					minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes(),
+					second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+				month >= 1 && month <= 9 ? (month = "0" + month) : "";
+				day >= 0 && day <= 9 ? (day = "0" + day) : "";
+				var timer = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+				console.log(timer);
+				return timer;
+				
+				
+				},
+			abc(){
+				
 			}
 		},
 		created() {
@@ -88,12 +119,16 @@
 			this.userInfo = uni.getStorageSync('userInfo')
 			// console.log(this.userInfo);
 			this.getlist()
+			this.getTime()
+		
+
 		},
 		mounted() {
 
+
 		},
 		onLoad() {
-
+		
 		},
 		filters: {
 
@@ -111,9 +146,10 @@
 </script>
 
 <style scoped lang="scss">
-	.box{
-			padding: 20rpx 20rpx 0rpx 20rpx;
+	.box {
+		padding: 20rpx 20rpx 0rpx 20rpx;
 	}
+
 	.underwayItem {
 		// width:98%;
 		// height: 500rpx;
@@ -123,11 +159,12 @@
 		border-radius: 30rpx;
 		margin: 0 auto;
 		margin-top: 20rpx;
-			padding: 30rpx;
+		padding: 30rpx;
+
 		.underway {
 			display: flex;
 			margin-bottom: 20rpx;
-		padding-top: 10rpx;
+			padding-top: 10rpx;
 			border-radius: 13rpx;
 
 			.underwayLeft {
