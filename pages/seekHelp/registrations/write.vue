@@ -244,6 +244,7 @@
 					var afimg=this.imgs.join('|')
 					this.number.map(item => {
 						this.awarry.push(item.name)
+						console.log(this.awarry);
 					})
 					this.serve = this.awarry.join('/')
 					var _this = this;
