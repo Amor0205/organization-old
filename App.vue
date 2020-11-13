@@ -1,8 +1,8 @@
 <script>
+import {  } from './src/ajax.js'
 export default {
 	onLaunch: function() {
 		console.log('App Launch');
-		
 		
 		// const synth = window.speechSynthesis;
 		// const msg = new SpeechSynthesisUtterance();
@@ -56,10 +56,11 @@ export default {
 				content = JSON.parse(result.notificationExtras).content
 			}
 			/**
-			 * 0巡视订单1求助订单2协助订单
-			 * 3上班刷卡成功4巡视订单刷卡
-			 * 5求助订单刷卡6协助订单刷卡
+			 * 0巡视订单 1求助报警(普通弹框) 2协助订单(普通弹框)
+			 * 3上班刷卡成功 4巡视订单刷卡
+			 * 5求助订单刷卡  6协助订单刷卡 
 			 */
+			console.log(result)
 			if(type == 1){
 				uni.showModal({
 					title: '老人求助',

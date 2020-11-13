@@ -174,7 +174,7 @@
 									if(res.data.code == 2000){
 										_this.userInfo.status = 3;
 										uni.setStorageSync('userInfo',_this.userInfo)
-										console.log('下班')
+										console.log('上班')
 									}
 								})
 							} else if (res.cancel) {
@@ -197,9 +197,9 @@
 						4
 					).then(res=>{
 						if(res.data.code == 2000){
-							this.userInfo.status = 4;
+							_this.userInfo.status = 4;
 							uni.setStorageSync('userInfo',this.userInfo)
-							console.log('上班，等待刷卡')
+							console.log('上班')
 						}
 					})
 				}
@@ -237,6 +237,7 @@
 		created() {
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
+			// this.userInfo.avatar = 'http://' + this.userInfo.avatar
 			if(this.userInfo.status != 3){
 				this.duty = false;
 			}
@@ -259,9 +260,9 @@
 				// }
 				console.log(result)
 				/**
-				 * 0巡视订单1求助订单2协助订单
-				 * 3上班刷卡成功4巡视订单刷卡
-				 * 5求助订单刷卡6协助订单刷卡
+				 * 0巡视订单 1求助报警(普通弹框) 2协助订单(普通弹框)
+				 * 3上班刷卡成功 4巡视订单刷卡
+				 * 5求助订单刷卡  6协助订单刷卡 
 				 */
 				if(type == 3){
 					//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
@@ -270,12 +271,12 @@
 						1
 					).then(res=>{
 						console.log(res)
-						if(res.code == 2000){
+						if(res.data.code == 2000){
 							_this.userInfo.status = 1;
 							_this.closeable = true;
-							uni.setStorageSync('userInfo',this.userInfo)
+							uni.setStorageSync('userInfo',_this.userInfo)
 							uni.showToast({
-								title:'上班打卡成功',
+								title:content,
 								icon:'none'
 							})
 						}

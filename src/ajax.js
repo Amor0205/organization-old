@@ -173,12 +173,14 @@ export function putordere(orderId,type,status) {
 
 //更新员工状态
 export function workStatus(employeeId, status) {
-	return http.put('/employee/updateWordStatus', {
-		params: {
+	return http.put('/employee/updateWorkStatus', {
+		// params: {
 			employeeId,
 			status
-		}
+		// }
 	})
 }
+
+
 
 
