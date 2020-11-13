@@ -174,7 +174,7 @@
 									if(res.data.code == 2000){
 										_this.userInfo.status = 3;
 										uni.setStorageSync('userInfo',_this.userInfo)
-										console.log('上班')
+										console.log('下班')
 									}
 								})
 							} else if (res.cancel) {
@@ -196,10 +196,10 @@
 						this.userInfo.id,
 						4
 					).then(res=>{
-						if(res.code == 2000){
-							_this.userInfo.status = 4;
+						if(res.data.code == 2000){
+							this.userInfo.status = 4;
 							uni.setStorageSync('userInfo',this.userInfo)
-							console.log('上班')
+							console.log('上班，等待刷卡')
 						}
 					})
 				}
