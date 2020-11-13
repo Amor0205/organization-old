@@ -178,7 +178,7 @@
 					// 	_this.userInfo.id,
 					// 	2
 					// ).then(res=>{
-						console.log(res)
+						// console.log(res)
 						// if(res.data.code == 2000){
 							_this.userInfo.status = 2;
 							uni.setStorageSync('userInfo',_this.userInfo)
@@ -193,7 +193,7 @@
 						// }
 					// })
 				}else if(type == 5){
-					console.log(res)
+					// console.log(res)
 					_this.userInfo.status = 5;
 					uni.setStorageSync('userInfo',_this.userInfo)
 					uni.showToast({

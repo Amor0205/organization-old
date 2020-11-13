@@ -90,8 +90,6 @@ export default {
 									})
 								}
 							})
-							
-							
 						}else if (res.cancel) {
 							console.log('用户点击取消');
 						}
@@ -101,7 +99,7 @@ export default {
 				var userInfo = uni.getStorageSync('userInfo')
 				uni.showModal({
 					title: '同事求助',
-					content:`求助人：${content.alarmName}\n;地点：${content.location}\n;备注：${content.content}\n;`,
+					content:`求助人：${content.alarmName};\n地点：${content.location};\n备注：${content.content};\n`,
 					confirmText:'确认求助',
 					cancelText:'暂无时间',
 					success: function (res) {

@@ -65,8 +65,8 @@
 		<!-- 显示刷卡栏 -->
 		<view class="base" @click="gotos" v-if='serves==true'>
 			<view class="show">
-				<view class="receiving">王护工已接单</view>
-				<view class="wait">等待王护工刷卡</view>
+				<view class="receiving">{{ helper }}已接单</view>
+				<view class="wait">等待{{ helper }}刷卡</view>
 			</view>
 		</view>
 		<view class="base" @click="goto" v-else>
@@ -91,16 +91,17 @@
 				underway: '',
 				serves:'',
 				userInfo:'',
+				helper:'',
 			}
 		},
 		methods: {
 			goto() {
-					this.serves = !this.serves
+					// this.serves = !this.serves
 			},
 			gotos(){
-				uni.navigateTo({
-					url: '../registrations/write?data=' + JSON.stringify(this.underway)
-				})
+				// uni.navigateTo({
+				// 	url: '../registrations/write?data=' + JSON.stringify(this.underway)
+				// })
 			}
 		},
 		mounted() {
@@ -134,7 +135,7 @@
 				/**
 				 * 0巡视订单 1求助报警(普通弹框) 2协助订单(普通弹框)
 				 * 3上班刷卡成功 4巡视订单刷卡
-				 * 5求助订单刷卡  6协助订单刷卡 
+				 * 5求助订单刷卡  6协助订单刷卡 7反馈协助者刷成功
 				 */
 				if(type == 0){
 					//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
@@ -157,6 +158,12 @@
 							})
 						}
 					})
+				}else if(type == 7){
+					
+					console.log(接单并刷卡);
+					// uni.navigateTo({
+					// 	url: '../registrations/write?data=' + JSON.stringify(this.underway)
+					// })
 				}
 			})	
 			//#endif

@@ -52,7 +52,8 @@
 
 <script>
 	import {
-		getTour
+		getTour,
+		receiveOrder
 	} from '../../src/ajax.js'
 	export default {
 		name: "",
@@ -70,9 +71,27 @@
 		},
 		methods: {
 			goTo(res) {
-				uni.navigateTo({
-					url: '../seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(res)
+				// uni.navigateTo({
+				// 	url: '../seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(res)
+				// })
+				
+				//接单  单号：前缀加单号  X 巡视  A报警 H协助
+				receiveOrder(
+					'X'+res.id,
+					this.userInfo.id
+				).then(res_1=>{
+					if(res_1.data.code == 2000){
+						uni.navigateTo({
+							url: '../seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(res)
+						})
+					}else{
+						uni.showToast({
+							icon:'none',
+							title:res_1.data.message
+						})
+					}
 				})
+				
 			},
 			// 获取巡视订单列表
 			getlist() {
