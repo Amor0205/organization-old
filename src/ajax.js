@@ -116,6 +116,14 @@ export function submitService(beImages, afImages,content, type, elderId,orderId)
 	})
 }
 
+//激光推送
+export function jPush(employeeId,registrationId) {
+	return http.post('/jPush', {
+		employeeId,
+		registrationId
+	})
+}
+
 
 
 

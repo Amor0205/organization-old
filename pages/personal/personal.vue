@@ -13,13 +13,16 @@
 				<!-- <view class="flowBox" :style="{color:item.color}" v-if="item.show == 0" v-for="(item,index) in flow" :key='index'>
 					{{ item.title }}
 				</view> -->
-				<view class="flowBox1" v-if="this.userInfo.status==0">
+				<view class="flowBox box_1" v-if="this.userInfo.status == 0">
 					上班
 				</view>
-				<view class="flowBox2" v-else-if="this.userInfo.status==1">
-					休闲
+				<view class="flowBox box_2" v-else-if="this.userInfo.status == 1">
+					空闲
 				</view>
-				<view class="flowBox3" v-else-if="this.userInfo.status==3">
+				<view class="flowBox box_3" v-else-if="this.userInfo.status == 2">
+					忙碌
+				</view>
+				<view class="flowBox box_4" v-else-if="this.userInfo.status == 3">
 					下班
 				</view>
 			</view>
@@ -38,7 +41,7 @@
 				<view class="withoutLeft">
 					性别
 				</view>
-				<view class="withoutRight" v-if="this.userInfo.status==0">
+				<view class="withoutRight" v-if="this.userInfo.sex == 0 ">
 					女
 				</view>
 				<view class="withoutRight" v-else>
@@ -91,7 +94,7 @@
 			<view class="outlogin" @click="goOut">
 				退出登录
 			</view>
-			<view class="offDuty" v-if='duty==true' @click="beDuty">
+			<view class="offDuty" v-if='duty == true' @click="beDuty">
 				上班
 			</view>
 			<view class="offDutys" v-else @click="offDuty ">
@@ -156,14 +159,23 @@
 			},
 			//下班
 			offDuty() {
-				this.duty = true
+				var _this = this;
 					uni.showModal({
 						title: '温馨提示',
+						content:'下班',
 						success: function(res) {
 							if (res.confirm) {
-								
-								uni.navigateTo({
-									url:'../login/login'
+								_this.duty = true
+								//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
+								workStatus(
+									_this.userInfo.id,
+									3
+								).then(res=>{
+									if(res.data.code == 2000){
+										_this.userInfo.status = 3;
+										uni.setStorageSync('userInfo',_this.userInfo)
+										console.log('上班')
+									}
 								})
 							} else if (res.cancel) {
 									uni.showToast({
@@ -177,6 +189,20 @@
 			beDuty() {
 				this.duty = false
 				this.show = true
+				
+				if(this.duty == false ){
+					//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
+					workStatus(
+						this.userInfo.id,
+						4
+					).then(res=>{
+						if(res.code == 2000){
+							_this.userInfo.status = 4;
+							uni.setStorageSync('userInfo',this.userInfo)
+							console.log('上班')
+						}
+					})
+				}
 			},
 
 			// 按钮跳转
@@ -211,12 +237,51 @@
 		created() {
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
-			this.userInfo.avatar = 'http://' + this.userInfo.avatar
+			if(this.userInfo.status != 3){
+				this.duty = false;
+			}
 			console.log(this.userInfo);
 		},
 		mounted() {},
 		onLoad() {
-
+			var jyJPush = this.jyJPush;
+			var _this = this;
+			//监听透传
+			jyJPush.addJYJPushCustomReceiveNotificationListener(result=> {
+			//  监听成功后，若收到推送，会在result返回对应的数据
+				var type 
+				// var content
+				// if(JSON.parse(result.notificationExtras).type){
+				// 	type = JSON.parse(result.notificationExtras).type
+				// }
+				// if(JSON.parse(result.notificationExtras).content){
+				// 	content = JSON.parse(result.notificationExtras).content
+				// }
+				console.log(result)
+				/**
+				 * 0巡视订单1求助订单2协助订单
+				 * 3上班刷卡成功4巡视订单刷卡
+				 * 5求助订单刷卡6协助订单刷卡
+				 */
+				if(type == 3){
+					//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
+					workStatus(
+						_this.userInfo.id,
+						1
+					).then(res=>{
+						console.log(res)
+						if(res.code == 2000){
+							_this.userInfo.status = 1;
+							_this.closeable = true;
+							uni.setStorageSync('userInfo',this.userInfo)
+							uni.showToast({
+								title:'上班打卡成功',
+								icon:'none'
+							})
+						}
+					})
+				}
+			})	
 		},
 		filters: {
 
@@ -349,7 +414,7 @@
 	}
 
 	//状态显示
-	.flowBox1 {
+	.flowBox {
 		width: 120rpx;
 		height: 40rpx;
 		display: flex;
@@ -359,35 +424,19 @@
 		border-radius: 20rpx;
 		font-size: 12px;
 		line-height: 40rpx;
-		margin: 20rpx auto;
-			color: #70d95d
+		margin: 30rpx auto;	
 	}
-
-	.flowBox2 {
-		width: 120rpx;
-		height: 40rpx;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		border: 1upx solid;
-		border-radius: 20rpx;
-		font-size: 12px;
-		line-height: 40rpx;
-		margin: 20rpx auto;
+	
+	.box_1{
+		color: #4dbc47
+	}
+	.box_2{
 		color: #3fbebe;
 	}
-
-	.flowBox3 {
-		width: 120rpx;
-		height: 40rpx;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		border: 1upx solid;
-		border-radius: 20rpx;
-		font-size: 12px;
-		line-height: 40rpx;
-		margin: 20rpx auto;
+	.box_3{
+		color: #ff1313;
+	}
+	.box_4{
 		color: #c3c4c6;
 	}
 

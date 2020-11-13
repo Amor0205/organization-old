@@ -47,7 +47,8 @@
 
 <script>
 	import {
-		login
+		login,
+		jPush
 	} from '../../src/ajax.js'
 	export default {
 		name: "",
@@ -58,7 +59,7 @@
 		data() {
 			return {
 				actionSheetShow: false, //选择单位弹框
-
+				registrationID:'',		//推送设备id
 				form: {
 					mobile: '17608130109',
 					password: '123456',
@@ -137,6 +138,15 @@
 									uni.showToast({
 										title:'登录成功'
 									})
+									jPush(
+										res.data.data.info.id,
+										this.registrationID
+									).then(res1=>{
+										console.log(res)
+										if(res1.data.code == 2000){
+											console.log('推送绑定成功')
+										}
+									})
 									//保存token
 									uni.setStorageSync('token', res.data.data.token)
 									// 保存用户信息
@@ -183,7 +193,16 @@
 
 		},
 		onLoad() {
-
+			var jyJPush = this.jyJPush;
+			//获取registrationID
+			jyJPush.getRegistrationID(result => {
+				this.registrationID = result.registrationID
+				console.log(JSON.stringify(result));
+				uni.showToast({
+					icon: 'none',
+					title: JSON.stringify(result)
+				})
+			});
 		},
 		filters: {
 

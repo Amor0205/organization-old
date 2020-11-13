@@ -35,14 +35,14 @@ export default {
 			}
 		});
 		
-		//获取registrationID
-		jyJPush.getRegistrationID(result => {
-			console.log(JSON.stringify(result));
-			uni.showToast({
-				icon: 'none',
-				title: JSON.stringify(result)
-			})
-		});
+		// //获取registrationID
+		// jyJPush.getRegistrationID(result => {
+		// 	console.log(JSON.stringify(result));
+		// 	uni.showToast({
+		// 		icon: 'none',
+		// 		title: JSON.stringify(result)
+		// 	})
+		// });
 		
 		//监听消息推送事件
 		jyJPush.addJYJPushReceiveNotificationListener(result=> {
@@ -51,11 +51,16 @@ export default {
 			var content
 			if(JSON.parse(result.notificationExtras).type){
 				type = JSON.parse(result.notificationExtras).type
+			}
+			if(JSON.parse(result.notificationExtras).content){
 				content = JSON.parse(result.notificationExtras).content
 			}
-			
-			//type   0老人求助 1同事求助
-			if(type == 0){
+			/**
+			 * 0巡视订单1求助订单2协助订单
+			 * 3上班刷卡成功4巡视订单刷卡
+			 * 5求助订单刷卡6协助订单刷卡
+			 */
+			if(type == 1){
 				uni.showModal({
 					title: '老人求助',
 					content,
@@ -66,7 +71,7 @@ export default {
 						}
 					}
 				})
-			}else if(type == 1){
+			}else if(type == 2){
 				uni.showModal({
 					title: '同事求助',
 					content,
