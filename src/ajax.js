@@ -194,7 +194,7 @@ export function workStatus(employeeId, status) {
 	})
 }
 
-//接单
+//接单  单号：前缀加单号  X 巡视  A报警 H协助
 export function receiveOrder(orderId, employeeId) {
 	return http.put('/order/receiveOrder', {
 		orderId,

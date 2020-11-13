@@ -71,8 +71,9 @@
 				uni.showLoading({
 					title:'正在接取任务'
 				})
+				//接单  单号：前缀加单号  X 巡视  A报警 H协助
 				receiveOrder(
-					res.id,
+					'A'+res.id,
 					this.userInfo.id
 				).then(res_1=>{
 					uni.hideLoading()
