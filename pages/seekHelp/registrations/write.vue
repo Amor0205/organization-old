@@ -8,27 +8,30 @@
 			<view style="padding:20rpx">服务后照片：</view>
 			<mk-upload :imgList="imgLists" @onDelete="onDeletes" @onChoose="onChooses" :maxCount='maxCount' />
 		</view>
-		<!-- 选择服务对象 -->
-		<!-- <view class="session">
-			<view class="">
-				请选择接受服务的对象:
+		<!-- 选择服务对象部分 -->
+		<view class="" v-if="this.alls.type==1">
+			<!-- 选择服务对象 -->
+			<view class="session">
+				<view class="">
+					请选择接受服务的对象:
+				</view>
+				<view class="" @click="Others">
+					搜索其他人？
+				</view>
 			</view>
-			<view class="" @click="Others">
-				搜索其他人？
+			<!-- 单选 -->
+			<view class="radio">
+				<u-radio-group v-model="value" @change="radioGroupChange">
+					<u-radio @change="radioChange" v-for="(item, index) in list" :key="index" :name="item.name" :disabled="item.disabled"
+					 active-color='#FFE300' icon-size='40px'>
+						<view class="list">
+							<text>{{item.elderName}}</text>
+							<!-- (<text>{{item.bed}}</text>) -->
+						</view>
+					</u-radio>
+				</u-radio-group>
 			</view>
-		</view> -->
-		<!-- 单选 -->
-		<!-- <view class="radio">
-			<u-radio-group v-model="value" @change="radioGroupChange">
-				<u-radio @change="radioChange" v-for="(item, index) in list" :key="index" :name="item.name" :disabled="item.disabled"
-				 active-color='#FFE300' icon-size='40px'>
-					<view class="list">
-						<text>{{item.name}}</text>
-						(<text>{{item.bed}}</text>)
-					</view>
-				</u-radio>
-			</u-radio-group>
-		</view> -->
+		</view>
 		<!-- 选择服务内容 -->
 		<view class="select" @click="changes">
 			选择服务内容
@@ -61,7 +64,8 @@
 	import mkUpload from "../../../components/mk-upload/mk-upload.vue"
 	import {
 		activeService,
-		submitService
+		submitService,
+		getold
 	} from '../../../src/ajax.js'
 	export default {
 
@@ -85,7 +89,7 @@
 				img: [], //服务前上传成功
 				imgs: [], //服务后上传成功
 				serve: '',
-
+				list: [], //房间老人列表
 			}
 		},
 		methods: {
@@ -115,7 +119,7 @@
 					const tempFilePaths = e.tempFilePaths;
 					this.imgList.push(tempFilePaths[0]);
 					console.log(this.imgList);
-		
+
 					var _this = this;
 					uni.uploadFile({
 						url: 'http://110.187.88.70:21605/serviceContent/upImage', //仅为示例，非真实的接口地址
@@ -133,11 +137,11 @@
 							uni.hideLoading()
 							if (JSON.parse(res.data).code == 2000) {
 								uni.showToast({
-									title:'上传成功'
+									title: '上传成功'
 								})
 								var img = (JSON.parse(res.data)).data.url
 								this.img.push(img)
-							console.log(this.img);
+								console.log(this.img);
 
 							}
 						}
@@ -183,7 +187,7 @@
 					const tempFilePaths = e.tempFilePaths;
 					this.imgLists.push(tempFilePaths[0]);
 					// console.log(this.imgLists);
-					
+
 					var _this = this;
 					uni.uploadFile({
 						url: 'http://110.187.88.70:21605/serviceContent/upImage', //仅为示例，非真实的接口地址
@@ -202,10 +206,10 @@
 							if (JSON.parse(res.data).code == 2000) {
 								console.log(JSON.parse(res.data));
 								uni.showToast({
-									title:'上传成功'
+									title: '上传成功'
 								})
 								var imgs = (JSON.parse(res.data)).data.url
-									this.imgs.push(imgs)
+								this.imgs.push(imgs)
 								console.log(this.imgs)
 
 							}
@@ -214,7 +218,17 @@
 
 				}, 1000);
 			},
-			
+			//获取房间内老人
+			oldlist() {
+				getold(
+					this.alls.id
+				).then(res => {
+					if (res.data.code == 2000) {
+						this.list = res.data.data.elders
+						console.log(this.list);
+					}
+				})
+			},
 
 			// 单选中某个单选框时，由radio时触发
 			radioChange(e) {
@@ -239,9 +253,9 @@
 			},
 			// 提交
 			submit() {
-				if(this.alls.type==0){
-					var befimg=this.img.join('|')
-					var afimg=this.imgs.join('|')
+				if (this.alls.type == 0) {
+					var befimg = this.img.join('|')
+					var afimg = this.imgs.join('|')
 					this.number.map(item => {
 						this.awarry.push(item.name)
 						console.log(this.awarry);
@@ -250,38 +264,78 @@
 					var _this = this;
 					uni.uploadFile({
 						url: 'http://110.187.88.70:21605/order/submitService', //仅为示例，非真实的接口地址
-						filePath:'',
+						filePath: '',
 						name: 'file',
 						methods: 'POST',
 						header: {
 							'Authorization': 'Bearer ' + _this.tokens
 						},
 						formData: {
-							beImages:befimg,
-							afImages:afimg,
-							content:this.serve,
-							type:this.alls.type,
-							elderId:this.alls.elderId,
-							orderId:this.alls.id,
+							beImages: befimg,
+							afImages: afimg,
+							content: this.serve,
+							type: this.alls.type,
+							elderId: this.alls.elderId,
+							orderId: this.alls.id,
 						},
 						success: (res) => {
 							console.log(res);
 							uni.hideLoading()
-								if (JSON.parse(res.data).code == 2000) {
-									uni.showToast({
-										title:'提交成功'
-									})
-								uni.setStorageSync('number','')
-								uni.setStorageSync('alls','')
-								uni.navigateTo({
-									url:'../../index/index'
+							if (JSON.parse(res.data).code == 2000) {
+								uni.showToast({
+									title: '提交成功'
 								})
-								}
+								uni.setStorageSync('number', '')
+								uni.setStorageSync('alls', '')
+								uni.navigateTo({
+									url: '../../index/index'
+								})
+							}
 						}
 					});
-				}else{
-					var befimg=this.img.join('|')
-					var afimg=this.imgs.join('|')
+				} else if (this.alls.type == 1) {
+					var befimg = this.img.join('|')
+					var afimg = this.imgs.join('|')
+					this.number.map(item => {
+						this.awarry.push(item.name)
+						console.log(this.awarry);
+					})
+					this.serve = this.awarry.join('/')
+					var _this = this;
+					uni.uploadFile({
+						url: 'http://110.187.88.70:21605/order/submitService', //仅为示例，非真实的接口地址
+						filePath: '',
+						name: 'file',
+						methods: 'POST',
+						header: {
+							'Authorization': 'Bearer ' + _this.tokens
+						},
+						formData: {
+							beImages: befimg,
+							afImages: afimg,
+							content: this.serve,
+							type: this.alls.type,
+							// elderId: this.alls.elderId,
+							orderId: this.alls.id,
+						},
+						success: (res) => {
+							console.log(res);
+							uni.hideLoading()
+							if (JSON.parse(res.data).code == 2000) {
+								uni.showToast({
+									title: '提交成功'
+								})
+								uni.setStorageSync('number', '')
+								uni.setStorageSync('alls', '')
+								uni.navigateTo({
+									url: '../../index/index'
+								})
+							}
+						}
+					});
+				} else {
+					var befimg = this.img.join('|')
+					var afimg = this.imgs.join('|')
 					this.number.map(item => {
 						this.awarry.push(item.name)
 					})
@@ -289,35 +343,35 @@
 					var _this = this;
 					uni.uploadFile({
 						url: 'http://110.187.88.70:21605/order/genActiveOrder', //仅为示例，非真实的接口地址
-						filePath:'',
+						filePath: '',
 						name: 'file',
 						methods: 'POST',
 						header: {
 							'Authorization': 'Bearer ' + _this.tokens
 						},
 						formData: {
-							beImages:befimg,
-							afImages:afimg,
-							elderId:this.alls.elderId,
-							employeeId:this.userInfo.id,
-							content:this.serve
+							beImages: befimg,
+							afImages: afimg,
+							elderId: this.alls.elderId,
+							employeeId: this.userInfo.id,
+							content: this.serve
 						},
 						success: (res) => {
-						// console.log(res);
+							// console.log(res);
 							uni.hideLoading()
-								if (JSON.parse(res.data).code == 2000) {
-									uni.showToast({
-										title:'提交成功'
-									})
-								uni.setStorageSync('number','')
-								uni.setStorageSync('alls','')
-								uni.navigateTo({
-									url:'../../index/index'
+							if (JSON.parse(res.data).code == 2000) {
+								uni.showToast({
+									title: '提交成功'
 								})
-								}
+								uni.setStorageSync('number', '')
+								uni.setStorageSync('alls', '')
+								uni.navigateTo({
+									url: '../../index/index'
+								})
+							}
 						}
 					});
-					}
+				}
 
 			},
 		},
@@ -343,6 +397,7 @@
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
 			this.tokens = uni.getStorageSync('token')
+
 		},
 		onShow() {
 			//接收服务内容
@@ -351,7 +406,7 @@
 			//保存服务对象详情
 			this.alls = uni.getStorageSync('alls')
 			console.log(this.alls);
-
+			this.oldlist()
 
 		},
 		filters: {

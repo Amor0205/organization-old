@@ -8,7 +8,8 @@
 					<u-collapse-item :title="item.head" v-for="(item, index) in itemList" :key="index" :open="item.open" :disabled="item.disabled"
 					 class="itemList">
 						<u-checkbox-group @change="checkboxGroupChange" v-for="(item1,index1) in item.list" :key="index1">
-							<u-checkbox @change="checkboxChange" v-model="item1.checked" :name="item1.name" shape="circle" active-color='#FFE300' class="u-checkbox">
+							<u-checkbox @change="checkboxChange" v-model="item1.checked" :name="item1.name" shape="circle" active-color='#FFE300'
+							 class="u-checkbox">
 								<view class="contain">
 									<view class="name">
 										{{item1.name}}
@@ -42,12 +43,14 @@
 </template>
 
 <script>
+	import {
+		postRelease
+	} from '../../../src/ajax.js'
 	export default {
 		data() {
 			return {
-				
-				itemList: [
-					{
+
+				itemList: [{
 					head: "卫生",
 					list: [{
 							name: '吃饭1',
@@ -127,7 +130,8 @@
 				number: [],
 				ids: '', //接收穿过来数据里面的flag
 				all: '',
-
+				awarry: [],
+				serve: ''
 			}
 		},
 		methods: {
@@ -153,14 +157,14 @@
 			// 	})
 			// }
 			//选择服务标签
-			tapInfo(e) {
-				if (this.rSelect.indexOf(e) == -1) {
-					// console.log(e)//打印下标
-					this.rSelect.push(e); //选中添加到数组里
-				} else {
-					this.rSelect.splice(this.rSelect.indexOf(e), 1); //取消
-				}
-			},
+			// tapInfo(e) {
+			// 	if (this.rSelect.indexOf(e) == -1) {
+			// 		// console.log(e)//打印下标
+			// 		this.rSelect.push(e); //选中添加到数组里
+			// 	} else {
+			// 		this.rSelect.splice(this.rSelect.indexOf(e), 1); //取消
+			// 	}
+			// },
 			submit() {
 				// var select=true
 				// //获取当前页面（返回index页面）
@@ -171,14 +175,41 @@
 				// setTimeout(() => {
 				// 		uni.navigateBack()
 				// }, 1500)
+				this.number.map(item => {
+					this.awarry.push(item.name)
+					console.log(this.awarry);
+				})
+				this.serve = this.awarry.join('/')
+				console.log(this.serve);
+				postRelease(
+					this.all.id,
+					this.all.type,
+					'',
+					this.serve
+				).then(res => {
+					if (res.data.code == 2000) {
+						uni.showToast({
+							title:'提交成功'
+						})
+						uni.setStorageSync('number', this.number)
+						uni.navigateTo({
+							url: '../assist/assist?all='+JSON.stringify(this.all)
+						})
+						
+					} else {
+						uni.showToast({
+							icon: 'none',
+							title: res.data.data.message
+						})
+					}
+				}).catch(err => {
+					console.log(err);
+				})
 
-	
-			
+
+
 				// if (this.ids.id == 2) {
-					uni.setStorageSync('number', this.number)
-					uni.navigateTo({
-						url: '../assist/assist?all='+JSON.stringify(this.all)
-					})
+
 
 				// } else  {
 				// 	uni.setStorageSync('number', this.number)
@@ -187,6 +218,7 @@
 				// 	})
 
 				// }
+
 
 			}
 
@@ -199,14 +231,14 @@
 
 		},
 		onLoad(option) {
-			console.log(option);
+			// console.log(option);
 			this.ids = JSON.parse(option.data)
-			console.log(this.ids);
+			// console.log(this.ids);
 			this.all = JSON.parse(option.all)
 			console.log(this.all);
 			// this.exhibits= JSON.parse(option.exhibit)
 			// console.log(this.exhibits);
-			
+
 		}
 
 	}
@@ -216,46 +248,45 @@
 	.box {
 		.centreBox {
 			padding: 20rpx;
-	
+
 			.employ {
 				// font-size: 60rpx;
 				color: #FF9500;
 				text-align: center;
 				padding-top: 20rpx;
 			}
-	
+
 			.initiative {
 				// font-size: 60rpx;
 				color: #878BA1;
 				padding-top: 50rpx;
 			}
-	
+
 			.collapse {
 				padding: 20rpx 0rpx 20rpx 0rpx;
 				font-size: 20px;
-	
+
 				.itemList {
 					margin-top: 50rpx;
-				
-					.u-checkbox{
+
+					.u-checkbox {
 						margin-right: 30rpx;
-							margin-top: 40rpx;
+						margin-top: 40rpx;
 					}
+
 					.contain {
-					
+
 						.name {
 							font-size: 16px;
 						}
 					}
 				}
-	
+
 			}
 		}
-	
-		.baseBox {
-			
-		}
-	
+
+		.baseBox {}
+
 		.submit {
 			width: 80%;
 			height: 100rpx;
@@ -268,7 +299,7 @@
 			font-size: 30rpx;
 			font-size: 18px;
 		}
-	
-	
+
+
 	}
 </style>

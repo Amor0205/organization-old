@@ -70,6 +70,25 @@ export function getSeekhelp(regionId, employeeId) {
 	})
 }
 
+//  搜索员工
+export function getsearchEmployee(regionId, searchContent) {
+	return http.get('/employee/searchEmployee', {
+		params: {
+			regionId, //区域id
+			searchContent, //员工id
+		}
+	})
+}
+
+//  获取房间内老人
+export function getold(orderId) {
+	return http.get('/elder/showSameRoomElder', {
+		params: {
+			orderId
+		}
+	})
+}
+
 
 
 

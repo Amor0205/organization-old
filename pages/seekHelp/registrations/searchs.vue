@@ -21,8 +21,17 @@
 					<view class="text">
 						姓名：{{item.name}}
 					</view>
-					<view class="text">
-						当前状态：{{item.state}}
+					<view class="text" v-if="item.status == 0">
+						当前状态： 上班
+					</view>
+					<view class="text" v-else-if="item.status == 1">
+						当前状态： 空闲
+					</view>
+					<view class="text" v-else-if="titem.status == 2">
+						当前状态： 忙碌
+					</view>
+					<view class="text" v-else-if="item.status == 3">
+					{{this.exhibit.status}}
 					</view>
 				</view>
 			</view>
@@ -31,22 +40,16 @@
 </template>
 
 <script>
+	import {
+		getsearchEmployee
+	} from '../../../src/ajax.js'
 	export default {
 
 		data() {
 			return {
 				inputValue: '', //input数据
 				showDeletd: false,
-				exhibit: [{
-					name: '王组长',
-					state: "已上班/未上班，空闲中/忙碌中"
-				}, {
-					name: '李组长',
-					state: "已上班/未上班，空闲中/忙碌中"
-				}, {
-					name: '张组长',
-					state: "已上班/未上班，空闲中/忙碌中"
-				}, ]
+				exhibit: []
 			};
 		},
 
@@ -78,10 +81,22 @@
 			},
 			//点击搜索触发
 			confirm(e) {
-				if (this.inputValue.leng != 0) {
-					console.log(e.target.value)
-					uni.hideKeyboard(); //隐藏软键盘
-				}
+				uni.hideKeyboard(); //隐藏软键盘
+				getsearchEmployee(
+					'99',
+					this.inputValue
+				).then(res => {
+					console.log(res);
+					if (res.data.code === 2000) {
+						this.exhibit = res.data.data.employees
+						console.log(this.exhibit);
+					} else {
+						uni.showToast({
+							icon: 'none',
+							title: res.data.data.message
+						})
+					}
+				})
 			},
 			goto(res) {
 				console.log(res);
@@ -93,12 +108,14 @@
 		},
 
 		created() {
-
+			// 获取userInfo
+			this.userInfo = uni.getStorageSync('userInfo')
 		},
 		mounted() {},
 		watch: {},
 		onLoad(option) {
 			this.all = JSON.parse(option.all)
+			console.log(this.all);
 		}
 
 	};

@@ -43,6 +43,7 @@
 </template>
 
 <script>
+	import{postRelease} from '../../../src/ajax.js'
 	export default {
 		data() {
 			return {
@@ -127,7 +128,9 @@
 				number: [],
 				ids: '', //接收穿过来数据里面的flag
 				all: '',
-
+					order:'',//搜索的员工信息
+					awarry:[],
+					serve:'',//点击选择的服务内容
 			}
 		},
 		methods: {
@@ -161,34 +164,40 @@
 					this.rSelect.splice(this.rSelect.indexOf(e), 1); //取消
 				}
 			},
+			//提交服务
 			submit() {
-				// var select=true
-				// //获取当前页面（返回index页面）
-				// var pages = getCurrentPages(); //当前页
-				// //用scode来接收成功的值
-				// pages[0].$vm.select = true
-				// console.log(pages[0].select);
-				// setTimeout(() => {
-				// 		uni.navigateBack()
-				// }, 1500)
-
-
-
-				// if (this.ids.id == 2) {
-				uni.setStorageSync('number', this.number)
-				uni.navigateTo({
-					url: '../assist/assist?all=' + JSON.stringify(this.all)
+				
+				this.number.map(item => {
+					this.awarry.push(item.name)
+					console.log(this.awarry);
 				})
-
-				// } else  {
-				// 	uni.setStorageSync('number', this.number)
-				// 	uni.navigateTo({
-				// 		url: './write'
-				// 	})
-
-				// }
-
+				this.serve = this.awarry.join('/')
+				console.log(this.serve);
+				postRelease(
+					this.all.id,
+					this.all.type,
+						this.order.id,
+					this.serve
+				).then(res => {
+					if (res.data.code == 2000) {
+						uni.showToast({
+							title: '提交成功'
+						})
+						uni.setStorageSync('number', this.number)
+						uni.navigateTo({
+							url: '../assist/assist?all=' + JSON.stringify(this.all)
+						})
+					} else {
+						uni.showToast({
+							icon: 'none',
+							title: res.data.data.message
+						})
+					}
+				}).catch(err => {
+					console.log(err);
+				})
 			}
+
 
 
 		},
@@ -199,6 +208,8 @@
 
 		},
 		onLoad(option) {
+			this.order=JSON.parse(option.exhibit)
+			console.log(this.order);
 			this.all = JSON.parse(option.all)
 			console.log(this.all);
 
@@ -236,6 +247,7 @@
 						margin-right: 30rpx;
 						margin-top: 40rpx;
 					}
+
 					.contain {
 						.name {
 							font-size: 16px;

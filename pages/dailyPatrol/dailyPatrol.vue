@@ -110,13 +110,16 @@
 			
 		},
 		created() {
+		
+			this.getTime()
+
+
+		},
+		onShow() {
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
 			// console.log(this.userInfo);
 			this.getlist()
-			this.getTime()
-
-
 		},
 		mounted() {
 

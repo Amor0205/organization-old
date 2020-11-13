@@ -3,26 +3,26 @@
 	<view class="containerBox">
 		<!-- 头部 -->
 		<view class='head'>
-			请输入对象姓名或房间号：
+			请输入服务对象姓名或房间号：
 		</view>
 		<view class="titleBox">
 			<view class="inputBox">
 				<view class="centerBox">
 					<image src="../../../static/imgs/sousuo@2x.png" mode=""></image>
-					<input style="color: #282828;width: 400upx;" placeholder="请输入你想搜索的内容" placeholder-style="font-size:28upx"
+					<input style="color: #282828;width: 400upx; height: 100upx;" placeholder="请输入服务号或者名字" placeholder-style="font-size:30upx"
 					 confirm-type='search' v-model="inputValue" @input="inputFun" @confirm="confirm"></input>
 					<image @click="deleteValue" v-if="showDeletd" src="../../../static/imgs/delete.png" mode=""></image>
 				</view>
 			</view>
 		</view>
-		<view class="Exhibition">
-			<view class="" v-for="(item,index) in exhibit" :key='index'>
+		<!--   -->
+		<view class="Exhibition" >
+			<view class="" v-for="(item,index) in elders" :key='index'>
 				<view class="exhibit" @click="goto(item)">
-					<view class="text">
-						姓名：{{item.name}}
-					</view>
-					<view class="text">
-						房间/床位：{{item.bed}}
+					<view class="">
+						名字:  {{item.elderName}}
+					</view><view class="">
+						床位: {{item.bedName}}
 					</view>
 				</view>
 			</view>
@@ -31,26 +31,17 @@
 </template>
 
 <script>
+	import {
+		getsearchElder
+	} from '../../../src/ajax.js'
 	export default {
 
 		data() {
 			return {
 				inputValue: '', //input数据
 				showDeletd: false,
-				exhibit: [{
-					name: '张先生',
-					bed: "501A床",
-					disabled: false
-				}, {
-					name: '李先生',
-					bed: "502A床",
-						disabled: false
-				}, {
-					name: '代先生',
-					bed: "503A床",
-							disabled: false
-				}, ],
-				array: [], //点击添加的新数组
+				userInfo:'',//用户数据
+				elders:'',//搜索获取的数据
 			};
 		},
 
@@ -80,12 +71,25 @@
 				this.inputValue = "";
 				this.showDeletd = false;
 			},
+			
 			//点击搜索触发
 			confirm(e) {
-				if (this.inputValue.leng != 0) {
-					console.log(e.target.value)
-					uni.hideKeyboard(); //隐藏软键盘
-				}
+				uni.hideKeyboard(); //隐藏软键盘
+				getsearchElder(
+					this.userInfo.regionId,
+					this.inputValue
+				).then(res => {
+					console.log(res);
+					if (res.data.code === 2000) {
+						this.elders = res.data.data.elders
+						console.log(this.elders);
+					} else {
+						uni.showToast({
+							icon: 'none',
+							title: res.data.data.message
+						})
+					}
+				})
 			},
 			//点击跳转到填写服务详情页面
 			goto(res) {
@@ -121,18 +125,19 @@
 <style lang="scss">
 	.containerBox {
 		.head {
-			padding: 20rpx 0rpx 0rpx 20rpx;
+			font-size: 20px;
+			padding:30rpx 0rpx 0rpx 20rpx;
 		}
-
+	
 		font-size: 14px;
 		line-height: 24px;
 		// height: 100%;
 		position: relative;
 		padding-bottom: 20upx;
-
+	
 		.titleBox {
 			padding: 0 2%;
-			padding-top: 50upx;
+			padding-top: 20upx;
 			width: 96%;
 			color: #282828;
 			position: fixed;
@@ -140,18 +145,18 @@
 			z-index: 399;
 			display: flex;
 			align-items: center;
-
+	
 			.imgBox {
 				width: 50upx;
 				height: 40upx;
 				margin-right: 20upx;
-
+	
 				image {
 					width: 100%;
 					height: 100%;
 				}
 			}
-
+	
 			.inputBox {
 				width: 100%;
 				background: #E8E8E8;
@@ -160,14 +165,14 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
-
+	
 				.centerBox {
 					display: flex;
 					align-items: center;
 					// justify-content: space-between;
 					color: #a9a9a9;
 					width: 75%;
-
+	
 					image {
 						width: 32upx;
 						height: 32upx;
@@ -176,11 +181,11 @@
 				}
 			}
 		}
-
+	
 		// 搜索显示
 		.Exhibition {
 			padding: 200upx 20rpx 0rpx 20rpx;
-
+	
 			.exhibit {
 				width: 100%;
 				height: 150rpx;
@@ -189,10 +194,11 @@
 				border-radius: 10rpx;
 				display: flex;
 				flex-direction: column;
-				justify-content: space-between;
-				// margin-left: 50rpx;
+				justify-content: space-around;
+				padding-left: 20rpx;
+				
 			}
-
+	
 			.text {
 				margin-left: 20rpx;
 			}
