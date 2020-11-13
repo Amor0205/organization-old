@@ -52,7 +52,7 @@
 		{
 			"path": "pages/seekHelp/present/present",
 			"style": {
-				"navigationBarTitleText": "当前求助",
+				"navigationBarTitleText": "老人求助",
 				"app-plus": {
 					"titleNView": true,
 					"bounce": "none"

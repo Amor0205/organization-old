@@ -194,6 +194,14 @@ export function workStatus(employeeId, status) {
 	})
 }
 
+//接单
+export function receiveOrder(orderId, employeeId) {
+	return http.put('/order/receiveOrder', {
+		orderId,
+		employeeId
+	})
+}
+
 
 
 

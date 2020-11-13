@@ -53,7 +53,7 @@
 </template>
 
 <script>
-	import {getSeekhelp} from '../../../src/ajax.js'
+	import { getSeekhelp,receiveOrder } from '../../../src/ajax.js'
 	export default {
 		name: "",
 		components: {
@@ -68,12 +68,28 @@
 		},
 		methods: {
 			goTo(res) {
-				uni.navigateTo({
-					// url:`../taskDetails/taskDetails?all=${res.item}`,
-					// url: '../taskDetails/taskDetails',
-					url: '../taskDetails/taskDetails?data=' + JSON.stringify(res)
-
+				uni.showLoading({
+					title:'正在接取任务'
 				})
+				receiveOrder(
+					res.id,
+					this.userInfo.id
+				).then(res_1=>{
+					uni.hideLoading()
+					if(res_1.data.code == 2000){
+						uni.navigateTo({
+							// url:`../taskDetails/taskDetails?all=${res.item}`,
+							// url: '../taskDetails/taskDetails',
+							url: '../taskDetails/taskDetails?data=' + JSON.stringify(res)
+						})
+					}else{
+						uni.showToast({
+							icon:'none',
+							title:res_1.data.message
+						})
+					}
+				})
+				
 			},
 			// 获取求助列表
 			getlist(){

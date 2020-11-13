@@ -70,7 +70,7 @@
 						任务开始时间:
 					</view>
 					<view class="underwayRight">
-						{{underway.time}}
+						{{underway.createTime}}
 					</view>
 				</view>
 
@@ -134,10 +134,10 @@
 		},
 		methods: {
 			goto(res) {
-				uni.navigateTo({
-					// url: '../registrations/registration',
-					url: '../registrations/registration?data=' + JSON.stringify(res)
-				})
+				// uni.navigateTo({
+				// 	// url: '../registrations/registration',
+				// 	url: '../registrations/registration?data=' + JSON.stringify(res)
+				// })
 			}
 		},
 		created() {
@@ -174,14 +174,13 @@
 				 */
 				if(type == 4){
 					//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
-					workStatus(
-						_this.userInfo.id,
-						2
-					).then(res=>{
+					// workStatus(
+					// 	_this.userInfo.id,
+					// 	2
+					// ).then(res=>{
 						console.log(res)
-						if(res.data.code == 2000){
+						// if(res.data.code == 2000){
 							_this.userInfo.status = 2;
-							_this.closeable = true;
 							uni.setStorageSync('userInfo',_this.userInfo)
 							uni.showToast({
 								title:content+'成功' ,
@@ -191,7 +190,19 @@
 								// url: '../registrations/registration',
 								url: '../registrations/registration?data=' + JSON.stringify(_this.underway)
 							})
-						}
+						// }
+					// })
+				}else if(type == 5){
+					console.log(res)
+					_this.userInfo.status = 5;
+					uni.setStorageSync('userInfo',_this.userInfo)
+					uni.showToast({
+						title:content+'成功' ,
+						icon:'none'
+					})
+					uni.navigateTo({
+						// url: '../registrations/registration',
+						url: '../registrations/registration?data=' + JSON.stringify(_this.underway)
 					})
 				}
 			})	
