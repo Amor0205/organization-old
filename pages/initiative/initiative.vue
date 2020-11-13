@@ -73,7 +73,8 @@
 				this.showDeletd = false;
 			},
 			
-			//点击搜索触发			confirm(e) {				uni.hideKeyboard(); //隐藏软键盘				getsearchElder(					this.userInfo.regionId,					this.inputValue				).then(res => {					if (res.data.code === 2000) {						this.elders = res.data.data.elders						console.log(this.elders);					} else {						uni.showToast({							icon: 'none',							title: res.data.message						})					}				})			},
+			//点击搜索触发			confirm(e) {				uni.hideKeyboard(); //隐藏软键盘				getsearchElder(					this.userInfo.regionId,					this.inputValue				).then(res => {
+					console.log(res);					if (res.data.code === 2000) {						this.elders = res.data.data.elders						console.log(this.elders);					} else {						uni.showToast({							icon: 'none',							title: res.data.data.message						})					}				})			},
 		
 			goto(res) {
 				console.log(res);

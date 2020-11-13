@@ -44,9 +44,7 @@
 						{{item.way}}
 					</view>
 				</view> -->
-					<view class="" @click="abc">
-						1212
-					</view>
+		
 
 		</view>
 	</view>
@@ -66,8 +64,8 @@
 			return {
 				userInfo: '', //个人信息
 				underway: [],
-				awarry:[],
-				time:'',
+				awarry: [],
+				time: '',
 			}
 		},
 		methods: {
@@ -94,7 +92,6 @@
 				})
 			},
 			getTime: function() {
-
 				var date = new Date(),
 					year = date.getFullYear(),
 					month = date.getMonth() + 1,
@@ -107,12 +104,10 @@
 				var timer = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
 				console.log(timer);
 				return timer;
-				
-				
-				},
-			abc(){
-				
-			}
+
+
+			},
+			
 		},
 		created() {
 			// 获取userInfo
@@ -120,7 +115,7 @@
 			// console.log(this.userInfo);
 			this.getlist()
 			this.getTime()
-		
+
 
 		},
 		mounted() {
@@ -128,7 +123,7 @@
 
 		},
 		onLoad() {
-		
+
 		},
 		filters: {
 

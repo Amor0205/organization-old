@@ -184,12 +184,12 @@
 					title:'提交成功'
 				})
 				uni.setStorageSync('number', this.number)
-				uni.navigateTo({
-					url:'../registrations/write'
-				})
-				// uni.navigateBack({
-
+				// uni.navigateTo({
+				// 	url:'../registrations/write'
 				// })
+				uni.navigateBack({
+
+				})
 			}
 
 
