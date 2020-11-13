@@ -204,6 +204,10 @@
 						// url: '../registrations/registration',
 						url: '../registrations/registration?data=' + JSON.stringify(_this.underway)
 					})
+				}else if(type == 6){
+					uni.redirectTo({
+					    url: '../../index/index'
+					});
 				}
 			})	
 			//#endif

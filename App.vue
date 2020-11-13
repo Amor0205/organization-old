@@ -1,5 +1,5 @@
 <script>
-import {  } from './src/ajax.js'
+import { receiveOrder } from './src/ajax.js'
 export default {
 	onLaunch: function() {
 		console.log('App Launch');
@@ -74,12 +74,31 @@ export default {
 					success: function (res) {
 						if (res.confirm) {
 							console.log('用户点击确定');
+							//接单  单号：前缀加单号  X 巡视  A报警 H协助
+							receiveOrder(
+								'A'+content.id,
+								userInfo.id
+							).then(res_1=>{
+								if(res_1.data.code == 2000){
+									uni.navigateTo({
+										url: 'pages/seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(content)
+									})
+								}else{
+									uni.showToast({
+										icon:'none',
+										title:res_1.data.message
+									})
+								}
+							})
+							
+							
 						}else if (res.cancel) {
 							console.log('用户点击取消');
 						}
 					}
 				})
 			}else if(type == 2){
+				var userInfo = uni.getStorageSync('userInfo')
 				uni.showModal({
 					title: '同事求助',
 					content:`求助人：${content.alarmName}\n;地点：${content.location}\n;备注：${content.content}\n;`,
@@ -88,6 +107,23 @@ export default {
 					success: function (res) {
 						if (res.confirm) {
 							console.log('用户点击确定');
+							//接单  单号：前缀加单号  X 巡视  A报警 H协助
+							receiveOrder(
+								'H'+content.id,
+								userInfo.id
+							).then(res_1=>{
+								if(res_1.data.code == 2000){
+									uni.navigateTo({
+										url: 'pages/seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(content)
+									})
+								}else{
+									uni.showToast({
+										icon:'none',
+										title:res_1.data.message
+									})
+								}
+							})
+							
 						}else if (res.cancel) {
 							console.log('用户点击取消');
 						}
