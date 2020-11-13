@@ -9,7 +9,7 @@ export default {
 		
 		// console.log(this)
 		
-		
+		// #ifdef APP-PLUS
 		// android_isNotificationEnabled() {
 			// const jyJPush = uni.requireNativePlugin('JY-JPush');
 			const jyJPush = this.jyJPush
@@ -44,7 +44,7 @@ export default {
 		// 	})
 		// });
 		
-		//监听消息推送事件
+		//监听消息推送事件(普通消息)
 		jyJPush.addJYJPushReceiveNotificationListener(result=> {
 		//  监听成功后，若收到推送，会在result返回对应的数据；数据格式保持极光返回的安卓/iOS数据一致
 			var type 
@@ -54,7 +54,10 @@ export default {
 			}
 			if(JSON.parse(result.notificationExtras).content){
 				content = JSON.parse(result.notificationExtras).content
+				content = JSON.parse(content)
 			}
+			
+						
 			/**
 			 * 0巡视订单 1求助报警(普通弹框) 2协助订单(普通弹框)
 			 * 3上班刷卡成功 4巡视订单刷卡
@@ -64,18 +67,22 @@ export default {
 			if(type == 1){
 				uni.showModal({
 					title: '老人求助',
-					content,
-					showCancel:false,
+					content:`求助人：${content.alarmName}\n;地点：${content.location}\n;备注：${content.content}\n;`,
+					// showCancel:false,
+					confirmText:'确认接单',
+					cancelText:'暂无时间',
 					success: function (res) {
 						if (res.confirm) {
 							console.log('用户点击确定');
+						}else if (res.cancel) {
+							console.log('用户点击取消');
 						}
 					}
 				})
 			}else if(type == 2){
 				uni.showModal({
 					title: '同事求助',
-					content,
+					content:`求助人：${content.alarmName}\n;地点：${content.location}\n;备注：${content.content}\n;`,
 					confirmText:'确认求助',
 					cancelText:'暂无时间',
 					success: function (res) {
@@ -125,7 +132,7 @@ export default {
 			})
 		});
 		
-		
+		//#endif
 		
 	},
 	onShow: function() {

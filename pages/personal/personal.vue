@@ -245,44 +245,49 @@
 		},
 		mounted() {},
 		onLoad() {
+			
+			//#ifdef APP-PLUS
 			var jyJPush = this.jyJPush;
 			var _this = this;
 			//监听透传
 			jyJPush.addJYJPushCustomReceiveNotificationListener(result=> {
 			//  监听成功后，若收到推送，会在result返回对应的数据
-				var type 
-				// var content
-				// if(JSON.parse(result.notificationExtras).type){
-				// 	type = JSON.parse(result.notificationExtras).type
-				// }
-				// if(JSON.parse(result.notificationExtras).content){
-				// 	content = JSON.parse(result.notificationExtras).content
-				// }
+				var type
+				var content
+				if(JSON.parse(result.extra).type){
+					type = JSON.parse(result.extra).type
+				}
+				if(JSON.parse(result.extra).content){
+					content = JSON.parse(result.extra).content
+				}
 				console.log(result)
 				/**
 				 * 0巡视订单 1求助报警(普通弹框) 2协助订单(普通弹框)
 				 * 3上班刷卡成功 4巡视订单刷卡
 				 * 5求助订单刷卡  6协助订单刷卡 
 				 */
-				if(type == 3){
-					//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
-					workStatus(
-						_this.userInfo.id,
-						1
-					).then(res=>{
-						console.log(res)
-						if(res.data.code == 2000){
+				
+				// if(type == 3){
+				// 	//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
+				// 	workStatus(
+				// 		_this.userInfo.id,
+				// 		1
+				// 	).then(res=>{
+				// 		console.log(res)
+				// 		if(res.data.code == 2000){
 							_this.userInfo.status = 1;
-							_this.closeable = true;
+							_this.closeable = false;
 							uni.setStorageSync('userInfo',_this.userInfo)
 							uni.showToast({
 								title:content,
 								icon:'none'
 							})
-						}
-					})
-				}
+				// 		}
+				// 	})
+				// }
 			})	
+			//#endif
+			
 		},
 		filters: {
 

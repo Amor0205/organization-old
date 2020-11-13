@@ -138,6 +138,7 @@
 									uni.showToast({
 										title:'登录成功'
 									})
+									//#ifdef APP-PLUS
 									jPush(
 										res.data.data.info.id,
 										this.registrationID
@@ -147,6 +148,7 @@
 											console.log('推送绑定成功')
 										}
 									})
+									//#endif
 									//保存token
 									uni.setStorageSync('token', res.data.data.token)
 									// 保存用户信息
@@ -193,6 +195,8 @@
 
 		},
 		onLoad() {
+			
+			//#ifdef APP-PLUS
 			var jyJPush = this.jyJPush;
 			//获取registrationID
 			jyJPush.getRegistrationID(result => {
@@ -203,6 +207,7 @@
 					title: JSON.stringify(result)
 				})
 			});
+			//#endif
 		},
 		filters: {
 
