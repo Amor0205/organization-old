@@ -117,7 +117,10 @@
 </template>
 
 <script>
-	import { workStatus } from '../../src/ajax.js'
+	import {
+		workStatus,
+		getuserinfo
+	} from '../../src/ajax.js'
 	export default {
 		name: "",
 		components: {
@@ -160,47 +163,47 @@
 			//下班
 			offDuty() {
 				var _this = this;
-					uni.showModal({
-						title: '温馨提示',
-						content:'下班',
-						success: function(res) {
-							if (res.confirm) {
-								_this.duty = true
-								//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
-								workStatus(
-									_this.userInfo.id,
-									3
-								).then(res=>{
-									if(res.data.code == 2000){
-										_this.userInfo.status = 3;
-										uni.setStorageSync('userInfo',_this.userInfo)
-										console.log('上班')
-									}
-								})
-							} else if (res.cancel) {
-									uni.showToast({
-										title:'取消退出'
-									})
-							}
+				uni.showModal({
+					title: '温馨提示',
+					content: '下班',
+					success: function(res) {
+						if (res.confirm) {
+							_this.duty = true
+							//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
+							workStatus(
+								_this.userInfo.id,
+								3
+							).then(res => {
+								if (res.data.code == 2000) {
+									_this.userInfo.status = 3;
+									uni.setStorageSync('userInfo', _this.userInfo)
+									console.log('上班')
+								}
+							})
+						} else if (res.cancel) {
+							uni.showToast({
+								title: '取消退出'
+							})
 						}
-					});
+					}
+				});
 			},
 			//上班
 			beDuty() {
 				this.duty = false
 				this.show = true
-				
-				if(this.duty == false ){
+
+				if (this.duty == false) {
 					//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
 					workStatus(
 						this.userInfo.id,
 						4
-					).then(res=>{
-						if(res.data.code == 2000){
+					).then(res => {
+						if (res.data.code == 2000) {
 							_this.userInfo.status = 4;
-							uni.setStorageSync('userInfo',this.userInfo)
+							uni.setStorageSync('userInfo', this.userInfo)
 							console.log('上班')
-							
+
 						}
 					})
 				}
@@ -234,15 +237,27 @@
 						break;
 				}
 			},
+			//重新获取用户信息
+			getuser() {
+				getuserinfo(
+					this.userInfo.id
+				).then(res => {
+					if (res.data.code == 2000) {
+						this.userInfo = res.data.data.employee
+						uni.setStorageSync('userInfo', res.data.data.employee)
+					}
+				})
+			}
 		},
 		created() {
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
 			// this.userInfo.avatar = 'http://' + this.userInfo.avatar
-			if(this.userInfo.status != 3){
+			if (this.userInfo.status != 3) {
 				this.duty = false;
 			}
 			console.log(this.userInfo);
+			this.getuser()
 		},
 		mounted() {},
 		onLoad() {
@@ -250,14 +265,14 @@
 			var jyJPush = this.jyJPush;
 			var _this = this;
 			//监听透传
-			jyJPush.addJYJPushCustomReceiveNotificationListener(result=> {
-			//  监听成功后，若收到推送，会在result返回对应的数据
+			jyJPush.addJYJPushCustomReceiveNotificationListener(result => {
+				//  监听成功后，若收到推送，会在result返回对应的数据
 				var type
 				var content
-				if(JSON.parse(result.extra).type){
+				if (JSON.parse(result.extra).type) {
 					type = JSON.parse(result.extra).type
 				}
-				if(JSON.parse(result.extra).content){
+				if (JSON.parse(result.extra).content) {
 					content = JSON.parse(result.extra).content
 				}
 				console.log(result)
@@ -266,7 +281,7 @@
 				 * 3上班刷卡成功 4巡视订单刷卡
 				 * 5求助订单刷卡  6协助订单刷卡 
 				 */
-				
+
 				// if(type == 3){
 				// 	//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
 				// 	workStatus(
@@ -275,26 +290,19 @@
 				// 	).then(res=>{
 				// 		console.log(res)
 				// 		if(res.data.code == 2000){
-							uni.showToast({
-								title:content,
-								icon:'none'
-							})
-							_this.closeable = false;
-							getuserinfo(
-							this.userInfo.id
-							).then(res=>{
-								if(res.data.code==2000){
-									this.userInfo=res.data.data.employee
-									uni.setStorageSync('userInfo',res.data.data.employee)
-								}
-							})
-							
+				uni.showToast({
+					title: content,
+					icon: 'none'
+				})
+				_this.closeable = false;
+				_this.getuser()
+
 				// 		}
 				// 	})
 				// }
-			})	
+			})
 			//#endif
-			
+
 		},
 		filters: {
 
@@ -437,19 +445,22 @@
 		border-radius: 20rpx;
 		font-size: 12px;
 		line-height: 40rpx;
-		margin: 30rpx auto;	
+		margin: 30rpx auto;
 	}
-	
-	.box_1{
+
+	.box_1 {
 		color: #4dbc47
 	}
-	.box_2{
+
+	.box_2 {
 		color: #3fbebe;
 	}
-	.box_3{
+
+	.box_3 {
 		color: #ff1313;
 	}
-	.box_4{
+
+	.box_4 {
 		color: #c3c4c6;
 	}
 
