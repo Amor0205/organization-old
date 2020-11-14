@@ -200,6 +200,7 @@
 							_this.userInfo.status = 4;
 							uni.setStorageSync('userInfo',this.userInfo)
 							console.log('上班')
+							
 						}
 					})
 				}
@@ -245,7 +246,6 @@
 		},
 		mounted() {},
 		onLoad() {
-			
 			//#ifdef APP-PLUS
 			var jyJPush = this.jyJPush;
 			var _this = this;
@@ -275,13 +275,20 @@
 				// 	).then(res=>{
 				// 		console.log(res)
 				// 		if(res.data.code == 2000){
-							_this.userInfo.status = 1;
-							_this.closeable = false;
-							uni.setStorageSync('userInfo',_this.userInfo)
 							uni.showToast({
 								title:content,
 								icon:'none'
 							})
+							_this.closeable = false;
+							getuserinfo(
+							this.userInfo.id
+							).then(res=>{
+								if(res.data.code==2000){
+									this.userInfo=res.data.data.employee
+									uni.setStorageSync('userInfo',res.data.data.employee)
+								}
+							})
+							
 				// 		}
 				// 	})
 				// }

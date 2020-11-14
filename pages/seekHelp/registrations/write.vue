@@ -376,13 +376,12 @@
 			},
 		},
 		mounted() {
-
 		},
 		onLoad(option) {
 			if (option.search) {
 				//搜索页面传过来的数据
 				this.arrays = JSON.parse(option.search)
-				// console.log(this.arrays);
+				console.log(this.arrays);
 				var list = []
 				this.list.push(this.arrays);
 				console.log(this.list);

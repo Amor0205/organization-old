@@ -96,6 +96,7 @@
 			getlist(){
 				getSeekhelp(
 				this.userInfo.regionId,
+				'1',
 				this.userInfo.id
 				).then(res=>{
 					if(res.data.code==2000){

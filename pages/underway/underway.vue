@@ -45,6 +45,9 @@
 </template>
 
 <script>
+	import {
+		getunderway
+	} from '../../src/ajax.js'
 	export default {
 		name: "",
 		components: {
@@ -53,27 +56,8 @@
 		props: {},
 		data() {
 			return {
-				underway: [{
-					name: '陈大爷',
-					time: '2020-10-01 18:30',
-					genre: '老人求助/日常巡视/同事协助',
-					place: '福星楼3楼405号305A床'
-				}, {
-					name: '李大爷',
-					time: '2020-10-01 18:30',
-					genre: '老人求助/日常巡视/同事协助',
-					place: '福星楼3楼405号305A床'
-				}, {
-					name: '张大妈',
-					time: '2020-10-01 18:30',
-					genre: '老人求助/日常巡视/同事协助',
-					place: '福星楼3楼405号305A床'
-				}, {
-					name: '王大爷',
-					time: '2020-10-01 18:30',
-					genre: '老人求助/日常巡视/同事协助',
-					place: '福星楼3楼405号305A床'
-				}]
+				underway: [],
+				userInfo:'',//用户信息
 			}
 		},
 		methods: {
@@ -83,7 +67,26 @@
 					// url:`../seekHelp/registrations/write?name=${res.data}`,
 					url: '../seekHelp/registrations/registration?data=' + JSON.stringify(res)
 				})
+			},
+			getlist() {
+				getunderway(
+				this.userInfo.regionId,
+				'2',
+				this.userInfo.id
+				).then(res => {
+					if (res.data.code==2000) {
+						console.log(res);
+					}
+				}).catch(err => {
+					console.log(err);
+				})
 			}
+		},
+		onShow() {
+			// 获取userInfo
+			this.userInfo = uni.getStorageSync('userInfo')
+			// console.log(this.userInfo);
+			this.getlist()
 		},
 		mounted() {
 

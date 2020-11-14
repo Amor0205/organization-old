@@ -49,22 +49,32 @@ export function getsearchElder(regionId, searchContent) {
 
 
 //  巡视订单
-export function getTour(regionId, employeeId) {
+export function getTour(regionId,type, employeeId) {
 	return http.get('/order', {
 		params: {
 			regionId, //区域id
-			type:0, 
+			type, 
 			employeeId,//员工id
 		}
 	})
 }
 
 //  老人求助
-export function getSeekhelp(regionId, employeeId) {
+export function getSeekhelp(regionId,type, employeeId) {
 	return http.get('/order', {
 		params: {
 			regionId, //区域id
-			type:1, 
+			type, 
+			employeeId,//员工id
+		}
+	})
+}
+//  进行中订单
+export function getunderway(regionId,type, employeeId) {
+	return http.get('/order', {
+		params: {
+			regionId, //区域id
+			type, 
 			employeeId,//员工id
 		}
 	})
@@ -85,6 +95,15 @@ export function getold(orderId) {
 	return http.get('/elder/showSameRoomElder', {
 		params: {
 			orderId
+		}
+	})
+}
+
+//  获取房间内老人
+export function getuserinfo(id) {
+	return http.get('/employee/findById', {
+		params: {
+			id
 		}
 	})
 }
