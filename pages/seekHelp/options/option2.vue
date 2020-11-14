@@ -36,7 +36,7 @@
 			</view> -->
 		</view>
 		<!-- 提交按钮 -->
-		<view class="submit" @click="submit()">
+		<view class="submit" @click="submit">
 			提交
 		</view>
 	</view>
@@ -137,10 +137,11 @@
 		methods: {
 			// 选中某个复选框时，由checkbox时触发
 			checkboxChange(e) {
-				//console.log(e);
+				// console.log(e);
 				if (e.value == true) {
 					// console.log(e)//打印下标
 					this.number.push(e); //选中添加到数组里
+					console.log(this.number);
 
 				} else {
 					this.number.splice(this.number.indexOf(e), 1); //取消
@@ -175,37 +176,38 @@
 				// setTimeout(() => {
 				// 		uni.navigateBack()
 				// }, 1500)
+					console.log(111);
 				this.number.map(item => {
 					this.awarry.push(item.name)
 					console.log(this.awarry);
 				})
 				this.serve = this.awarry.join('/')
+				console.log(this.number);
 				console.log(this.serve);
-				postRelease(
-					this.all.id,
-					this.all.type,
-					'',
-					this.serve
-				).then(res => {
-					if (res.data.code == 2000) {
-						uni.showToast({
-							title:'提交成功'
-						})
-						uni.setStorageSync('number', this.number)
-						uni.navigateTo({
-							url: '../assist/assist?all='+JSON.stringify(this.all)
-						})
+				// postRelease(
+				// 	this.all.id,
+				// 	this.all.type,
+				// 	'',
+				// 	this.serve
+				// ).then(res => {
+				// 	if (res.data.code == 2000) {
+				// 		uni.showToast({
+				// 			title:'提交成功'
+				// 		})
+				// 		uni.setStorageSync('number', this.number)
+				// 		uni.navigateTo({
+				// 			url: '../assist/assist?all='+JSON.stringify(this.all)
+				// 		})
 						
-					} else {
-						uni.showToast({
-							icon: 'none',
-							title: res.data.data.message
-						})
-					}
-				}).catch(err => {
-					console.log(err);
-				})
-
+				// 	} else {
+				// 		uni.showToast({
+				// 			icon: 'none',
+				// 			title: res.data.data.message
+				// 		})
+				// 	}
+				// }).catch(err => {
+				// 	console.log(err);
+				// })
 
 
 				// if (this.ids.id == 2) {

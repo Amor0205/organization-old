@@ -82,10 +82,10 @@
         },
         "nativePlugins" : {
             "JY-JPush" : {
-                "ios_appkey" : "",
-                "ios_channel" : "",
                 "android_appkey" : "fc439e0e8c9581efaa14f7f6",
+                "ios_appkey" : "",
                 "android_channel" : "android",
+                "ios_channel" : "",
                 "__plugin_info__" : {
                     "name" : "【官方推荐】JYJPush极光推送插件 - 极光官方推荐 - [试用版，仅用于自定义调试基座]",
                     "description" : "极光推送Uni版本",
@@ -97,22 +97,22 @@
                     "bought" : 0,
                     "pid" : "741",
                     "parameters" : {
-                        "ios_appkey" : {
-                            "des" : "极光推送的APPKEY",
-                            "key" : "JPUSH_APPKEY",
-                            "value" : ""
-                        },
-                        "ios_channel" : {
-                            "des" : "极光推送的渠道名称",
-                            "key" : "JPUSH_CHANNEL",
-                            "value" : ""
-                        },
                         "android_appkey" : {
                             "des" : "极光推送的APPKEY",
                             "key" : "JPUSH_APPKEY",
                             "value" : ""
                         },
+                        "ios_appkey" : {
+                            "des" : "极光推送的APPKEY",
+                            "key" : "JPUSH_APPKEY",
+                            "value" : ""
+                        },
                         "android_channel" : {
+                            "des" : "极光推送的渠道名称",
+                            "key" : "JPUSH_CHANNEL",
+                            "value" : ""
+                        },
+                        "ios_channel" : {
                             "des" : "极光推送的渠道名称",
                             "key" : "JPUSH_CHANNEL",
                             "value" : ""

@@ -103,8 +103,8 @@
 		</view>
 		<!-- 弹出层 -->
 		<view class="">
-			<!-- :mask-close-able='close' -->
-			<u-popup v-model="show" mode="center" border-radius="30" :closeable='closeable' width="500rpx" height="400rpx">
+			
+			<u-popup v-model="show" mode="center" border-radius="30" :mask-close-able='close' :closeable='closeable' width="500rpx" height="400rpx">
 				<view class="">
 					<view class="hint">
 						温馨提示
@@ -294,7 +294,7 @@
 					title: content,
 					icon: 'none'
 				})
-				_this.closeable = false;
+				_this.close = false;
 				_this.getuser()
 
 				// 		}
