@@ -135,7 +135,7 @@
 				/**
 				 * 0巡视订单 1求助报警(普通弹框) 2协助订单(普通弹框)
 				 * 3上班刷卡成功 4巡视订单刷卡
-				 * 5求助订单刷卡  6协助订单刷卡 7反馈协助者刷成功
+				 * 5求助订单刷卡  6协助订单刷卡 7反馈协助者接单 8协助者刷卡成功
 				 */
 				if(type == 0){
 					//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
@@ -146,7 +146,6 @@
 						console.log(res)
 						if(res.data.code == 2000){
 							_this.userInfo.status = 2;
-							_this.closeable = true;
 							uni.setStorageSync('userInfo',_this.userInfo)
 							uni.showToast({
 								title:content+'成功' ,
@@ -159,11 +158,17 @@
 						}
 					})
 				}else if(type == 7){
-					
-					console.log(接单并刷卡);
+					_this.serves = true;
+					console.log(协助接单);
 					// uni.navigateTo({
 					// 	url: '../registrations/write?data=' + JSON.stringify(this.underway)
 					// })
+				}else if(type == 8){
+					console.log(协助刷卡成功)
+					uni.navigateTo({
+						// url: '../registrations/registration',
+						url: '../registrations/registration?data=' + JSON.stringify(_this.underway)
+					})
 				}
 			})	
 			//#endif
