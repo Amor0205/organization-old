@@ -65,8 +65,8 @@
 		<!-- 显示刷卡栏 -->
 		<view class="base" @click="gotos" v-if='serves==true'>
 			<view class="show">
-				<view class="receiving">{{ helper }}已接单</view>
-				<view class="wait">等待{{ helper }}刷卡</view>
+				<view class="receiving">{{ helper }}</view>
+				<!-- <view class="wait">等待{{ helper }}刷卡</view> -->
 			</view>
 		</view>
 		<view class="base" @click="goto" v-else>
@@ -159,12 +159,13 @@
 					})
 				}else if(type == 7){
 					_this.serves = true;
-					console.log(协助接单);
+					_this.helper = content;
+					console.log(content,'协助接单');
 					// uni.navigateTo({
 					// 	url: '../registrations/write?data=' + JSON.stringify(this.underway)
 					// })
 				}else if(type == 8){
-					console.log(协助刷卡成功)
+					console.log(content,'协助刷卡成功')
 					uni.navigateTo({
 						// url: '../registrations/registration',
 						url: '../registrations/registration?data=' + JSON.stringify(_this.underway)

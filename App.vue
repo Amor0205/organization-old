@@ -8,6 +8,7 @@ export default {
 		// const msg = new SpeechSynthesisUtterance();
 		
 		// console.log(this)
+		var _this = this;
 		
 		// #ifdef APP-PLUS
 		// android_isNotificationEnabled() {
@@ -65,6 +66,7 @@ export default {
 			 */
 			console.log(result)
 			if(type == 1){
+				var userInfo = uni.getStorageSync('userInfo')
 				uni.showModal({
 					title: '老人求助',
 					content:`求助人：${content.alarmName}\n;地点：${content.location}\n;备注：${content.content}\n;`,
@@ -80,9 +82,7 @@ export default {
 								userInfo.id
 							).then(res_1=>{
 								if(res_1.data.code == 2000){
-									uni.navigateTo({
-										url: 'pages/seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(content)
-									})
+									_this.gotoPage(content)
 								}else{
 									uni.showToast({
 										icon:'none',
@@ -111,9 +111,7 @@ export default {
 								userInfo.id
 							).then(res_1=>{
 								if(res_1.data.code == 2000){
-									uni.navigateTo({
-										url: 'pages/seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(content)
-									})
+									_this.gotoPage(content)
 								}else{
 									uni.showToast({
 										icon:'none',
@@ -174,6 +172,14 @@ export default {
 	},
 	onHide: function() {
 		console.log('App Hide');
+	},
+	methods:{
+		gotoPage(content){
+			//接单  单号：前缀加单号  X 巡视  A报警 H协助
+			uni.navigateTo({
+				url: 'pages/seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(content)
+			})
+		}
 	}
 };
 </script>

@@ -174,9 +174,6 @@
 					// console.log(res.statusBarHeight);
 					this.statusBarHeights = res.statusBarHeight
 					// console.log(this.statusBarHeights);
-
-
-
 				}
 			});
 		},
