@@ -15,9 +15,9 @@
 				<view class="">
 					请选择接受服务的对象:
 				</view>
-				<!-- <view class="" @click="Others">
+				<view class="" @click="Others">
 					搜索其他人？
-				</view> -->
+				</view>
 			</view>
 			<!-- 单选 -->
 			<view class="radio">
@@ -402,14 +402,14 @@
 				// console.log(this.all);
 				uni.setStorageSync('alls', this.all)
 			}
-			
+			// 获取userInfo
+			this.userInfo = uni.getStorageSync('userInfo')
 			this.tokens = uni.getStorageSync('token')
 				
 		
 		},
 		created() {
-			// 获取userInfo
-			this.userInfo = uni.getStorageSync('userInfo')
+			
 		
 
 		},
