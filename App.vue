@@ -3,7 +3,6 @@ import { receiveOrder } from './src/ajax.js'
 export default {
 	onLaunch: function() {
 		console.log('App Launch');
-		
 		// const synth = window.speechSynthesis;
 		// const msg = new SpeechSynthesisUtterance();
 		
@@ -50,6 +49,7 @@ export default {
 		//  监听成功后，若收到推送，会在result返回对应的数据；数据格式保持极光返回的安卓/iOS数据一致
 			var type 
 			var content
+			var time
 			if(JSON.parse(result.notificationExtras).type){
 				type = JSON.parse(result.notificationExtras).type
 			}
@@ -58,6 +58,8 @@ export default {
 				content = JSON.parse(content)
 			}
 			
+			time = new Date(content.alarmTime); 
+			time = this.formatDate(time)
 						
 			/**
 			 * 0巡视订单 1求助报警(普通弹框) 2协助订单(普通弹框)
@@ -69,7 +71,7 @@ export default {
 				var userInfo = uni.getStorageSync('userInfo')
 				uni.showModal({
 					title: '老人求助',
-					content:`求助人：${content.alarmName}\n;地点：${content.location}\n;备注：${content.content}\n;`,
+					content:`求助人：${content.alarmName};\n地点：${content.location};\n时间：${time};\n`,
 					// showCancel:false,
 					confirmText:'确认接单',
 					cancelText:'暂无时间',
@@ -103,7 +105,7 @@ export default {
 				var userInfo = uni.getStorageSync('userInfo')
 				uni.showModal({
 					title: '同事求助',
-					content:`求助人：${content.alarmName};\n地点：${content.location};\n备注：${content.content};\n`,
+					content:`求助人：${content.alarmName};\n地点：${content.location};\n备注：${content.content};\n时间：${time};\n`,
 					confirmText:'确认求助',
 					cancelText:'暂无时间',
 					success: function (res) {
@@ -187,6 +189,16 @@ export default {
 			uni.navigateTo({
 				url: '/pages/seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(content)
 			})
+		},
+		
+		formatDate(now) { 
+			var year=now.getFullYear();  //取得4位数的年份
+			var month=now.getMonth()+1;  //取得日期中的月份，其中0表示1月，11表示12月
+			var date=now.getDate();      //返回日期月份中的天数（1到31）
+			var hour=now.getHours();     //返回日期中的小时数（0到23）
+			var minute=now.getMinutes(); //返回日期中的分钟数（0到59）
+			var second=now.getSeconds(); //返回日期中的秒数（0到59）
+			return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second; 
 		}
 	}
 };
