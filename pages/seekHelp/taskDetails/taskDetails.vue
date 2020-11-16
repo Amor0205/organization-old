@@ -70,7 +70,7 @@
 						任务开始时间:
 					</view>
 					<view class="underwayRight">
-						{{underway.createTime}}
+						{{underway.beginTime}}
 					</view>
 				</view>
 
@@ -79,7 +79,7 @@
 						任务类型:
 					</view>
 					<view class="underwayRight">
-						{{underway.taskType}}
+						{{underway.typeDesc}}
 					</view>
 				</view>
 				<view class="underway">

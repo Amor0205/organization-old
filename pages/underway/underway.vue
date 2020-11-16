@@ -16,7 +16,7 @@
 						任务开始时间 :
 					</view>
 					<view class="underwayRight">
-						{{item.beginTime}}
+						{{item.beginTime}} 前
 					</view>
 				</view>
 				<view class="underway">
@@ -62,11 +62,17 @@
 		},
 		methods: {
 			goto(res) {
-				console.log(res);
-				uni.navigateTo({
-					// url:`../seekHelp/registrations/write?name=${res.data}`,
-					url: '../seekHelp/registrations/registration?data=' + JSON.stringify(res)
-				})
+				if(res.swipeCardStatus==1){
+					console.log(res);
+					uni.navigateTo({
+						url: '../seekHelp/registrations/registration?data=' + JSON.stringify(res)
+					})
+				}else if(res.swipeCardStatus==0){
+					uni.navigateTo({
+						url: '../seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(res)
+					})
+				}
+				
 			},
 			getlist() {
 				getunderway(

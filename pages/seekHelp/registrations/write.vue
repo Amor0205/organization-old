@@ -9,7 +9,7 @@
 			<mk-upload :imgList="imgLists" @onDelete="onDeletes" @onChoose="onChooses" :maxCount='maxCount' />
 		</view>
 		<!-- 选择服务对象部分 -->
-		<view class="" v-if="this.alls.type==1">
+		<view class="" v-if="this.all.type==1">
 			<!-- 选择服务对象 -->
 			<view class="session">
 				<view class="">
@@ -220,17 +220,7 @@
 
 				}, 1000);
 			},
-			//获取房间内老人
-			oldlist() {
-				getold(
-					this.alls.id
-				).then(res => {
-					if (res.data.code == 2000) {
-						this.list = res.data.data.elders
-						console.log(this.list);
-					}
-				})
-			},
+			
 
 			// 单选中某个单选框时，由radio时触发
 			radioChange(e) {
@@ -255,7 +245,7 @@
 			},
 			// 提交
 			submit() {
-				if (this.alls.type == 0) {
+				if (this.all.type == 0) {
 					var befimg = this.img.join('|')
 					var afimg = this.imgs.join('|')
 					this.number.map(item => {
@@ -277,9 +267,9 @@
 							beImages: befimg,
 							afImages: afimg,
 							content: this.serve,
-							type: this.alls.type,
-							elderId: this.alls.elderId,
-							orderId: this.alls.id,
+							type: this.all.type,
+							elderId: this.all.elderId,
+							orderId: this.all.id,
 						},
 						success: (res) => {
 							console.log(res);
@@ -296,7 +286,7 @@
 							}
 						}
 					});
-				} else if (this.alls.type == 1) {
+				} else if (this.all.type == 1) {
 					var befimg = this.img.join('|')
 					var afimg = this.imgs.join('|')
 					this.list.map(item=>{
@@ -324,9 +314,9 @@
 							beImages: befimg,
 							afImages: afimg,
 							content: this.serve,
-							type: this.alls.type,
+							type: this.all.type,
 							elderId: this.oldid,
-							orderId: this.alls.id,
+							orderId: this.all.id,
 						},
 						success: (res) => {
 							console.log(res);
@@ -336,7 +326,7 @@
 									title: '提交成功'
 								})
 								uni.setStorageSync('number', '')
-								uni.setStorageSync('alls', '')
+								uni.setStorageSync('all', '')
 								uni.navigateTo({
 									url: '../../index/index'
 								})
@@ -362,7 +352,7 @@
 						formData: {
 							beImages: befimg,
 							afImages: afimg,
-							elderId: this.alls.elderId,
+							elderId: this.all.elderId,
 							employeeId: this.userInfo.id,
 							content: this.serve
 						},
@@ -374,7 +364,7 @@
 									title: '提交成功'
 								})
 								uni.setStorageSync('number', '')
-								uni.setStorageSync('alls', '')
+								uni.setStorageSync('all', '')
 								uni.navigateTo({
 									url: '../../index/index'
 								})
@@ -382,14 +372,35 @@
 						}
 					});
 				}
+				
 
+			},
+			//获取房间内老人
+			oldlist() {
+				getold(
+					this.all.id
+				).then(res => {
+					if (res.data.code == 2000) {
+						this.list = res.data.data.elders
+						console.log(this.list);
+					}
+				})
 			},
 		},
 		mounted() {
-				this.oldlist()
+		
 		},
 		onLoad(option) {
-			
+			//接收服务内容
+			this.number = uni.getStorageSync('number')
+			// console.log(this.number);
+			//保存服务对象详情
+			// this.alls = uni.getStorageSync('alls')
+			// console.log(this.alls);
+					this.oldlist()
+			// 获取userInfo
+			this.userInfo = uni.getStorageSync('userInfo')
+			this.tokens = uni.getStorageSync('token')
 			if (option.search) {
 				//搜索页面传过来的数据
 				this.arrays = JSON.parse(option.search)
@@ -399,28 +410,20 @@
 			} else if (option.data) {
 				//服务对象详情
 				this.all = JSON.parse(option.data)
-				// console.log(this.all);
-				uni.setStorageSync('alls', this.all)
+				console.log(this.all);
+				// uni.setStorageSync('alls', this.all)
 			}
-			// 获取userInfo
-			this.userInfo = uni.getStorageSync('userInfo')
-			this.tokens = uni.getStorageSync('token')
+		
 				
 		
 		},
 		created() {
 			
-		
+	
 
 		},
 		onShow() {
-			//接收服务内容
-			this.number = uni.getStorageSync('number')
-			// console.log(this.number);
-			//保存服务对象详情
-			this.alls = uni.getStorageSync('alls')
-			// console.log(this.alls);
-			
+		
 
 		},
 		filters: {
