@@ -68,28 +68,32 @@
 		},
 		methods: {
 			goTo(res) {
-				uni.showLoading({
-					title:'正在接取任务'
-				})
-				//接单  单号：前缀加单号  X 巡视  A报警 H协助
-				receiveOrder(
-					'A'+res.id,
-					this.userInfo.id
-				).then(res_1=>{
-					uni.hideLoading()
-					if(res_1.data.code == 2000){
-						uni.navigateTo({
-							// url:`../taskDetails/taskDetails?all=${res.item}`,
-							// url: '../taskDetails/taskDetails',
-							url: '../taskDetails/taskDetails?data=' + JSON.stringify(res)
+				// uni.showLoading({
+				// 	title:'正在接取任务'
+				// })
+				// //接单  单号：前缀加单号  X 巡视  A报警 H协助
+				// receiveOrder(
+				// 	'A'+res.id,
+				// 	this.userInfo.id
+				// ).then(res_1=>{
+				// 	uni.hideLoading()
+				// 	if(res_1.data.code == 2000){
+				// 		uni.navigateTo({
+				// 			// url:`../taskDetails/taskDetails?all=${res.item}`,
+				// 			// url: '../taskDetails/taskDetails',
+				// 			url: '../taskDetails/taskDetails?data=' + JSON.stringify(res)
+				// 		})
+				// 	}else{
+				// 		uni.showToast({
+				// 			icon:'none',
+				// 			title:res_1.data.message
+				// 		})
+				// 	}
+				// })
+				
+				uni.navigateTo({
+							url: '../registrations/registration?data=' + JSON.stringify(res)
 						})
-					}else{
-						uni.showToast({
-							icon:'none',
-							title:res_1.data.message
-						})
-					}
-				})
 				
 			},
 			// 获取求助列表

@@ -14,7 +14,7 @@
 						<image src="../../../static/imgs/timg.jpg" class="headportraitImg"></image>
 					</view>
 					<view class="serial">
-						{{underway.name}}
+						{{underway.elderName}}
 					</view>
 				</view>
 				<view class="">
@@ -31,7 +31,7 @@
 							巡视时间段 :
 						</view>
 						<view class="underwayRight">
-							{{underway.time}}
+							{{underway.beginTime}}前
 						</view>
 					</view>
 					<view class="underway">
@@ -39,7 +39,7 @@
 							任务类型:
 						</view>
 						<view class="underwayRight">
-							{{underway.genre}}
+							{{underway.typeDesc}}
 						</view>
 					</view>
 					<!-- <view class="underway">
@@ -55,7 +55,7 @@
 							求助位置:
 						</view>
 						<view class="underwayRights">
-							{{underway.place}}
+							{{underway.location}}
 						</view>
 					</view>
 				</view>

@@ -1,4 +1,4 @@
-<!-- 其他人搜索 -->
+<!-- 主动服务 -->
 <template>
 	<view class="containerBox">
 		<!-- 头部 -->
@@ -42,6 +42,7 @@
 				showDeletd: false,
 				userInfo:'',//用户数据
 				elders:'',//搜索获取的数据
+				
 			};
 		},
 
@@ -72,39 +73,14 @@
 				this.showDeletd = false;
 			},
 			
-			//点击搜索触发
-			confirm(e) {
-				uni.hideKeyboard(); //隐藏软键盘
-				getsearchElder(
-					this.userInfo.regionId,
-					this.inputValue
-				).then(res => {
-					console.log(res);
-					if (res.data.code === 2000) {
-						this.elders = res.data.data.elders
-						console.log(this.elders);
-					} else {
-						uni.showToast({
-							icon: 'none',
-							title: res.data.data.message
-						})
-					}
-				})
-			},
-			//点击跳转到填写服务详情页面
-			goto(res) {
-				// console.log(res);
-				// this.array.push(res);
-				// console.log(this.array);
-				// uni.setStorageSync('array', res)
-				uni.navigateTo({
-					url: './write?search=' + JSON.stringify(res)	
-				
-				})
-			}
+			//点击搜索触发			confirm(e) {				uni.hideKeyboard(); //隐藏软键盘				getsearchElder(					this.userInfo.regionId,					this.inputValue				).then(res => {
+					console.log(res);					if (res.data.code === 2000) {						this.elders = res.data.data.elders						console.log(this.elders);					} else {						uni.showToast({							icon: 'none',							title: res.data.data.message						})					}				})			},
+		//点击跳转到填写服务详情页面			goto(res) {				console.log(res);				// this.array.push(res);				// console.log(this.array);				// uni.setStorageSync('array', res)				uni.navigateTo({					url: './write?search=' + JSON.stringify(res)									})			}
 		},
 
 		created() {
+			// 获取userInfo
+			this.userInfo = uni.getStorageSync('userInfo')
 
 		},
 		mounted() {
@@ -128,13 +104,13 @@
 			font-size: 20px;
 			padding:30rpx 0rpx 0rpx 20rpx;
 		}
-	
+
 		font-size: 14px;
 		line-height: 24px;
 		// height: 100%;
 		position: relative;
 		padding-bottom: 20upx;
-	
+
 		.titleBox {
 			padding: 0 2%;
 			padding-top: 20upx;
@@ -145,18 +121,18 @@
 			z-index: 399;
 			display: flex;
 			align-items: center;
-	
+
 			.imgBox {
 				width: 50upx;
 				height: 40upx;
 				margin-right: 20upx;
-	
+
 				image {
 					width: 100%;
 					height: 100%;
 				}
 			}
-	
+
 			.inputBox {
 				width: 100%;
 				background: #E8E8E8;
@@ -165,14 +141,14 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
-	
+
 				.centerBox {
 					display: flex;
 					align-items: center;
 					// justify-content: space-between;
 					color: #a9a9a9;
 					width: 75%;
-	
+
 					image {
 						width: 32upx;
 						height: 32upx;
@@ -181,11 +157,11 @@
 				}
 			}
 		}
-	
+
 		// 搜索显示
 		.Exhibition {
 			padding: 200upx 20rpx 0rpx 20rpx;
-	
+
 			.exhibit {
 				width: 100%;
 				height: 150rpx;
@@ -198,7 +174,7 @@
 				padding-left: 20rpx;
 				
 			}
-	
+
 			.text {
 				margin-left: 20rpx;
 			}

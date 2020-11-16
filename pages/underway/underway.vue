@@ -8,7 +8,7 @@
 						名字 :
 					</view>
 					<view class="underwayRight">
-						{{item.name}}
+						{{item.elderName}}
 					</view>
 				</view>
 				<view class="underway">
@@ -16,7 +16,7 @@
 						任务开始时间 :
 					</view>
 					<view class="underwayRight">
-						{{item.time}}
+						{{item.beginTime}}
 					</view>
 				</view>
 				<view class="underway">
@@ -24,7 +24,7 @@
 						任务类型:
 					</view>
 					<view class="underwayRight">
-						{{item.genre}}
+						{{item.typeDesc}}
 					</view>
 				</view>
 				<view class="underway">
@@ -32,7 +32,7 @@
 						任务位置:
 					</view>
 					<view class="underwayRight">
-						{{item.place}}
+						{{item.location}}
 					</view>
 				</view>
 			</view>
@@ -75,7 +75,8 @@
 				this.userInfo.id
 				).then(res => {
 					if (res.data.code==2000) {
-						console.log(res);
+						this.underway=res.data.data.orders
+						console.log(this.underway);
 					}
 				}).catch(err => {
 					console.log(err);

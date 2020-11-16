@@ -184,30 +184,31 @@
 				this.serve = this.awarry.join('/')
 				console.log(this.number);
 				console.log(this.serve);
-				// postRelease(
-				// 	this.all.id,
-				// 	this.all.type,
-				// 	'',
-				// 	this.serve
-				// ).then(res => {
-				// 	if (res.data.code == 2000) {
-				// 		uni.showToast({
-				// 			title:'提交成功'
-				// 		})
-				// 		uni.setStorageSync('number', this.number)
-				// 		uni.navigateTo({
-				// 			url: '../assist/assist?all='+JSON.stringify(this.all)
-				// 		})
+				postRelease(
+					this.all.ordId,
+					this.all.type,
+					'',
+					this.serve
+				).then(res => {
+					if (res.data.code == 2000) {
+						console.log(res);
+						uni.showToast({
+							title:'提交成功'
+						})
+						uni.setStorageSync('number', this.number)
+						uni.navigateTo({
+							url: '../assist/assist?all='+JSON.stringify(this.all)
+						})
 						
-				// 	} else {
-				// 		uni.showToast({
-				// 			icon: 'none',
-				// 			title: res.data.data.message
-				// 		})
-				// 	}
-				// }).catch(err => {
-				// 	console.log(err);
-				// })
+					} else {
+						uni.showToast({
+							icon: 'none',
+							title: res.data.data.message
+						})
+					}
+				}).catch(err => {
+					console.log(err);
+				})
 
 
 				// if (this.ids.id == 2) {

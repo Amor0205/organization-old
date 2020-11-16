@@ -15,14 +15,14 @@
 				<view class="">
 					请选择接受服务的对象:
 				</view>
-				<view class="" @click="Others">
+				<!-- <view class="" @click="Others">
 					搜索其他人？
-				</view>
+				</view> -->
 			</view>
 			<!-- 单选 -->
 			<view class="radio">
 				<u-radio-group v-model="value" @change="radioGroupChange">
-					<u-radio @change="radioChange" v-for="(item, index) in list" :key="index" :name="item.name" :disabled="item.disabled"
+					<u-radio @change="radioChange" v-for="(item, index) in list" :key="index" :name="item.elderName" :disabled="item.disabled"
 					 active-color='#FFE300' icon-size='40px'>
 						<view class="list">
 							<text>{{item.elderName}}</text>
@@ -90,6 +90,8 @@
 				imgs: [], //服务后上传成功
 				serve: '',
 				list: [], //房间老人列表
+				abc:[],
+				oldid:''
 			}
 		},
 		methods: {
@@ -261,6 +263,7 @@
 						console.log(this.awarry);
 					})
 					this.serve = this.awarry.join('/')
+					
 					var _this = this;
 					uni.uploadFile({
 						url: 'http://110.187.88.70:21605/order/submitService', //仅为示例，非真实的接口地址
@@ -296,11 +299,18 @@
 				} else if (this.alls.type == 1) {
 					var befimg = this.img.join('|')
 					var afimg = this.imgs.join('|')
+					this.list.map(item=>{
+						this.abc.push(item.elderId)
+						console.log(this.abc);
+					})
+					this.oldid = this.abc.join('')
+					console.log(this.oldid);
 					this.number.map(item => {
 						this.awarry.push(item.name)
 						console.log(this.awarry);
 					})
 					this.serve = this.awarry.join('/')
+						console.log(this.serve);
 					var _this = this;
 					uni.uploadFile({
 						url: 'http://110.187.88.70:21605/order/submitService', //仅为示例，非真实的接口地址
@@ -315,7 +325,7 @@
 							afImages: afimg,
 							content: this.serve,
 							type: this.alls.type,
-							// elderId: this.alls.elderId,
+							elderId: this.oldid,
 							orderId: this.alls.id,
 						},
 						success: (res) => {
@@ -376,13 +386,14 @@
 			},
 		},
 		mounted() {
+				this.oldlist()
 		},
 		onLoad(option) {
+			
 			if (option.search) {
 				//搜索页面传过来的数据
 				this.arrays = JSON.parse(option.search)
 				console.log(this.arrays);
-				var list = []
 				this.list.push(this.arrays);
 				console.log(this.list);
 			} else if (option.data) {
@@ -391,21 +402,25 @@
 				// console.log(this.all);
 				uni.setStorageSync('alls', this.all)
 			}
+			
+			this.tokens = uni.getStorageSync('token')
+				
+		
 		},
 		created() {
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
-			this.tokens = uni.getStorageSync('token')
+		
 
 		},
 		onShow() {
 			//接收服务内容
 			this.number = uni.getStorageSync('number')
-			console.log(this.number);
+			// console.log(this.number);
 			//保存服务对象详情
 			this.alls = uni.getStorageSync('alls')
-			console.log(this.alls);
-			this.oldlist()
+			// console.log(this.alls);
+			
 
 		},
 		filters: {
