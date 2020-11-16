@@ -243,6 +243,7 @@
 					this.userInfo.id
 				).then(res => {
 					if (res.data.code == 2000) {
+						console.log('获取用户信息')
 						this.userInfo = res.data.data.employee
 						uni.setStorageSync('userInfo', res.data.data.employee)
 					}
@@ -294,7 +295,7 @@
 					title: content,
 					icon: 'none'
 				})
-				_this.close = false;
+				_this.show = false;
 				_this.getuser()
 
 				// 		}
