@@ -76,12 +76,16 @@ export default {
 					success: function (res) {
 						if (res.confirm) {
 							console.log('用户点击确定');
+							uni.showLoading({
+								title:'正在接单'
+							})
 							//接单  单号：前缀加单号  X 巡视  A报警 H协助
 							receiveOrder(
 								'A'+content.id,
 								userInfo.id
 							).then(res_1=>{
 								if(res_1.data.code == 2000){
+									uni.hideLoading()
 									_this.gotoPage(content)
 								}else{
 									uni.showToast({
@@ -105,12 +109,16 @@ export default {
 					success: function (res) {
 						if (res.confirm) {
 							console.log('用户点击确定');
+							uni.showLoading({
+								title:'正在接单'
+							})
 							//接单  单号：前缀加单号  X 巡视  A报警 H协助
 							receiveOrder(
 								'H'+content.id,
 								userInfo.id
 							).then(res_1=>{
 								if(res_1.data.code == 2000){
+									uni.hideLoading()
 									_this.gotoPage(content)
 								}else{
 									uni.showToast({
