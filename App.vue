@@ -185,7 +185,7 @@ export default {
 		gotoPage(content){
 			//接单  单号：前缀加单号  X 巡视  A报警 H协助
 			uni.navigateTo({
-				url: 'pages/seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(content)
+				url: '/pages/seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(content)
 			})
 		}
 	}
