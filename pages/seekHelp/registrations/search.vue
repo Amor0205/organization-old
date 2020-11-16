@@ -74,8 +74,12 @@
 			},
 			
 			//点击搜索触发			confirm(e) {				uni.hideKeyboard(); //隐藏软键盘				getsearchElder(					this.userInfo.regionId,					this.inputValue				).then(res => {
-					console.log(res);					if (res.data.code === 2000) {						this.elders = res.data.data.elders						console.log(this.elders);					} else {						uni.showToast({							icon: 'none',							title: res.data.data.message						})					}				})			},
-		//点击跳转到填写服务详情页面			goto(res) {				console.log(res);				// this.array.push(res);				// console.log(this.array);				// uni.setStorageSync('array', res)				uni.navigateTo({					url: './write?search=' + JSON.stringify(res)									})			}
+					// console.log(res);					if (res.data.code === 2000) {						this.elders = res.data.data.elders						// console.log(this.elders);					} else {						uni.showToast({							icon: 'none',							title: res.data.data.message						})					}				})			},
+		//点击跳转到填写服务详情页面			goto(res) {				// console.log(res);				// this.array.push(res);				// console.log(this.array);				// uni.setStorageSync('array', res)				// uni.navigateTo({				// 	url: './write'									// })
+					uni.setStorageSync('old',res)
+				uni.navigateBack({
+					
+				})			}
 		},
 
 		created() {

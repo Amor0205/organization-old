@@ -91,7 +91,8 @@
 				serve: '',
 				list: [], //房间老人列表
 				abc:[],
-				oldid:''
+				oldid:'',
+				old:''
 			}
 		},
 		methods: {
@@ -280,6 +281,7 @@
 								})
 								uni.setStorageSync('number', '')
 								uni.setStorageSync('alls', '')
+								
 								uni.navigateTo({
 									url: '../../index/index'
 								})
@@ -327,6 +329,7 @@
 								})
 								uni.setStorageSync('number', '')
 								uni.setStorageSync('all', '')
+								uni.setStorageSync('old', '')
 								uni.navigateTo({
 									url: '../../index/index'
 								})
@@ -391,40 +394,54 @@
 		
 		},
 		onLoad(option) {
-			//接收服务内容
-			this.number = uni.getStorageSync('number')
-			// console.log(this.number);
+		
 			//保存服务对象详情
 			// this.alls = uni.getStorageSync('alls')
 			// console.log(this.alls);
-					this.oldlist()
+			this.oldlist()
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
 			this.tokens = uni.getStorageSync('token')
 			if (option.search) {
 				//搜索页面传过来的数据
 				this.arrays = JSON.parse(option.search)
-				console.log(this.arrays);
-				this.list.push(this.arrays);
-				console.log(this.list);
+				// console.log(this.arrays);
+				
+				// console.log(this.list);
 			} else if (option.data) {
 				//服务对象详情
 				this.all = JSON.parse(option.data)
 				console.log(this.all);
 				// uni.setStorageSync('alls', this.all)
 			}
-		
+			
 				
 		
 		},
 		created() {
-			
-	
+		
 
 		},
 		onShow() {
-		
+			//接收服务内容
+			this.number = uni.getStorageSync('number')
+			console.log(this.number)
+			if(uni.getStorageSync('old')){
+				this.old = uni.getStorageSync('old')
+				this.list=this.list.concat(this.old)
+				console.log(this.list);
+						
+			}else{
+					
+			}
+			
 
+		},
+		onHide() {
+			uni.setStorageSync('old', '')
+		},
+		onUnload() {
+			uni.setStorageSync('old', '')
 		},
 		filters: {
 
