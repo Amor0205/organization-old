@@ -141,10 +141,7 @@
 			
 		},
 		created() {
-		
 			this.getTime()
-
-
 		},
 		onShow() {
 			// 获取userInfo
