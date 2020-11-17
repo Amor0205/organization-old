@@ -140,9 +140,8 @@
 					success: (res) => {
 						// console.log(res.data);
 						if(res.statusCode == 200){
-							this.update_url = this.getCaption(this.update_url)
+							this.update_url = this.getCaption(res.data.downloadPath)
 							this.update_des = res.data.updateDescrip.split(',');
-							
 							if(this.Version(res.data.versionName,this.version)){
 								this.updateApp()
 							}
