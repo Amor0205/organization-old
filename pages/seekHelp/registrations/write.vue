@@ -90,9 +90,9 @@
 				imgs: [], //服务后上传成功
 				serve: '',
 				list: [], //房间老人列表
-				abc:[],
-				oldid:'',
-				old:''
+				abc: [],
+				oldid: '',
+				old: ''
 			}
 		},
 		methods: {
@@ -221,7 +221,7 @@
 
 				}, 1000);
 			},
-			
+
 
 			// 单选中某个单选框时，由radio时触发
 			radioChange(e) {
@@ -246,6 +246,7 @@
 			},
 			// 提交
 			submit() {
+			
 				if (this.all.type == 0) {
 					var befimg = this.img.join('|')
 					var afimg = this.imgs.join('|')
@@ -254,7 +255,9 @@
 						console.log(this.awarry);
 					})
 					this.serve = this.awarry.join('/')
-					
+					uni.showLoading({
+						title: "正在提交"
+					})
 					var _this = this;
 					uni.uploadFile({
 						url: 'http://110.187.88.70:21605/order/submitService', //仅为示例，非真实的接口地址
@@ -276,14 +279,22 @@
 							console.log(res);
 							uni.hideLoading()
 							if (JSON.parse(res.data).code == 2000) {
+
 								uni.showToast({
 									title: '提交成功'
 								})
+								uni.hideLoading()
 								uni.setStorageSync('number', '')
 								uni.setStorageSync('alls', '')
-								
+
 								uni.navigateTo({
 									url: '../../index/index'
+								})
+							} else {
+								uni.hideLoading()
+								uni.showToast({
+									icon: 'none',
+									title: res.data.message
 								})
 							}
 						}
@@ -291,7 +302,7 @@
 				} else if (this.all.type == 1) {
 					var befimg = this.img.join('|')
 					var afimg = this.imgs.join('|')
-					this.list.map(item=>{
+					this.list.map(item => {
 						this.abc.push(item.elderId)
 						console.log(this.abc);
 					})
@@ -302,7 +313,7 @@
 						console.log(this.awarry);
 					})
 					this.serve = this.awarry.join('/')
-						console.log(this.serve);
+					console.log(this.serve);
 					var _this = this;
 					uni.uploadFile({
 						url: 'http://110.187.88.70:21605/order/submitService', //仅为示例，非真实的接口地址
@@ -324,6 +335,7 @@
 							console.log(res);
 							uni.hideLoading()
 							if (JSON.parse(res.data).code == 2000) {
+									uni.hideLoading()
 								uni.showToast({
 									title: '提交成功'
 								})
@@ -332,6 +344,13 @@
 								uni.setStorageSync('old', '')
 								uni.navigateTo({
 									url: '../../index/index'
+								})
+							}
+							else {
+								uni.hideLoading()
+								uni.showToast({
+									icon: 'none',
+									title: res.data.message
 								})
 							}
 						}
@@ -343,6 +362,9 @@
 						this.awarry.push(item.name)
 					})
 					this.serve = this.awarry.join('/')
+					uni.showLoading({
+						title: "正在提交"
+					})
 					var _this = this;
 					uni.uploadFile({
 						url: 'http://110.187.88.70:21605/order/genActiveOrder', //仅为示例，非真实的接口地址
@@ -366,16 +388,23 @@
 								uni.showToast({
 									title: '提交成功'
 								})
+										uni.hideLoading()
 								uni.setStorageSync('number', '')
 								uni.setStorageSync('all', '')
 								uni.navigateTo({
 									url: '../../index/index'
 								})
+							}else {
+								uni.hideLoading()
+								uni.showToast({
+									icon: 'none',
+									title: res.data.message
+								})
 							}
 						}
 					});
 				}
-				
+
 
 			},
 			//获取房间内老人
@@ -391,10 +420,10 @@
 			},
 		},
 		mounted() {
-		
+
 		},
 		onLoad(option) {
-		
+
 			//保存服务对象详情
 			// this.alls = uni.getStorageSync('alls')
 			// console.log(this.alls);
@@ -406,7 +435,7 @@
 				//搜索页面传过来的数据
 				this.arrays = JSON.parse(option.search)
 				// console.log(this.arrays);
-				
+
 				// console.log(this.list);
 			} else if (option.data) {
 				//服务对象详情
@@ -414,27 +443,27 @@
 				console.log(this.all);
 				// uni.setStorageSync('alls', this.all)
 			}
-			
-				
-		
+
+
+
 		},
 		created() {
-		
+
 
 		},
 		onShow() {
 			//接收服务内容
 			this.number = uni.getStorageSync('number')
 			console.log(this.number)
-			if(uni.getStorageSync('old')){
+			if (uni.getStorageSync('old')) {
 				this.old = uni.getStorageSync('old')
-				this.list=this.list.concat(this.old)
+				this.list = this.list.concat(this.old)
 				console.log(this.list);
-						
-			}else{
-					
+
+			} else {
+
 			}
-			
+
 
 		},
 		onHide() {

@@ -57,34 +57,45 @@
 		data() {
 			return {
 				underway: [],
-				userInfo:'',//用户信息
+				userInfo: '', //用户信息
 			}
 		},
 		methods: {
 			goto(res) {
-				if(res.swipeCardStatus==1){
+				if (res.swipeCardStatus == 1) {
 					console.log(res);
 					uni.navigateTo({
 						url: '../seekHelp/registrations/registration?data=' + JSON.stringify(res)
 					})
-				}else if(res.swipeCardStatus==0){
+				} else if (res.swipeCardStatus == 0) {
 					uni.navigateTo({
 						url: '../seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(res)
 					})
 				}
-				
+
 			},
 			getlist() {
+				uni.showLoading({
+					title: "正在加载"
+				})
 				getunderway(
-				this.userInfo.regionId,
-				'2',
-				this.userInfo.id
+					this.userInfo.regionId,
+					'2',
+					this.userInfo.id
 				).then(res => {
-					if (res.data.code==2000) {
-						this.underway=res.data.data.orders
+					if (res.data.code == 2000) {
+						uni.hideLoading()
+						this.underway = res.data.data.orders
 						console.log(this.underway);
+					} else {
+						uni.hideLoading()
+						uni.showToast({
+							icon: 'none',
+							title: res.data.message
+						})
 					}
 				}).catch(err => {
+					uni.hideLoading()
 					console.log(err);
 				})
 			}

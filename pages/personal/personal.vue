@@ -2,29 +2,26 @@
 <template>
 	<view>
 		<!-- 头部 -->
-		<view class="head">
-			<view class="profilePhoto">
-				<view class="timg">
-					<image :src="this.userInfo.avatar" class="timgImg"></image>
+		<view class="headPortraitBox">
+			<view class="imgBox" @click="uploadPic">
+				<image :src="this.userInfo.avatar ? this.userInfo.avatar : headPortraitDefault" mode=""></image>
+				<view class="iconBox">
+					<image src="../../static/imgs/camera_fill.png" mode=""></image>
 				</view>
-				<!-- <view class="serial">
-					{{this.userInfo.name}}
-				</view> -->
-				<!-- <view class="flowBox" :style="{color:item.color}" v-if="item.show == 0" v-for="(item,index) in flow" :key='index'>
-					{{ item.title }}
-				</view> -->
-				<view class="flowBox box_1" v-if="this.userInfo.status == 0">
-					上班
-				</view>
-				<view class="flowBox box_2" v-else-if="this.userInfo.status == 1">
-					空闲
-				</view>
-				<view class="flowBox box_3" v-else-if="this.userInfo.status == 2">
-					忙碌
-				</view>
-				<view class="flowBox box_4" v-else-if="this.userInfo.status == 3">
-					下班
-				</view>
+			</view>
+		</view>
+		<view>
+			<view class="flowBox box_1" v-if="this.userInfo.status == 0">
+				上班
+			</view>
+			<view class="flowBox box_2" v-else-if="this.userInfo.status == 1">
+				空闲
+			</view>
+			<view class="flowBox box_3" v-else-if="this.userInfo.status == 2">
+				忙碌
+			</view>
+			<view class="flowBox box_4" v-else-if="this.userInfo.status == 3">
+				下班
 			</view>
 		</view>
 		<!-- 中间 -->
@@ -41,7 +38,7 @@
 				<view class="withoutLeft">
 					性别
 				</view>
-				<view class="withoutRight" v-if="this.userInfo.sex == 0 ">
+				<view class="withoutRight" v-if="this.userInfo.sex == 1 ">
 					女
 				</view>
 				<view class="withoutRight" v-else>
@@ -103,8 +100,9 @@
 		</view>
 		<!-- 弹出层 -->
 		<view class="">
-			
-			<u-popup v-model="show" mode="center" border-radius="30" :mask-close-able='close' :closeable='closeable' width="500rpx" height="400rpx">
+
+			<u-popup v-model="show" mode="center" border-radius="30" :mask-close-able='close' :closeable='closeable' width="500rpx"
+			 height="400rpx">
 				<view class="">
 					<view class="hint">
 						温馨提示
@@ -134,6 +132,8 @@
 				show: false,
 				closeable: false,
 				close: false,
+				headPortraitDefault: '../../static/imgs/xiangyous.png', //显示默认图片
+				uploadPicData: '', //上传图片数据
 				personal: [{
 					title: '修改密码',
 					imgs: '../../static/imgs/xiangyous.png'
@@ -150,6 +150,46 @@
 			}
 		},
 		methods: {
+			// 图片上传
+			uploadPic() {
+				uni.chooseImage({
+					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					success: (res) => {
+						const tempFilePaths = res.tempFilePaths;
+						this.userInfo.avatar = tempFilePaths[0]
+						this.uploadPicData = tempFilePaths[0]
+						var _this = this;
+						uni.showLoading({
+							title: '上传中'
+						});
+						// console.log(this.uploadPicData)
+						// if(this.uploadPicData){
+						uni.uploadFile({
+							url: 'http://110.187.88.70:21605/employee/upAvatar', //仅为示例，非真实的接口地址
+							filePath: this.uploadPicData,
+							name: 'file',
+							header: {
+								'Authorization': 'Bearer ' + _this.tokens
+							},
+							formData: {
+								type:'0',
+								id:this.userInfo.id
+							},
+							success: (res) => {
+								// var data = JSON.parse(res.data)
+								console.log(res);
+								uni.hideLoading()
+								uni.showToast({
+									title: '上传成功'
+								})
+								if (res.data.code == 2000) {
+									console.log(res);
+								}
+							}
+						});
+					}
+				});
+			},
 			//退出登录
 			goOut() {
 				// 清除token
@@ -478,5 +518,45 @@
 		font-size: 16px;
 		font-weight: 700;
 		color: #009c00;
+	}
+
+	//上传头像
+	.headPortraitBox {
+		height: 250upx;
+		display: flex;
+		justify-content: center;
+		position: relative;
+
+		.imgBox {
+			height: 180upx;
+			width: 180upx;
+			position: absolute;
+			bottom: 30upx;
+
+			image {
+				border-radius: 50%;
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+		.iconBox {
+			width: 60upx;
+			height: 60upx;
+			background: #FFE300;
+			border-radius: 50%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			position: absolute;
+			bottom: 0upx;
+			right: 0;
+
+			image {
+				border-radius: 0;
+				width: 36upx;
+				height: 36upx;
+			}
+		}
 	}
 </style>
