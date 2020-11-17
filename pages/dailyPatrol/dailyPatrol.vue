@@ -76,6 +76,9 @@
 				// })
 				
 				//接单  单号：前缀加单号  X 巡视  A报警 H协助
+				uni.showLoading({
+					title: '正在接取任务'
+				})
 				receiveOrder(
 					'X'+res.id,
 					this.userInfo.id
@@ -85,9 +88,10 @@
 							url: '../seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(res)
 						})
 					}else{
+						uni.hideLoading()
 						uni.showToast({
-							icon:'none',
-							title:res_1.data.message
+							icon: 'none',
+							title: res_1.data.message
 						})
 					}
 				})
