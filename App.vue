@@ -27,7 +27,7 @@ export default {
 			status = 1, 开启
 			status = -1, 检测失败
 			*/
-			console.log(JSON.stringify(result));
+			// console.log(JSON.stringify(result));
 			if(result.status == 0){
 				jyJPush.android_goToAppNotificationSettings(result=> {
 					console.log(JSON.stringify(result));

@@ -201,11 +201,11 @@
 			//获取registrationID
 			jyJPush.getRegistrationID(result => {
 				this.registrationID = result.registrationID
-				console.log(JSON.stringify(result));
-				uni.showToast({
-					icon: 'none',
-					title: JSON.stringify(result)
-				})
+				// console.log(JSON.stringify(result));
+				// uni.showToast({
+				// 	icon: 'none',
+				// 	title: JSON.stringify(result)
+				// })
 			});
 			//#endif
 		},

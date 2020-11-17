@@ -49,12 +49,14 @@ export function getsearchElder(regionId, searchContent) {
 
 
 //  巡视订单
-export function getTour(regionId,type, employeeId) {
+export function getTour(regionId,type, employeeId,currentPage) {
 	return http.get('/order', {
 		params: {
 			regionId, //区域id
 			type, 
 			employeeId,//员工id
+			currentPage,
+			pageSize:4
 		}
 	})
 }

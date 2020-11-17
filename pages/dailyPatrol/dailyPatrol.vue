@@ -65,8 +65,8 @@
 			return {
 				userInfo: '', //个人信息
 				underway: [],
-				awarry: [],
-				time: '',
+				currentPage:1,
+				pullTag:true,
 			}
 		},
 		methods: {
@@ -98,16 +98,23 @@
 				getTour(
 					this.userInfo.regionId,
 					'0',
-					this.userInfo.id
+					this.userInfo.id,
+					this.currentPage
 				).then(res => {
 					if (res.data.code == 2000) {
-						this.underway = res.data.data.tourOrders
-						console.log(this.underway);
-						this.underway.map(item => {
-							this.awarry.push(item.tourTime)
-							console.log(this.awarry);
-						})
-						this.time = this.awarry.toString()
+						if(res.data.data.tourOrders != 0){
+							this.underway = this.underway.concat(res.data.data.tourOrders) 
+						}else if(res.data.data.tourOrders.length == 0){
+							this.pullTag = false;
+							uni.showToast({
+								icon:'none',
+								title:'已经到底了＞﹏＜' 
+							})
+						}
+						
+						
+						// console.log(this.underway);
+					
 					}
 				})
 			},
@@ -139,6 +146,7 @@
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
 			// console.log(this.userInfo);
+			this.currentPage = 1;
 			this.getlist()
 		},
 		mounted() {
@@ -147,6 +155,14 @@
 		},
 		onLoad() {
 
+		},
+		onReachBottom() {
+			if(this.pullTag){
+				this.currentPage ++
+				this.getlist()
+			}
+			
+			
 		},
 		filters: {
 
