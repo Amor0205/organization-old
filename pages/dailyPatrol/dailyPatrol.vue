@@ -8,7 +8,7 @@
 						巡视有效时间 :
 					</view>
 					<view class="underwayRight">
-						{{item.tourTime}} 前
+						{{item.createTime}} 前
 					</view>
 				</view>
 				<view class="underway">
@@ -44,7 +44,7 @@
 						{{item.way}}
 					</view>
 				</view> -->
-		
+
 
 		</view>
 	</view>
@@ -65,8 +65,10 @@
 			return {
 				userInfo: '', //个人信息
 				underway: [],
-				currentPage:1,
-				pullTag:true,
+				currentPage: 1,
+				pullTag: true,
+				time: '', //当前时间戳
+				timer: [], //循环的时间
 			}
 		},
 		methods: {
@@ -74,20 +76,20 @@
 				// uni.navigateTo({
 				// 	url: '../seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(res)
 				// })
-				
+
 				//接单  单号：前缀加单号  X 巡视  A报警 H协助
 				uni.showLoading({
 					title: '正在接取任务'
 				})
 				receiveOrder(
-					'X'+res.id,
+					'X' + res.id,
 					this.userInfo.id
-				).then(res_1=>{
-					if(res_1.data.code == 2000){
+				).then(res_1 => {
+					if (res_1.data.code == 2000) {
 						uni.navigateTo({
 							url: '../seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(res)
 						})
-					}else{
+					} else {
 						uni.hideLoading()
 						uni.showToast({
 							icon: 'none',
@@ -95,7 +97,7 @@
 						})
 					}
 				})
-				
+
 			},
 			// 获取巡视订单列表
 			getlist() {
@@ -106,42 +108,43 @@
 					this.currentPage
 				).then(res => {
 					if (res.data.code == 2000) {
-						if(res.data.data.tourOrders != 0){
-							this.underway = this.underway.concat(res.data.data.tourOrders) 
-						}else if(res.data.data.tourOrders.length == 0){
+						console.log(res);
+						if (res.data.data.tourOrders != 0) {
+							this.underway = this.underway.concat(res.data.data.tourOrders)
+							this.underway.map(item => {
+								// this.timer.push(item.createTime)
+								// console.log(this.timer);
+								var timestamp3 = new Date(item.createTime).getTime(); // 结果：1477808630404 ，通过原型方法直接获得当前时间的毫秒值，准确
+								console.log(timestamp3);
+								//当前时间与接口时间作对比
+								if (this.time > timestamp3) {
+									item.state = '超时'
+								} else {
+									item.state = '未超时'
+								}
+							})
+						} else if (res.data.data.tourOrders.length == 0) {
 							this.pullTag = false;
 							uni.showToast({
-								icon:'none',
-								title:'没有更多任务了＞﹏＜' 
+								icon: 'none',
+								title: '没有更多任务了＞﹏＜'
 							})
 						}
-						
-						
+
+
 						// console.log(this.underway);
-					
+
 					}
 				})
 			},
-			getTime: function() {
-				var date = new Date(),
-					year = date.getFullYear(),
-					month = date.getMonth() + 1,
-					day = date.getDate(),
-					hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(),
-					minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes(),
-					second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-				month >= 1 && month <= 9 ? (month = "0" + month) : "";
-				day >= 0 && day <= 9 ? (day = "0" + day) : "";
-				var timer = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
-				console.log(timer);
-				return timer;
+	
 
 
-			},
-			
 		},
 		created() {
-			this.getTime()
+	
+
+
 		},
 		onShow() {
 			// 获取userInfo
@@ -149,6 +152,12 @@
 			// console.log(this.userInfo);
 			this.currentPage = 1;
 			this.getlist()
+			//获取的当前时间戳
+			this.time = Math.round(new Date())
+			console.log(this.time);
+
+
+
 		},
 		mounted() {
 
@@ -158,12 +167,12 @@
 
 		},
 		onReachBottom() {
-			if(this.pullTag){
-				this.currentPage ++
+			if (this.pullTag) {
+				this.currentPage++
 				this.getlist()
 			}
-			
-			
+
+
 		},
 		filters: {
 

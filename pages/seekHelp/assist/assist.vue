@@ -31,7 +31,7 @@
 							巡视时间段 :
 						</view>
 						<view class="underwayRight">
-							{{underway.beginTime}}前
+							{{underway.createTime}}前
 						</view>
 					</view>
 					<view class="underway">
@@ -39,7 +39,7 @@
 							任务类型:
 						</view>
 						<view class="underwayRight">
-							{{underway.typeDesc}}
+							{{underway.taskType}}
 						</view>
 					</view>
 					<!-- <view class="underway">

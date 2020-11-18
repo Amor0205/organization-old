@@ -22,11 +22,11 @@
 						巡视时间段:
 					</view>
 					<view class="underwayRight">
-						{{underway.tourTime}}前
+						{{underway.createTime}}前
 					</view>
 				</view>
 
-				<view class="underway" v-if="underway.type==0">
+				<view class="underway" >
 					<view class="underwayLeft">
 						任务类型:
 					</view>
@@ -70,7 +70,7 @@
 						任务开始时间:
 					</view>
 					<view class="underwayRight">
-						{{underway.beginTime}}
+						{{underway.createTime}}
 					</view>
 				</view>
 

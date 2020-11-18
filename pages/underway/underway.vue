@@ -16,7 +16,7 @@
 						任务开始时间 :
 					</view>
 					<view class="underwayRight">
-						{{item.beginTime}} 前
+						{{item.createTime}} 前
 					</view>
 				</view>
 				<view class="underway">
