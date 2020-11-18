@@ -150,7 +150,7 @@
 			}
 		},
 		methods: {
-			// 图片上传
+			// 头像上传
 			uploadPic() {
 				uni.chooseImage({
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
@@ -165,7 +165,7 @@
 						// console.log(this.uploadPicData)
 						// if(this.uploadPicData){
 						uni.uploadFile({
-							url: 'http://110.187.88.70:21605/employee/upAvatar', //仅为示例，非真实的接口地址
+							url: 'http://110.187.88.70:21605/elder/upAvatar', //仅为示例，非真实的接口地址
 							filePath: this.uploadPicData,
 							name: 'file',
 							header: {
@@ -176,14 +176,13 @@
 								id:this.userInfo.id
 							},
 							success: (res) => {
-								// var data = JSON.parse(res.data)
-								console.log(res);
 								uni.hideLoading()
-								uni.showToast({
-									title: '上传成功'
-								})
 								if (res.data.code == 2000) {
 									console.log(res);
+									this.getuser()
+									uni.showToast({
+										title: '上传成功'
+									})
 								}
 							}
 						});
@@ -298,7 +297,10 @@
 				this.duty = false;
 			}
 			console.log(this.userInfo);
-			this.getuser()
+			if(this.userInfo==''){
+				this.getuser()
+			}
+			
 		},
 		mounted() {},
 		onLoad() {
