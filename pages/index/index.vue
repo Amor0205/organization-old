@@ -36,6 +36,7 @@
 		props: {},
 		data() {
 			return {
+				userInfo:'',
 				statusBarHeights: '',
 				serve: [{
 					title: '进行中订单',
@@ -60,31 +61,39 @@
 		methods: {
 			// 按钮跳转
 			goTo(res) {
-				switch (res.title) {
-					case '进行中订单':
-						uni.navigateTo({
-							url: '../underway/underway'
-						})
-						break;
-					case '老人求助':
-						uni.navigateTo({
-							url: '../seekHelp/present/present'
-						})
-						break;
-					case '日常巡视':
-						uni.navigateTo({
-							url: '../dailyPatrol/dailyPatrol'
-
-						})
-						break;
-					case '主动服务':
-						uni.navigateTo({
-							url: '../initiative/initiative?'
-						})
-						break;
-					default:
-						break;
+				if(this.userInfo.status != 3){
+					switch (res.title) {
+						case '进行中订单':
+							uni.navigateTo({
+								url: '../underway/underway'
+							})
+							break;
+						case '老人求助':
+							uni.navigateTo({
+								url: '../seekHelp/present/present'
+							})
+							break;
+						case '日常巡视':
+							uni.navigateTo({
+								url: '../dailyPatrol/dailyPatrol'
+					
+							})
+							break;
+						case '主动服务':
+							uni.navigateTo({
+								url: '../initiative/initiative?'
+							})
+							break;
+						default:
+							break;
+					}
+				}else{
+					uni.showToast({
+						icon:'none',
+						title:'请先上班打卡，再进行操作！'
+					})
 				}
+				
 			},
 			personal() {
 				uni.navigateTo({
@@ -196,7 +205,9 @@
 			// #endif
 		},
 		onShow() {
-
+			if(uni.getStorageSync('userInfo')){
+				this.userInfo = uni.getStorageSync('userInfo')
+			}
 		},
 		filters: {
 

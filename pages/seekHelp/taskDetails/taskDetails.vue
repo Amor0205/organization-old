@@ -9,7 +9,7 @@
 			<!-- 被服务人员信息 -->
 			<view class="message">
 				<view class="headportrait">
-					<image src="../../../static/imgs/timg.jpg" class="headportraitImg"></image>
+					<image :src="underway.avatar?underway.avatar:imgUrl" class="headportraitImg"></image>
 				</view>
 				<view class="serial">
 					{{underway.elderName}}
@@ -57,7 +57,7 @@
 			<!-- 被服务人员信息 -->
 			<view class="message">
 				<view class="headportrait">
-					<image src="../../../static/imgs/timg.jpg" class="headportraitImg"></image>
+					<image :src="underway.avatar?underway.avatar:imgUrl" class="headportraitImg"></image>
 				</view>
 				<view class="serial">
 					{{underway.elderName}}
@@ -128,6 +128,7 @@
 		props: {},
 		data() {
 			return {
+				imgUrl:'../../../static/imgs/tou.png',
 				userInfo:'',
 				underway: '',
 			}

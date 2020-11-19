@@ -246,7 +246,7 @@
 			},
 			// 提交
 			submit() {
-			
+				console.log(this.all.type)
 				if (this.all.type == 0) {
 					var befimg = this.img.join('|')
 					var afimg = this.imgs.join('|')
@@ -272,7 +272,7 @@
 							afImages: afimg,
 							content: this.serve,
 							type: this.all.type,
-							elderId: this.all.elderId,
+							elderId: 0,
 							orderId: this.all.id,
 						},
 						success: (res) => {

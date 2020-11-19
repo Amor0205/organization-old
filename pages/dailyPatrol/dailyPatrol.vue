@@ -23,7 +23,10 @@
 					<view class="underwayLeft">
 						当前状态:
 					</view>
-					<view class="underwayRight">
+					<view class="underwayRight" v-if="item.state == '未超时' ">
+						{{item.state}}
+					</view>
+					<view class="underwayRight" v-else style="color: #cf441e;">
 						{{item.state}}
 					</view>
 				</view>
@@ -81,16 +84,17 @@
 				uni.showLoading({
 					title: '正在接取任务'
 				})
+				console.log('X' + res.id,this.userInfo.id);
 				receiveOrder(
 					'X' + res.id,
 					this.userInfo.id
 				).then(res_1 => {
+					uni.hideLoading()
 					if (res_1.data.code == 2000) {
 						uni.navigateTo({
 							url: '../seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(res)
 						})
 					} else {
-						uni.hideLoading()
 						uni.showToast({
 							icon: 'none',
 							title: res_1.data.message
@@ -147,6 +151,7 @@
 
 		},
 		onShow() {
+			this.underway = []
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
 			// console.log(this.userInfo);

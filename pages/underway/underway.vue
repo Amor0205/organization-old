@@ -83,12 +83,10 @@
 					'2',
 					this.userInfo.id
 				).then(res => {
+					uni.hideLoading()
 					if (res.data.code == 2000) {
-						uni.hideLoading()
 						this.underway = res.data.data.orders
-						console.log(this.underway);
 					} else {
-						uni.hideLoading()
 						uni.showToast({
 							icon: 'none',
 							title: res.data.message
