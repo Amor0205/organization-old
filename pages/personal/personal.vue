@@ -195,7 +195,7 @@
 				uni.setStorageSync('token', '')
 				// 清除userInfo
 				uni.setStorageSync("userInfo", '')
-				uni.navigateTo({
+				uni.reLaunch({
 					url: '../login/login'
 				})
 			},
