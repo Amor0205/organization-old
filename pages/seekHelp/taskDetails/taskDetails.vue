@@ -203,7 +203,7 @@
 					})
 					uni.navigateTo({
 						// url: '../registrations/registration',
-						url: '../registrations/registration?data=' + JSON.stringify(_this.underway)
+						url: '../registrations/registration?data=' + JSON.stringify(_this.underway)+'&flag=5'
 					})
 				}else if(type == 6){
 					uni.redirectTo({

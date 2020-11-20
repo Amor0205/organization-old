@@ -61,8 +61,8 @@
 				actionSheetShow: false, //选择单位弹框
 				registrationID:'',		//推送设备id
 				form: {
-					mobile: '15892716645',
-					password: '123456',
+					mobile: '',
+					password: '',
 
 				},
 

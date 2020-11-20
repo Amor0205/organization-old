@@ -11,7 +11,7 @@
 				<!-- 被服务人员信息 -->
 				<view class="message">
 					<view class="headportrait">
-						<image src="../../../static/imgs/timg.jpg" class="headportraitImg"></image>
+						<image :src="underway.avatar?underway.avatar:imgUrl" class="headportraitImg"></image>
 					</view>
 					<view class="serial">
 						{{underway.elderName}}
@@ -62,11 +62,10 @@
 			</view>
 
 			<view class="underwayItem" v-else>
-
 				<!-- 被服务人员信息 -->
 				<view class="message">
 					<view class="headportrait">
-						<image src="../../../static/imgs/timg.jpg" class="headportraitImg"></image>
+					<image :src="underway.avatar?underway.avatar:imgUrl" class="headportraitImg"></image>
 					</view>
 					<view class="serial">
 						{{underway.elderName}}
@@ -89,7 +88,15 @@
 							{{underway.createTime}}
 						</view>
 					</view>
-					<view class="underway">
+					<view class="underway" v-if="this.flag==5">
+						<view class="underwayLeft">
+							任务类型:
+						</view>
+						<view class="underwayRight">
+							{{underway.typeDesc}}
+						</view>
+					</view>
+					<view class="underway" v-else>
 						<view class="underwayLeft">
 							任务类型:
 						</view>
@@ -97,14 +104,25 @@
 							{{underway.taskType}}
 						</view>
 					</view>
-					<view class="underway">
-						<view class="underwayLeft">
+					
+					
+					<view class="underway" v-if="this.flag==5">
+						<!-- <view class="underwayLeft" >
 							求助方式:
 						</view>
 						<view class="underwayRight">
 							{{underway.helpMethod}}
-						</view>
+						</view> -->
 					</view>
+					<view class="underway" v-else>
+						<!-- <view class="underwayLeft" >
+							求助方式:
+						</view>
+						<view class="underwayRight">
+							{{underway.helpMethod}}
+						</view> -->
+					</view>
+					
 					<view class="underway">
 						<view class="underwayLeft">
 							求助位置:
@@ -165,6 +183,7 @@
 		props: {},
 		data() {
 			return {
+				imgUrl:'../../../static/imgs/tou.png',
 				show: false,
 				underway: '',
 				genres: [{
@@ -272,6 +291,8 @@
 		onLoad(option) {
 			this.underway = JSON.parse(option.data)
 			console.log(this.underway);
+			this.flag=option.flag
+			console.log(this.flag);
 
 		},
 

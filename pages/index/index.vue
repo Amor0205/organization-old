@@ -2,7 +2,7 @@
 	<view class="box">
 		<view class="top">
 			<view class="timg">
-				<image src="../../static/imgs/timg.jpg" class="timgImg"></image>
+				<image src="../../static/imgs/logo.png" class="timgImg"></image>
 			</view>
 			<view class="touxiang" @click="personal">
 				<image src='../../static/imgs/touxiang.png' class="touxiangImg"></image>
@@ -226,10 +226,18 @@
 
 <style scoped lang="scss">
 	.box {
-		// background-image: url(../../static/imgs/ss.jpg);
-		background-size: contain;
-		background-repeat:no-repeat;
-		// margin-top: 100rpx;
+		background-image: url(../../static/imgs/back.jpg);
+		  background-size: 100% 100%;
+		  background-position: center center;
+		  overflow: auto;
+		overflow: hidden;
+		height: 100%;
+		position: absolute;
+		left: 0px;
+		width: 100%;
+		top: 50%;
+		transform: translateY(-50%);
+		
 		.top {
 			display: flex;
 			justify-content: space-between;

@@ -2,7 +2,7 @@
     "name" : "机构养老-员工",
     "appid" : "__UNI__AB02923",
     "description" : "",
-    "versionName" : "1.0.7",
+    "versionName" : "1.1.0",
     "versionCode" : "100",
     "transformPx" : false,
     "app-plus" : {
@@ -77,6 +77,14 @@
                         "appkey_ios" : "15c4c242476ae6ddd4f8584c2dc74c3b",
                         "appkey_android" : "15c4c242476ae6ddd4f8584c2dc74c3b"
                     }
+                }
+            },
+            "icons" : {
+                "android" : {
+                    "hdpi" : "static/imgs/logo.png",
+                    "xhdpi" : "static/imgs/logo.png",
+                    "xxhdpi" : "static/imgs/logo.png",
+                    "xxxhdpi" : "static/imgs/logo.png"
                 }
             }
         },

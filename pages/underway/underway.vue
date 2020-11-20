@@ -65,7 +65,7 @@
 				if (res.swipeCardStatus == 1) {
 					console.log(res);
 					uni.navigateTo({
-						url: '../seekHelp/registrations/registration?data=' + JSON.stringify(res)
+						url: '../seekHelp/registrations/registration?data=' + JSON.stringify(res)+'&flag=5'
 					})
 				} else if (res.swipeCardStatus == 0) {
 					uni.navigateTo({
@@ -86,6 +86,7 @@
 					uni.hideLoading()
 					if (res.data.code == 2000) {
 						this.underway = res.data.data.orders
+						console.log(this.underway);
 					} else {
 						uni.showToast({
 							icon: 'none',
