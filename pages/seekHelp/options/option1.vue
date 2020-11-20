@@ -50,11 +50,11 @@
 					{
 					head: "卫生",
 					list: [
-						{
-							name: '吃饭1',
-							checked: false,
-							disabled: false
-						},
+						// {
+						// 	name: '吃饭1',
+						// 	checked: false,
+						// 	disabled: false
+						// },
 						
 						
 
@@ -127,7 +127,7 @@
 					if(res.data.code==2000){
 						console.log(res);
 						res.data.data.menus.map(res1=>{
-							this.itemList.push({head:res1.name,list:res1.children,checked:res1.checked,disabled:res1.disabled},)
+							this.itemList.push({head:res1.name,list:res1.children,checked:res1.checked==false,disabled:res1.disabled==false},)
 							console.log(this.itemList);
 						})
 						
