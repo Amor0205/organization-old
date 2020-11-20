@@ -26,6 +26,7 @@
 				}
 			}
 		},
+		
 		//忘记密码
 		{
 			"path": "pages/forget/forget",

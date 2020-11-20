@@ -9,14 +9,14 @@
 				<view class="input">
 					<u-form-item label="账号" label-position='top' prop="mobile" style="font-size: 18px;">
 						<view class="" style="width: 600rpx;height: 80rpx;">
-							<u-input v-model="form.mobile" type="mobile" placeholder='请输入登录账号' maxlength='11' class="input" />
+							<u-input v-model="form.mobile" type="mobile" placeholder='请输入登录账号' maxlength='11' class="input" :border='border'/>
 						</view>
 					</u-form-item>
 				</view>
 				<view class="">
 					<u-form-item label="密码" label-position='top' prop="password" style="font-size: 18px;">
 						<view class="" style="width: 600rpx;height: 80rpx;  ">
-							<u-input v-model="form.password" type="password" placeholder='请输入密码' maxlength='11' />
+							<u-input v-model="form.password" type="password" placeholder='请输入密码' maxlength='11' :border='border' />
 						</view>
 					</u-form-item>
 				</view>
@@ -60,9 +60,10 @@
 			return {
 				actionSheetShow: false, //选择单位弹框
 				registrationID:'',		//推送设备id
+				border:true,
 				form: {
-					mobile: '',
-					password: '',
+					mobile: '17360071277',//15892716646
+					password: '123456',//123456
 
 				},
 
@@ -116,7 +117,6 @@
 				uni.hideKeyboard();
 				this.form.sex = this.actionSheetList[index].text;
 			},
-
 			//点击登录
 			submit() {
 				this.$refs.uForm.validate(valid => {
@@ -138,31 +138,34 @@
 									uni.showToast({
 										title:'登录成功'
 									})
-									//#ifdef APP-PLUS
-									jPush(
-										res.data.data.info.id,
-										this.registrationID
-									).then(res1=>{
-										console.log(res)
-										if(res1.data.code == 2000){
-											console.log('推送绑定成功')
-										}
+									uni.redirectTo({
+										url:'../index/index'
 									})
+									//#ifdef APP-PLUS
+										jPush(
+											res.data.data.info.id,
+											this.registrationID
+										).then(res1=>{
+											console.log(res)
+											if(res1.data.code == 2000){
+												console.log('推送绑定成功')
+											}
+										})
 									//#endif
 									//保存token
 									uni.setStorageSync('token', res.data.data.token)
 									// 保存用户信息
 									uni.setStorageSync('userInfo', res.data.data.info)
 									// 登录成功 且没有特殊要求前往首页  tag = 0 返回上一页
-									if (this.tag == '' || this.tag == undefined) {
-										uni.reLaunch({
-											url: '../index/index'
-										})
-									} else if (this.tag == 0) {
-										uni.navigateBack({
-											delta: 1
-										})
-									}
+									// if (this.tag == '' || this.tag == undefined) {
+									// 	uni.reLaunch({
+									// 		url: '../index/index'
+									// 	})
+									// } else if (this.tag == 0) {
+									// 	uni.navigateBack({
+									// 		delta: 1
+									// 	})
+									// }
 								} else if (res.data.code == 4000) {
 									uni.showToast({
 										icon: "none",
@@ -188,6 +191,15 @@
 			forget() {
 				uni.navigateTo({
 					url: '../forget/forget'
+				})
+			}
+		},
+		created(){
+			//获取userInfo
+			if(uni.getStorageSync('userInfo')){
+				// console.log(1)
+				uni.redirectTo({
+					url:'../index/index'
 				})
 			}
 		},

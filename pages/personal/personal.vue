@@ -23,6 +23,9 @@
 			<view class="flowBox box_4" v-else-if="this.userInfo.status == 3">
 				下班
 			</view>
+			<view class="flowBox box_4" v-else-if="this.userInfo.status ==4 ">
+				等待刷卡
+			</view>
 		</view>
 		<!-- 中间 -->
 		<view class="middle">
@@ -91,7 +94,7 @@
 			<view class="outlogin" @click="goOut">
 				退出登录
 			</view>
-			<view class="offDuty" v-if='duty == true' @click="beDuty">
+			<view class="offDuty" v-if='this.userInfo.status == 3' @click="beDuty">
 				上班
 			</view>
 			<view class="offDutys" v-else @click="offDuty ">
@@ -282,7 +285,7 @@
 					this.userInfo.id
 				).then(res => {
 					if (res.data.code == 2000) {
-						console.log('获取用户信息')
+						console.log('重新获取用户信息',res.data.data.employee)
 						this.userInfo = res.data.data.employee
 						uni.setStorageSync('userInfo', res.data.data.employee)
 					}
@@ -290,17 +293,13 @@
 			}
 		},
 		created() {
-			// 获取userInfo
-			this.userInfo = uni.getStorageSync('userInfo')
 			// this.userInfo.avatar = 'http://' + this.userInfo.avatar
 			if (this.userInfo.status != 3) {
 				this.duty = false;
 			}
-			console.log(this.userInfo);
-			if(this.userInfo==''){
+			if(this.userInfo == ''){
 				this.getuser()
 			}
-			
 		},
 		mounted() {},
 		onLoad() {
@@ -325,27 +324,22 @@
 				 * 5求助订单刷卡  6协助订单刷卡 
 				 */
 
-				// if(type == 3){
 				// 	//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
-				// 	workStatus(
-				// 		_this.userInfo.id,
-				// 		1
-				// 	).then(res=>{
-				// 		console.log(res)
-				// 		if(res.data.code == 2000){
 				uni.showToast({
 					title: content,
 					icon: 'none'
 				})
 				_this.show = false;
+				_this.duty = false
 				_this.getuser()
-
-				// 		}
-				// 	})
-				// }
 			})
 			//#endif
 
+		},
+		onShow() {
+			// 获取userInfo
+			this.userInfo = uni.getStorageSync('userInfo')
+			this.getuser()
 		},
 		filters: {
 

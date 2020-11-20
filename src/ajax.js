@@ -101,7 +101,7 @@ export function getold(orderId) {
 	})
 }
 
-//  获取房间内老人
+//  获取用户信息
 export function getuserinfo(id) {
 	return http.get('/employee/findById', {
 		params: {

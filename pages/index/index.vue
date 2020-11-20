@@ -177,6 +177,7 @@
 			
 		},
 		created() {
+			console.log(uni.getStorageSync('token'))
 			uni.getSystemInfo({
 				success: function(res) {
 					// console.log(res.statusBarHeight);
@@ -190,8 +191,8 @@
 		},
 
 		onLoad() {
-			if( uni.getStorageSync('token').length == 0 ){
-				uni.navigateTo({
+			if( uni.getStorageSync('token').lenght == 0 ){
+				uni.redirectTo({
 					url: '../login/login'
 				})
 			}

@@ -39,7 +39,7 @@
 							任务类型:
 						</view>
 						<view class="underwayRight">
-							{{underway.taskType}}
+							{{underway.typeDesc}}
 						</view>
 					</view>
 					<!-- <view class="underway">

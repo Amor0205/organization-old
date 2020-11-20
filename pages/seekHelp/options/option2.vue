@@ -94,16 +94,8 @@
 			// 	}
 			// },
 			submit() {
-				// var select=true
-				// //获取当前页面（返回index页面）
-				// var pages = getCurrentPages(); //当前页
-				// //用scode来接收成功的值
-				// pages[0].$vm.select = true
-				// console.log(pages[0].select);
-				// setTimeout(() => {
-				// 		uni.navigateBack()
-				// }, 1500)
-					console.log(111);
+				
+						
 				this.number.map(item => {
 					this.awarry.push(item.name)
 					console.log(this.awarry);
@@ -112,10 +104,10 @@
 				console.log(this.number);
 				console.log(this.serve);
 				postRelease(
-					this.all.ordId,
+					this.all.id,
 					this.all.type,
 					'',
-					this.serve
+					'带上碗'
 				).then(res => {
 					if (res.data.code == 2000) {
 						console.log(res);
@@ -138,26 +130,17 @@
 				})
 
 
-				// if (this.ids.id == 2) {
-
-
-				// } else  {
-				// 	uni.setStorageSync('number', this.number)
-				// 	uni.navigateTo({
-				// 		url: './write'
-				// 	})
-
-				// }
+		
 
 
 			},
 			getlist(){
 				getcontent().then(res=>{
 					if(res.data.code==2000){
-						console.log(res);
+						// console.log(res);
 						res.data.data.menus.map(res1=>{
 							this.itemList.push({head:res1.name,list:res1.children,checked:res1.checked==false,disabled:res1.disabled==false},)
-							console.log(this.itemList);
+							// console.log(this.itemList);
 						})
 						
 					}
