@@ -110,6 +110,15 @@ export function getuserinfo(id) {
 	})
 }
 
+//  获取服务内容
+export function getcontent() {
+	return http.get('/serviceContent', {
+		params: {
+			
+		}
+	})
+}
+
 
 
 

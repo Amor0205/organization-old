@@ -1,6 +1,6 @@
 <template>
 
-	<view class="">
+	<view class="box">
 		<view class="scripts">
 			福利院员工系统
 		</view>
@@ -228,6 +228,19 @@
 </script>
 
 <style scoped lang="scss">
+	.box{
+		background-image: url(../../static/imgs/back.jpg);
+		  background-size: 100% 100%;
+		  background-position: center center;
+		  overflow: auto;
+		overflow: hidden;
+		height: 100%;
+		position: absolute;
+		left: 0px;
+		width: 100%;
+		top: 50%;
+		transform: translateY(-50%);
+	}
 	.scripts {
 		text-align: center;
 		font-size: 22px;

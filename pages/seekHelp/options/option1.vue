@@ -5,7 +5,7 @@
 		<view class="centreBox">
 			<view class="collapse">
 				<u-collapse>
-					<u-collapse-item :title="item.head" v-for="(item, index) in itemList" :key="index" :open="item.open" :disabled="item.disabled"
+					<u-collapse-item :title="item.name" v-for="(item, index) in itemList" :key="index" :open="item.open" :disabled="item.disabled"
 					 class="itemList">
 						<u-checkbox-group @change="checkboxGroupChange" v-for="(item1,index1) in item.list" :key="index1">
 							<u-checkbox @change="checkboxChange" v-model="item1.checked" :name="item1.name" shape="circle" active-color='#FFE300' class="u-checkbox">
@@ -42,93 +42,24 @@
 </template>
 
 <script>
+	import{ getcontent } from '../../../src/ajax.js'
 	export default {
 		data() {
 			return {
-				itemList: [{
+				itemList: [
+					{
 					head: "卫生",
-					list: [{
+					list: [
+						{
 							name: '吃饭1',
 							checked: false,
 							disabled: false
 						},
-						{
-							name: '饮水2',
-							checked: false,
-							disabled: false
-						}, {
-							name: '被套清洁3',
-							checked: false,
-							disabled: false
-						}, {
-							name: '被套清洁3',
-							checked: false,
-							disabled: false
-						}, {
-							name: '被套清洁3',
-							checked: false,
-							disabled: false
-						},
+						
+						
 
 					]
-				}, {
-					head: "清洁",
-					list: [{
-							name: '打游戏',
-							checked: false,
-							disabled: false
-						},
-						{
-							name: '上网',
-							checked: false,
-							disabled: false
-						}, {
-							name: '洗衣服',
-							checked: false,
-							disabled: false
-						},
-
-					],
-					open: false,
-				}, {
-					head: "饮食",
-					list: [{
-							name: '品古董',
-							checked: false,
-							disabled: false
-						},
-						{
-							name: '京东',
-							checked: false,
-							disabled: false
-						}, {
-							name: '淘宝',
-							checked: false,
-							disabled: false
-						},
-
-					],
-					open: false,
-				}, {
-					head: "药品",
-					list: [{
-							name: '爱奇艺',
-							checked: false,
-							disabled: false
-						},
-						{
-							name: '优酷',
-							checked: false,
-							disabled: false
-						}, {
-							name: '腾讯',
-							checked: false,
-							disabled: false
-						},
-
-					],
-					open: false,
-				}],
+				},],
 				rSelect: [], //点击标签添加的数组
 				number: [],
 				ids: '', //接收穿过来数据里面的flag
@@ -190,15 +121,30 @@
 				uni.navigateBack({
 
 				})
+			},
+			getlist(){
+				getcontent().then(res=>{
+					if(res.data.code==2000){
+						console.log(res);
+						res.data.data.menus.map(res1=>{
+							this.itemList.push({head:res1.name,list:res1.children,checked:res1.checked,disabled:res1.disabled},)
+							console.log(this.itemList);
+						})
+						
+						
+					
+						
+					}
+				})
 			}
 
 
 		},
 		created() {
-
+			this.getlist()
 		},
 		mounted() {
-
+	
 		},
 		onLoad() {
 
