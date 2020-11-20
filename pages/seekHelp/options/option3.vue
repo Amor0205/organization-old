@@ -43,87 +43,12 @@
 </template>
 
 <script>
-	import{postRelease} from '../../../src/ajax.js'
+	import{postRelease,getcontent} from '../../../src/ajax.js'
 	export default {
 		data() {
 			return {
 
-				itemList: [{
-					head: "卫生",
-					list: [{
-							name: '吃饭1',
-							checked: false,
-							disabled: false
-						},
-						{
-							name: '饮水2',
-							checked: false,
-							disabled: false
-						}, {
-							name: '被套清洁3',
-							checked: false,
-							disabled: false
-						},
-
-					]
-				}, {
-					head: "清洁",
-					list: [{
-							name: '打游戏',
-							checked: false,
-							disabled: false
-						},
-						{
-							name: '上网',
-							checked: false,
-							disabled: false
-						}, {
-							name: '洗衣服',
-							checked: false,
-							disabled: false
-						},
-
-					],
-					open: false,
-				}, {
-					head: "饮食",
-					list: [{
-							name: '品古董',
-							checked: false,
-							disabled: false
-						},
-						{
-							name: '京东',
-							checked: false,
-							disabled: false
-						}, {
-							name: '淘宝',
-							checked: false,
-							disabled: false
-						},
-
-					],
-					open: false,
-				}, {
-					head: "药品",
-					list: [{
-							name: '爱奇艺',
-							checked: false,
-							disabled: false
-						},
-						{
-							name: '优酷',
-							checked: false,
-							disabled: false
-						}, {
-							name: '腾讯',
-							checked: false,
-							disabled: false
-						},
-
-					],
-					open: false,
-				}],
+				itemList: [],
 				rSelect: [], //点击标签添加的数组
 				number: [],
 				ids: '', //接收穿过来数据里面的flag
@@ -164,9 +89,21 @@
 					this.rSelect.splice(this.rSelect.indexOf(e), 1); //取消
 				}
 			},
+			//获取服务列表
+			getlist(){
+				getcontent().then(res=>{
+					if(res.data.code==2000){
+						console.log(res);
+						res.data.data.menus.map(res1=>{
+							this.itemList.push({head:res1.name,list:res1.children,checked:res1.checked==false,disabled:res1.disabled==false},)
+							console.log(this.itemList);
+						})
+						
+					}
+				})
+			},
 			//提交服务
 			submit() {
-				
 				this.number.map(item => {
 					this.awarry.push(item.name)
 					console.log(this.awarry);
@@ -176,7 +113,7 @@
 				postRelease(
 					this.all.id,
 					this.all.type,
-						this.order.id,
+					this.order.id,
 					this.serve
 				).then(res => {
 					if (res.data.code == 2000) {
@@ -205,7 +142,7 @@
 
 		},
 		mounted() {
-
+		this.getlist()
 		},
 		onLoad(option) {
 			this.order=JSON.parse(option.exhibit)

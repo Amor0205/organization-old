@@ -5,7 +5,7 @@
 		<view class="centreBox">
 			<view class="collapse">
 				<u-collapse>
-					<u-collapse-item :title="item.name" v-for="(item, index) in itemList" :key="index" :open="item.open" :disabled="item.disabled"
+					<u-collapse-item :title="item.head" v-for="(item, index) in itemList" :key="index" :open="item.open" :disabled="item.disabled"
 					 class="itemList">
 						<u-checkbox-group @change="checkboxGroupChange" v-for="(item1,index1) in item.list" :key="index1">
 							<u-checkbox @change="checkboxChange" v-model="item1.checked" :name="item1.name" shape="circle" active-color='#FFE300' class="u-checkbox">
@@ -47,19 +47,7 @@
 		data() {
 			return {
 				itemList: [
-					{
-					head: "卫生",
-					list: [
-						// {
-						// 	name: '吃饭1',
-						// 	checked: false,
-						// 	disabled: false
-						// },
-						
-						
-
-					]
-				},],
+				],
 				rSelect: [], //点击标签添加的数组
 				number: [],
 				ids: '', //接收穿过来数据里面的flag
