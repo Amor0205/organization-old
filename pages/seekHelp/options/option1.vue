@@ -131,9 +131,6 @@
 							console.log(this.itemList);
 						})
 						
-						
-					
-						
 					}
 				})
 			}
