@@ -31,7 +31,7 @@
 						当前状态： 忙碌
 					</view>
 					<view class="text" v-else-if="item.status == 3">
-					{{this.exhibit.status}}
+						{{this.exhibit.status}}
 					</view>
 				</view>
 			</view>
@@ -82,15 +82,18 @@
 			//点击搜索触发
 			confirm(e) {
 				uni.hideKeyboard(); //隐藏软键盘
+				uni.showLoading({
+					title: '正在搜索'
+				})
 				getsearchEmployee(
 					'100',
 					this.inputValue
 				).then(res => {
-					console.log(res);
 					if (res.data.code === 2000) {
 						this.exhibit = res.data.data.employees
-						console.log(this.exhibit);
+						uni.hideLoading()
 					} else {
+						uni.hideLoading()
 						uni.showToast({
 							icon: 'none',
 							title: res.data.data.message
@@ -124,6 +127,7 @@
 <style lang="scss">
 	.containerBox {
 		.head {
+				font-size: 20px;
 			padding: 20rpx 0rpx 0rpx 20rpx;
 		}
 

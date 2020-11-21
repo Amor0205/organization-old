@@ -51,8 +51,7 @@
 		data() {
 			return {
 
-				itemList: [
-					],
+				itemList: [],
 				rSelect: [], //点击标签添加的数组
 				number: [],
 				ids: '', //接收穿过来数据里面的flag
@@ -94,8 +93,9 @@
 			// 	}
 			// },
 			submit() {
-				
-						
+				uni.showLoading({
+					title: '正在提交'
+				})
 				this.number.map(item => {
 					this.awarry.push(item.name)
 					console.log(this.awarry);
@@ -107,42 +107,45 @@
 					this.all.id,
 					this.all.type,
 					'',
-					'带上碗'
+					this.serve
 				).then(res => {
 					if (res.data.code == 2000) {
-						console.log(res);
+						uni.hideLoading()
 						uni.showToast({
-							title:'提交成功'
+							title: '提交成功'
 						})
 						uni.setStorageSync('number', this.number)
 						uni.navigateTo({
-							url: '../assist/assist?all='+JSON.stringify(this.all)
+							url: '../assist/assist?all=' + JSON.stringify(this.all)
 						})
-						
+
 					} else {
+						uni.hideLoading()
 						uni.showToast({
 							icon: 'none',
 							title: res.data.data.message
 						})
 					}
 				}).catch(err => {
+					uni.hideLoading()
 					console.log(err);
 				})
 
-
-		
-
-
 			},
-			getlist(){
-				getcontent().then(res=>{
-					if(res.data.code==2000){
+			getlist() {
+				getcontent().then(res => {
+					if (res.data.code == 2000) {
 						// console.log(res);
-						res.data.data.menus.map(res1=>{
-							this.itemList.push({head:res1.name,list:res1.children,checked:res1.checked==false,disabled:res1.disabled==false},)
+						res.data.data.menus.map(res1 => {
+							this.itemList.push({
+								head: res1.name,
+								list: res1.children,
+								checked: res1.checked == false,
+								disabled: res1.disabled == false
+							}, )
 							// console.log(this.itemList);
 						})
-						
+
 					}
 				})
 			}
@@ -153,7 +156,7 @@
 
 		},
 		mounted() {
-		this.getlist()
+			this.getlist()
 		},
 		onLoad(option) {
 			// console.log(option);
@@ -163,7 +166,7 @@
 			console.log(this.all);
 			// this.exhibits= JSON.parse(option.exhibit)
 			// console.log(this.exhibits);
-			
+
 
 		}
 

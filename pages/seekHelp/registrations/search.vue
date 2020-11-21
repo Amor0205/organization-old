@@ -16,12 +16,13 @@
 			</view>
 		</view>
 		<!--   -->
-		<view class="Exhibition" >
+		<view class="Exhibition">
 			<view class="" v-for="(item,index) in elders" :key='index'>
 				<view class="exhibit" @click="goto(item)">
 					<view class="">
-						名字:  {{item.elderName}}
-					</view><view class="">
+						名字: {{item.elderName}}
+					</view>
+					<view class="">
 						床位: {{item.bedName}}
 					</view>
 				</view>
@@ -40,9 +41,9 @@
 			return {
 				inputValue: '', //input数据
 				showDeletd: false,
-				userInfo:'',//用户数据
-				elders:'',//搜索获取的数据
-				
+				userInfo: '', //用户数据
+				elders: '', //搜索获取的数据
+
 			};
 		},
 
@@ -72,14 +73,45 @@
 				this.inputValue = "";
 				this.showDeletd = false;
 			},
-			
-			//点击搜索触发			confirm(e) {				uni.hideKeyboard(); //隐藏软键盘				getsearchElder(					this.userInfo.regionId,					this.inputValue				).then(res => {
-					// console.log(res);					if (res.data.code === 2000) {						this.elders = res.data.data.elders						// console.log(this.elders);					} else {						uni.showToast({							icon: 'none',							title: res.data.data.message						})					}				})			},
-		//点击跳转到填写服务详情页面			goto(res) {				// console.log(res);				// this.array.push(res);				// console.log(this.array);				// uni.setStorageSync('array', res)				// uni.navigateTo({				// 	url: './write'									// })
-					uni.setStorageSync('old',res)
+
+			//点击搜索触发
+			confirm(e) {
+				uni.hideKeyboard(); //隐藏软键盘
+				uni.showLoading({
+					title: '正在搜索'
+				})
+				getsearchElder(
+					this.userInfo.regionId,
+					this.inputValue
+				).then(res => {
+					// console.log(res);
+					if (res.data.code === 2000) {
+						this.elders = res.data.data.elders
+						uni.hideLoading()
+					} else {
+						uni.hideLoading()
+						uni.showToast({
+							icon: 'none',
+							title: res.data.data.message
+						})
+					}
+				})
+			},
+			//点击跳转到填写服务详情页面
+			goto(res) {
+				// console.log(res);
+				// this.array.push(res);
+				// console.log(this.array);
+				// uni.setStorageSync('array', res)
+				// uni.navigateTo({
+				// 	url: './write'	
+
+				// })
+				uni.setStorageSync('old', res)
 				uni.navigateBack({
-					
-				})			}
+
+				})
+			}
 		},
 
 		created() {
@@ -106,7 +138,7 @@
 	.containerBox {
 		.head {
 			font-size: 20px;
-			padding:30rpx 0rpx 0rpx 20rpx;
+			padding: 30rpx 0rpx 0rpx 20rpx;
 		}
 
 		font-size: 14px;
@@ -176,7 +208,7 @@
 				flex-direction: column;
 				justify-content: space-around;
 				padding-left: 20rpx;
-				
+
 			}
 
 			.text {

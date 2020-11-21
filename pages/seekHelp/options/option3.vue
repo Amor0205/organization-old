@@ -104,6 +104,9 @@
 			},
 			//提交服务
 			submit() {
+				uni.showLoading({
+					title: '正在提交'
+				})
 				this.number.map(item => {
 					this.awarry.push(item.name)
 					console.log(this.awarry);
@@ -117,6 +120,7 @@
 					this.serve
 				).then(res => {
 					if (res.data.code == 2000) {
+							uni.hideLoading()
 						uni.showToast({
 							title: '提交成功'
 						})
@@ -125,14 +129,17 @@
 							url: '../assist/assist?all=' + JSON.stringify(this.all)
 						})
 					} else {
+							uni.hideLoading()
 						uni.showToast({
 							icon: 'none',
 							title: res.data.data.message
 						})
 					}
 				}).catch(err => {
+					uni.hideLoading()
 					console.log(err);
 				})
+				
 			}
 
 

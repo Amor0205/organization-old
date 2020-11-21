@@ -1,6 +1,9 @@
 <!-- 进行中订单 -->
 <template>
 	<view class="box">
+		<view class="hint" v-if="!underway.length">
+			暂无进行中订单
+		</view>
 		<view class="underwayItem" v-for="(item,index) in underway" :key='index'>
 			<view class="">
 				<view class="underway">
@@ -65,7 +68,7 @@
 				if (res.swipeCardStatus == 1) {
 					console.log(res);
 					uni.navigateTo({
-						url: '../seekHelp/registrations/registration?data=' + JSON.stringify(res)+'&flag=5'
+						url: '../seekHelp/registrations/registration?data=' + JSON.stringify(res) + '&flag=5'
 					})
 				} else if (res.swipeCardStatus == 0) {
 					uni.navigateTo({
@@ -170,5 +173,17 @@
 			// color: #4b4b4b;
 			// border: 1rpx solid gray;
 		}
+	}
+	//暂无订单
+	.hint{
+		font-size: 50rpx;
+		font-weight: bold;
+		text-align: center;
+		color: #cecece;
+		width: 400rpx;
+		position: absolute;
+		top: 35%;
+		left: 50%;
+		margin-left: -200rpx;
 	}
 </style>

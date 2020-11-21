@@ -279,14 +279,14 @@
 							console.log(res);
 							uni.hideLoading()
 							if (JSON.parse(res.data).code == 2000) {
-
 								uni.showToast({
 									title: '提交成功'
 								})
 								uni.hideLoading()
 								uni.setStorageSync('number', '')
+								uni.setStorageSync('all', '')
+								uni.setStorageSync('old', '')
 								uni.setStorageSync('alls', '')
-
 								uni.navigateTo({
 									url: '../../index/index'
 								})
@@ -300,6 +300,9 @@
 						}
 					});
 				} else if (this.all.type == 1) {
+					uni.showLoading({
+						title: "正在提交"
+					})
 					var befimg = this.img.join('|')
 					var afimg = this.imgs.join('|')
 					this.list.map(item => {
@@ -335,18 +338,17 @@
 							console.log(res);
 							uni.hideLoading()
 							if (JSON.parse(res.data).code == 2000) {
-									uni.hideLoading()
 								uni.showToast({
 									title: '提交成功'
 								})
+								uni.hideLoading()
 								uni.setStorageSync('number', '')
 								uni.setStorageSync('all', '')
 								uni.setStorageSync('old', '')
 								uni.navigateTo({
 									url: '../../index/index'
 								})
-							}
-							else {
+							} else {
 								uni.hideLoading()
 								uni.showToast({
 									icon: 'none',
@@ -388,13 +390,14 @@
 								uni.showToast({
 									title: '提交成功'
 								})
-										uni.hideLoading()
+								uni.hideLoading()
 								uni.setStorageSync('number', '')
 								uni.setStorageSync('all', '')
+								uni.setStorageSync('old', '')
 								uni.navigateTo({
 									url: '../../index/index'
 								})
-							}else {
+							} else {
 								uni.hideLoading()
 								uni.showToast({
 									icon: 'none',

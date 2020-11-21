@@ -1,6 +1,9 @@
 <!-- 日常巡视 -->
 <template>
 	<view class="box">
+		<view class="hint" v-if="!underway.length">
+			暂无巡视任务
+		</view>
 		<view class="underwayItem" v-for="(item,index) in underway" :key='index'>
 			<view class="" @click="goTo(item)">
 				<view class="underway">
@@ -127,7 +130,7 @@
 									item.state = '未超时'
 								}
 							})
-						} else if (res.data.data.tourOrders.length == 0) {
+						} else if (res.data.data.tourOrders.length == 0 ) {
 							this.pullTag = false;
 							uni.showToast({
 								icon: 'none',
@@ -235,5 +238,17 @@
 			padding-top: 20rpx;
 			line-height: 50rpx;
 		}
+	}
+	//暂无订单
+	.hint{
+		font-size: 50rpx;
+		font-weight: bold;
+		text-align: center;
+		color: #cecece;
+		width: 400rpx;
+		position: absolute;
+		top: 35%;
+		left: 50%;
+		margin-left: -200rpx;
 	}
 </style>

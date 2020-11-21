@@ -1,6 +1,9 @@
 <!-- 老人求助 -->
 <template>
 	<view class="box">
+		<view class="hint" v-if="!underway.length">
+			暂无求助任务
+		</view>
 		<view class="underwayItem" v-for="(item,index) in underway" :key='index'>
 			<view class="">
 				<view class="underway">
@@ -109,8 +112,8 @@
 					'1',
 					this.userInfo.id
 				).then(res => {
+					uni.hideLoading()
 					if (res.data.code == 2000) {
-						uni.hideLoading()
 						this.underway = res.data.data.alarmLogs
 						console.log(this.underway);
 					} else {
@@ -118,8 +121,10 @@
 							icon: 'none',
 							title: res.data.message
 						})
-						uni.hideLoading()
 					}
+				}).catch(err => {
+					uni.hideLoading()
+					console.log(err);
 				})
 			}
 		},
@@ -194,5 +199,17 @@
 			border-radius: 40rpx;
 			color: #4b4b4b;
 		}
+	}
+	//暂无订单
+	.hint{
+		font-size: 50rpx;
+		font-weight: bold;
+		text-align: center;
+		color: #cecece;
+		width: 400rpx;
+		position: absolute;
+		top: 35%;
+		left: 50%;
+		margin-left: -200rpx;
 	}
 </style>

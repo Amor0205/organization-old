@@ -64,30 +64,7 @@
 					<image :src="item.imgs" class="rightwardsImg"></image>
 				</view>
 			</view>
-			<!-- <view class="without">
-				<view class="withoutLeft">
-					关于我们
-				</view>
-				<view class="rightwards">
-					<image src="../../static/imgs/xiangyous.png" class="rightwardsImg"></image>
-				</view>
-			</view>
-			<view class="without">
-				<view class="withoutLeft">
-					巡视已完成订单
-				</view>
-				<view class="rightwards">
-					<image src="../../static/imgs/xiangyous.png" class="rightwardsImg"></image>
-				</view>
-			</view>
-			<view class="without">
-				<view class="withoutLeft">
-					求助已完成订单
-				</view>
-				<view class="rightwards">
-					<image src="../../static/imgs/xiangyous.png" class="rightwardsImg"></image>
-				</view>
-			</view> -->
+		
 		</view>
 		<!-- 底部 -->
 		<view class="base">
@@ -140,13 +117,16 @@
 				personal: [{
 					title: '修改密码',
 					imgs: '../../static/imgs/xiangyous.png'
-				}, {
-					title: '巡视已完成订单',
-					imgs: '../../static/imgs/xiangyous.png'
-				}, {
-					title: '求助已完成订单',
-					imgs: '../../static/imgs/xiangyous.png'
-				}, {
+				}, 
+				// {
+				// 	title: '巡视已完成订单',
+				// 	imgs: '../../static/imgs/xiangyous.png'
+				// },
+				// {
+				// 	title: '求助已完成订单',
+				// 	imgs: '../../static/imgs/xiangyous.png'
+				// }, 
+				{
 					title: '关于我们',
 					imgs: '../../static/imgs/xiangyous.png'
 				}, ]
