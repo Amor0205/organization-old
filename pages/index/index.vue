@@ -177,7 +177,7 @@
 			
 		},
 		created() {
-			console.log(uni.getStorageSync('token'))
+			// console.log(uni.getStorageSync('token'))
 			uni.getSystemInfo({
 				success: function(res) {
 					// console.log(res.statusBarHeight);

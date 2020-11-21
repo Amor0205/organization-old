@@ -27,17 +27,17 @@
 						任务类型:
 					</view>
 					<view class="underwayRight">
-						{{item.taskType}}
+						{{item.content}}
 					</view>
 				</view>
-				<view class="underway">
+				<!-- <view class="underway">
 					<view class="underwayLeft">
 						求助方式:
 					</view>
 					<view class="underwayRight">
 						{{item.helpMethod}}
 					</view>
-				</view>
+				</view> -->
 				<view class="underway">
 					<view class="underwayLeft">
 						求助位置:
@@ -98,8 +98,6 @@
 						})
 					}
 				})
-
-
 
 			},
 			// 获取求助列表

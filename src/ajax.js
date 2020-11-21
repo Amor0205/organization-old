@@ -174,11 +174,11 @@ export function jPush(employeeId,registrationId) {
 }
 
 //发起请求协助
-export function postRelease(orderId,parentOrderType,content) {
+export function postRelease(orderId,parentOrderType,receiveEmpId,content) {
 	return http.post('/order/colleagueAssistance', {
 		orderId,
 		parentOrderType,
-		receiveEmpId:null,
+		receiveEmpId,
 		content
 	})
 }

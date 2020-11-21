@@ -13,7 +13,7 @@
 			<!-- 选择服务对象 -->
 			<view class="session">
 				<view class="">
-					请选择接受服务的对象:
+				请选择接受服务的对象:
 				</view>
 				<view class="" @click="Others">
 					搜索其他人？

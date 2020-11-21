@@ -28,18 +28,34 @@
 					</view> -->
 					<view class="underway">
 						<view class="underwayLeft">
-							巡视时间段 :
+							任务时间 :
 						</view>
 						<view class="underwayRight">
-							{{underway.createTime}}前
+							{{underway.createTime}}
 						</view>
 					</view>
-					<view class="underway">
+					<view class="underway" v-if='underway.type==0'>
 						<view class="underwayLeft">
 							任务类型:
 						</view>
 						<view class="underwayRight">
-							{{underway.typeDesc}}
+							{{underway.content}}
+						</view>
+					</view>
+					<view class="underway" v-else-if='underway.type==1'>
+						<view class="underwayLeft">
+							任务类型:
+						</view>
+						<view class="underwayRight">
+							{{underway.content}}
+						</view>
+					</view>
+					<view class="underway" v-else-if='underway.type==2'>
+						<view class="underwayLeft">
+							任务类型:
+						</view>
+						<view class="underwayRight">
+							{{underway.content}}
 						</view>
 					</view>
 					<!-- <view class="underway">
@@ -75,7 +91,7 @@
 				<view class="wait">正等待同事接单</view>
 			</view>
 		</view>
-		
+
 	</view>
 </template>
 
@@ -88,18 +104,18 @@
 		props: {},
 		data() {
 			return {
-				imgUrl:'../../../static/imgs/tou.png',
+				imgUrl: '../../../static/imgs/tou.png',
 				underway: '',
-				serves:'',
-				userInfo:'',
-				helper:'',
+				serves: '',
+				userInfo: '',
+				helper: '',
 			}
 		},
 		methods: {
 			goto() {
-					// this.serves = !this.serves
+				// this.serves = !this.serves
 			},
-			gotos(){
+			gotos() {
 				// uni.navigateTo({
 				// 	url: '../registrations/write?data=' + JSON.stringify(this.underway)
 				// })
@@ -115,21 +131,21 @@
 		onLoad(option) {
 			this.underway = JSON.parse(option.all)
 			console.log(this.underway);
-			
+
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
 			//#ifdef APP-PLUS
 			var jyJPush = this.jyJPush;
 			var _this = this;
 			//监听透传
-			jyJPush.addJYJPushCustomReceiveNotificationListener(result=> {
-			//  监听成功后，若收到推送，会在result返回对应的数据
-				var type 
+			jyJPush.addJYJPushCustomReceiveNotificationListener(result => {
+				//  监听成功后，若收到推送，会在result返回对应的数据
+				var type
 				var content
-				if(JSON.parse(result.extra).type){
+				if (JSON.parse(result.extra).type) {
 					type = JSON.parse(result.extra).type
 				}
-				if(JSON.parse(result.extra).content){
+				if (JSON.parse(result.extra).content) {
 					content = JSON.parse(result.extra).content
 				}
 				console.log(result)
@@ -138,19 +154,19 @@
 				 * 3上班刷卡成功 4巡视订单刷卡
 				 * 5求助订单刷卡  6协助订单刷卡 7反馈协助者接单 8协助者刷卡成功
 				 */
-				if(type == 0){
+				if (type == 0) {
 					//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
 					workStatus(
 						_this.userInfo.id,
 						2
-					).then(res=>{
+					).then(res => {
 						console.log(res)
-						if(res.data.code == 2000){
+						if (res.data.code == 2000) {
 							_this.userInfo.status = 2;
-							uni.setStorageSync('userInfo',_this.userInfo)
+							uni.setStorageSync('userInfo', _this.userInfo)
 							uni.showToast({
-								title:content+'成功' ,
-								icon:'none'
+								title: content + '成功',
+								icon: 'none'
 							})
 							uni.navigateTo({
 								// url: '../registrations/registration',
@@ -158,21 +174,21 @@
 							})
 						}
 					})
-				}else if(type == 7){
+				} else if (type == 7) {
 					_this.serves = true;
 					_this.helper = content;
-					console.log(content,'协助接单');
+					console.log(content, '协助接单');
 					// uni.navigateTo({
 					// 	url: '../registrations/write?data=' + JSON.stringify(this.underway)
 					// })
-				}else if(type == 8){
-					console.log(content,'协助刷卡成功')
+				} else if (type == 8) {
+					console.log(content, '协助刷卡成功')
 					uni.navigateTo({
 						// url: '../registrations/registration',
 						url: '../registrations/registration?data=' + JSON.stringify(_this.underway)
 					})
 				}
-			})	
+			})
 			//#endif
 		},
 		filters: {

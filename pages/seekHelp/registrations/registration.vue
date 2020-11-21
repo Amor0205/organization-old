@@ -6,7 +6,7 @@
 				被服务者信息
 			</view>
 			<!-- 中间个人信息部分 -->
-			<view class="underwayItem" v-if="underway.type==0">
+			<view class="underwayItem">
 
 				<!-- 被服务人员信息 -->
 				<view class="message">
@@ -18,38 +18,40 @@
 					</view>
 				</view>
 				<view class="">
-					<!-- <view class="underway">
-						<view class="underwayLeft">
-							名字 :
-						</view>
-						<view class="underwayRight">
-							{{underway.name}}
-						</view>
-					</view> -->
+
 					<view class="underway">
 						<view class="underwayLeft">
 							巡视时间段 :
 						</view>
 						<view class="underwayRight">
-							{{underway.createTime}}前
+							{{underway.createTime}}
 						</view>
 					</view>
-					<view class="underway" >
+					<view class="underway" v-if='underway.type==0'>
 						<view class="underwayLeft">
 							任务类型:
 						</view>
 						<view class="underwayRight">
-							日常巡视
+							{{underway.content}}
 						</view>
 					</view>
-					<!-- <view class="underway">
+					<view class="underway" v-else-if='underway.type==1'>
 						<view class="underwayLeft">
-							求助方式:
+							任务类型:
 						</view>
 						<view class="underwayRight">
-							{{underway.way}}
+							{{underway.content}}
 						</view>
-					</view> -->
+					</view>
+					<view class="underway" v-else-if='underway.type==2'>
+						<view class="underwayLeft">
+							任务类型:
+						</view>
+						<view class="underwayRight">
+							{{underway.content}}
+						</view>
+					</view>
+
 					<view class="underway">
 						<view class="underwayLeft">
 							巡视位置:
@@ -61,78 +63,6 @@
 				</view>
 			</view>
 
-			<view class="underwayItem" v-else>
-				<!-- 被服务人员信息 -->
-				<view class="message">
-					<view class="headportrait">
-					<image :src="underway.avatar?underway.avatar:imgUrl" class="headportraitImg"></image>
-					</view>
-					<view class="serial">
-						{{underway.elderName}}
-					</view>
-				</view>
-				<view class="">
-					<!-- <view class="underway">
-					<view class="underwayLeft">
-						名字 :
-					</view>
-					<view class="underwayRight">
-						{{underway.name}}
-					</view>
-				</view> -->
-					<view class="underway">
-						<view class="underwayLeft">
-							任务开始时间 :
-						</view>
-						<view class="underwayRight">
-							{{underway.createTime}}
-						</view>
-					</view>
-					<view class="underway" v-if="this.flag==5">
-						<view class="underwayLeft">
-							任务类型:
-						</view>
-						<view class="underwayRight">
-							{{underway.typeDesc}}
-						</view>
-					</view>
-					<view class="underway" v-else>
-						<view class="underwayLeft">
-							任务类型:
-						</view>
-						<view class="underwayRight">
-							{{underway.taskType}}
-						</view>
-					</view>
-					
-					
-					<view class="underway" v-if="this.flag==5">
-						<!-- <view class="underwayLeft" >
-							求助方式:
-						</view>
-						<view class="underwayRight">
-							{{underway.helpMethod}}
-						</view> -->
-					</view>
-					<view class="underway" v-else>
-						<!-- <view class="underwayLeft" >
-							求助方式:
-						</view>
-						<view class="underwayRight">
-							{{underway.helpMethod}}
-						</view> -->
-					</view>
-					
-					<view class="underway">
-						<view class="underwayLeft">
-							求助位置:
-						</view>
-						<view class="underwayRights">
-							{{underway.location}}
-						</view>
-					</view>
-				</view>
-			</view>
 
 
 		</view>
@@ -183,7 +113,7 @@
 		props: {},
 		data() {
 			return {
-				imgUrl:'../../../static/imgs/tou.png',
+				imgUrl: '../../../static/imgs/tou.png',
 				show: false,
 				underway: '',
 				genres: [{
@@ -219,12 +149,12 @@
 					this.underway.type,
 					1
 				).then(res => {
-					if(res.data.code==2000 ){
+					if (res.data.code == 2000) {
 						uni.showToast({
-							title:'提交成功'
+							title: '提交成功'
 						})
 						uni.navigateTo({
-							url:'../../index/index'
+							url: '../../index/index'
 						})
 					}
 				})
@@ -236,15 +166,15 @@
 					this.underway.type,
 					2
 				).then(res => {
-				if(res.data.code==2000 ){
-					uni.showToast({
-						title:'提交成功'
-					})
-					uni.navigateTo({
-						url:'../../index/index'
-					})
-				}
-					
+					if (res.data.code == 2000) {
+						uni.showToast({
+							title: '提交成功'
+						})
+						uni.navigateTo({
+							url: '../../index/index'
+						})
+					}
+
 				})
 			},
 			//进行服务按钮
@@ -291,7 +221,7 @@
 		onLoad(option) {
 			this.underway = JSON.parse(option.data)
 			console.log(this.underway);
-			this.flag=option.flag
+			this.flag = option.flag
 			console.log(this.flag);
 
 		},

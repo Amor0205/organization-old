@@ -27,7 +27,7 @@
 						任务类型:
 					</view>
 					<view class="underwayRight">
-						{{item.typeDesc}}
+						{{item.content}}
 					</view>
 				</view>
 				<view class="underway">
@@ -159,7 +159,6 @@
 				margin-left: 20rpx;
 			}
 		}
-
 		.button {
 			width: 300rpx;
 			height: 80rpx;
