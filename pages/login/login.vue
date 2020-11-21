@@ -62,8 +62,8 @@
 				registrationID:'',		//推送设备id
 				border:true,
 				form: {
-					mobile: '17360071277',//15892716646
-					password: '123456',//123456
+					mobile: '',//15892716646
+					password: '',//123456
 
 				},
 

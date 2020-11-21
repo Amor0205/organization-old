@@ -61,7 +61,7 @@
 		methods: {
 			// 按钮跳转
 			goTo(res) {
-				if(this.userInfo.status != 3){
+				if(this.userInfo.status != 3 && this.userInfo.status != 4){
 					switch (res.title) {
 						case '进行中订单':
 							uni.navigateTo({
