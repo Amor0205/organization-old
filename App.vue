@@ -58,8 +58,9 @@ export default {
 				content = JSON.parse(content)
 			}
 			
-			time = new Date(content.alarmTime); 
+			time = new Date(content.createTime); 
 			time = this.formatDate(time)
+			content.createTime = time
 						
 			/**
 			 * 0巡视订单 1求助报警(普通弹框) 2协助订单(普通弹框)
@@ -71,13 +72,13 @@ export default {
 				var userInfo = uni.getStorageSync('userInfo')
 				uni.showModal({
 					title: '老人求助',
-					content:`求助人：${content.alarmName};\n地点：${content.location};\n时间：${time};\n`,
+					content:`求助人：${content.elderName};\n地点：${content.location};\n时间：${content.createTime};\n`,
 					// showCancel:false,
 					confirmText:'确认接单',
 					cancelText:'暂无时间',
 					success: function (res) {
 						if (res.confirm) {
-							console.log('用户点击确定');
+							// console.log('用户点击确定');
 							uni.showLoading({
 								title:'正在接单'
 							})
@@ -86,8 +87,9 @@ export default {
 								'A'+content.id,
 								userInfo.id
 							).then(res_1=>{
+								uni.hideLoading()
 								if(res_1.data.code == 2000){
-									uni.hideLoading()
+									
 									_this.gotoPage(content)
 								}else{
 									uni.showToast({
@@ -95,7 +97,10 @@ export default {
 										title:res_1.data.message
 									})
 								}
-							})
+							}).catch(function(error) {
+								uni.hideLoading()
+								console.log(error);
+							}); 
 						}else if (res.cancel) {
 							console.log('用户点击取消');
 						}
@@ -105,22 +110,23 @@ export default {
 				var userInfo = uni.getStorageSync('userInfo')
 				uni.showModal({
 					title: '同事求助',
-					content:`求助人：${content.alarmName};\n地点：${content.location};\n备注：${content.content};\n时间：${time};\n`,
+					content:`求助人：${content.elderName};\n地点：${content.location};\n服务内容：${content.content};\n时间：${content.createTime};\n`,
 					confirmText:'确认求助',
 					cancelText:'暂无时间',
 					success: function (res) {
 						if (res.confirm) {
-							console.log('用户点击确定');
+							// console.log('用户点击确定');
 							uni.showLoading({
 								title:'正在接单'
 							})
 							//接单  单号：前缀加单号  X 巡视  A报警 H协助
 							receiveOrder(
 								'H'+content.id,
-								userInfo.id
+								userInfo.id,
+								// content.parentOrderType
 							).then(res_1=>{
+								uni.hideLoading()
 								if(res_1.data.code == 2000){
-									uni.hideLoading()
 									_this.gotoPage(content)
 								}else{
 									uni.showToast({
@@ -128,7 +134,10 @@ export default {
 										title:res_1.data.message
 									})
 								}
-							})
+							}).catch(function(error) {
+								uni.hideLoading()
+								console.log(error);
+							}); 
 							
 						}else if (res.cancel) {
 							console.log('用户点击取消');
