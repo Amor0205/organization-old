@@ -10,15 +10,12 @@ export default {
 		var _this = this;
 		
 		// #ifdef APP-PLUS
-		// android_isNotificationEnabled() {
-			// const jyJPush = uni.requireNativePlugin('JY-JPush');
-			const jyJPush = this.jyJPush
-			
-			//判定是否 正常链接
-			jyJPush.android_isNotificationEnabled(result => {
-				console.log(JSON.stringify(result));
-			});
-		// },
+		const jyJPush = this.jyJPush
+		// const jyJPush = uni.requireNativePlugin('JY-JPush');
+		//判定是否 正常链接
+		jyJPush.android_isNotificationEnabled(result => {
+			console.log(JSON.stringify(result));
+		});
 		
 		//安卓检查是否开启通知权限
 		jyJPush.android_isNotificationEnabled(result=> {
@@ -46,7 +43,8 @@ export default {
 		
 		//监听消息推送事件(普通消息)
 		jyJPush.addJYJPushReceiveNotificationListener(result=> {
-		//  监听成功后，若收到推送，会在result返回对应的数据；数据格式保持极光返回的安卓/iOS数据一致
+			console.log('收到消息'+ JSON.stringify(result));
+			//  监听成功后，若收到推送，会在result返回对应的数据；数据格式保持极光返回的安卓/iOS数据一致
 			var type 
 			var content
 			var time
@@ -67,12 +65,13 @@ export default {
 			 * 3上班刷卡成功 4巡视订单刷卡
 			 * 5求助订单刷卡  6协助订单刷卡 
 			 */
+			
 			console.log(result)
 			if(type == 1){
 				var userInfo = uni.getStorageSync('userInfo')
 				uni.showModal({
 					title: '老人求助',
-					content:`求助人：${content.elderName};\n地点：${content.location};\n时间：${content.createTime};\n`,
+					content:`求助人：${content.elderName}\n地点：${content.location}\n时间：${content.createTime}\n`,
 					// showCancel:false,
 					confirmText:'确认接单',
 					cancelText:'暂无时间',
@@ -110,7 +109,7 @@ export default {
 				var userInfo = uni.getStorageSync('userInfo')
 				uni.showModal({
 					title: '同事求助',
-					content:`求助人：${content.elderName};\n地点：${content.location};\n服务内容：${content.content};\n时间：${content.createTime};\n`,
+					content:`求助人：${content.elderName}\n地点：${content.location}\n服务内容：${content.content}\n时间：${content.createTime}\n`,
 					confirmText:'确认求助',
 					cancelText:'暂无时间',
 					success: function (res) {
@@ -146,7 +145,7 @@ export default {
 				})
 			}
 			
-			console.log('收到消息'+ JSON.stringify(result));
+			
 			// uni.showToast({
 			// 	icon:'none',
 			// 	title: JSON.stringify(result)
@@ -169,18 +168,19 @@ export default {
 		jyJPush.addJYJPushCustomReceiveNotificationListener(result => {
 			var data =  JSON.stringify(result)
 			console.log('穿透消息'+ JSON.stringify(result));
-			uni.showToast({
-				icon: 'none',
-				title: JSON.stringify(result)
-			})
+			// uni.showToast({
+			// 	icon: 'none',
+			// 	title: JSON.stringify(result)
+			// })
 		});
 		
 		//监听消息点击事件
 		jyJPush.addJYJPushReceiveNewOpenNotificationListener(result => {
-			uni.showToast({
-				icon: 'none',
-				title: JSON.stringify(result)
-			})
+			console.log('点击' + JSON.stringify(result))
+			// uni.showToast({
+			// 	icon: 'none',
+			// 	title: JSON.stringify(result)
+			// })
 		});
 		
 		//#endif

@@ -16,7 +16,7 @@
 				<view class="">
 					<u-form-item label="密码" label-position='top' prop="password" style="font-size: 18px;">
 						<view class="" style="width: 600rpx;height: 80rpx;  ">
-							<u-input v-model="form.password" type="password" placeholder='请输入密码' maxlength='11' :border='border' />
+							<u-input v-model="form.password" type="password" placeholder='请输入密码' maxlength='14' :border='border' />
 						</view>
 					</u-form-item>
 				</view>
@@ -138,9 +138,7 @@
 									uni.showToast({
 										title:'登录成功'
 									})
-									uni.redirectTo({
-										url:'../index/index'
-									})
+									
 									//#ifdef APP-PLUS
 										jPush(
 											res.data.data.info.id,
@@ -156,6 +154,10 @@
 									uni.setStorageSync('token', res.data.data.token)
 									// 保存用户信息
 									uni.setStorageSync('userInfo', res.data.data.info)
+									
+									uni.reLaunch({
+										url:'../index/index'
+									})
 									// 登录成功 且没有特殊要求前往首页  tag = 0 返回上一页
 									// if (this.tag == '' || this.tag == undefined) {
 									// 	uni.reLaunch({
@@ -173,7 +175,6 @@
 									})
 									return res.data
 								}
-								console.log(res);
 							}).catch(err => {
 								uni.showToast({
 									icon: "none",
@@ -198,7 +199,7 @@
 			//获取userInfo
 			if(uni.getStorageSync('userInfo')){
 				// console.log(1)
-				uni.redirectTo({
+				uni.reLaunch({
 					url:'../index/index'
 				})
 			}
@@ -213,7 +214,7 @@
 			//获取registrationID
 			jyJPush.getRegistrationID(result => {
 				this.registrationID = result.registrationID
-				// console.log(JSON.stringify(result));
+				console.log(JSON.stringify(result));
 				// uni.showToast({
 				// 	icon: 'none',
 				// 	title: JSON.stringify(result)

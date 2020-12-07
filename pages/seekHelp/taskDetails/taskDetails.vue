@@ -158,17 +158,29 @@
 			var jyJPush = this.jyJPush;
 			var _this = this;
 			//监听透传
-			jyJPush.addJYJPushCustomReceiveNotificationListener(result => {
+			// jyJPush.addJYJPushCustomReceiveNotificationListener(result => {
+			jyJPush.addJYJPushReceiveNotificationListener(result => {	
 				//  监听成功后，若收到推送，会在result返回对应的数据
 				var type
 				var content
-				if (JSON.parse(result.extra).type) {
-					type = JSON.parse(result.extra).type
-				}
-				if (JSON.parse(result.extra).content) {
-					content = JSON.parse(result.extra).content
-				}
+				//透传处理
+				// if (JSON.parse(result.extra).type) {
+				// 	type = JSON.parse(result.extra).type
+				// }
+				// if (JSON.parse(result.extra).content) {
+				// 	content = JSON.parse(result.extra).content
+				// }
 				console.log(result)
+				//普通处理
+				if(JSON.parse(result.notificationExtras).type){
+					type = JSON.parse(result.notificationExtras).type
+				}
+				if(JSON.parse(result.notificationExtras).content){
+					content = JSON.parse(result.notificationExtras).content
+					// content = JSON.parse(content)
+				}
+				
+				
 				/**
 				 * 0巡视订单 1求助报警(普通弹框) 2协助订单(普通弹框)
 				 * 3上班刷卡成功 4巡视订单刷卡

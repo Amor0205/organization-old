@@ -2,7 +2,7 @@
 <template>
 	<view class="box">
 		<!-- 中间部分项目分类 -->
-		<view class="centreBox">
+		<view class="centreBox" style="min-height:750rpx;">
 			<view class="collapse">
 				<u-collapse>
 					<u-collapse-item :title="item.head" v-for="(item, index) in itemList" :key="index" :open="item.open" :disabled="item.disabled"
@@ -104,45 +104,80 @@
 			},
 			//提交服务
 			submit() {
-				uni.showLoading({
-					title: '正在提交'
-				})
+				// uni.showLoading({
+				// 	title: '正在提交'
+				// })
+				// this.number.map(item => {
+				// 	this.awarry.push(item.name)
+				// 	console.log(this.awarry);
+				// })
+				// this.serve = this.awarry.join('/')
+				// console.log(this.serve);
+				// postRelease(
+				// 	this.all.id,
+				// 	this.all.type,
+				// 	this.order.id,
+				// 	this.serve
+				// ).then(res => {
+				// 	if (res.data.code == 2000) {
+				// 			uni.hideLoading()
+				// 		uni.showToast({
+				// 			title: '提交成功'
+				// 		})
+				// 		uni.setStorageSync('number', this.number)
+				// 		uni.navigateTo({
+				// 			url: '../assist/assist?all=' + JSON.stringify(this.all)
+				// 		})
+				// 	} else {
+				// 			uni.hideLoading()
+				// 		uni.showToast({
+				// 			icon: 'none',
+				// 			title: res.data.data.message
+				// 		})
+				// 	}
+				// }).catch(err => {
+				// 	uni.hideLoading()
+				// 	console.log(err);
+				// })
+				
 				this.number.map(item => {
 					this.awarry.push(item.name)
-					console.log(this.awarry);
 				})
 				this.serve = this.awarry.join('/')
-				console.log(this.serve);
-				postRelease(
-					this.all.id,
-					this.all.type,
-					this.order.id,
-					this.serve
-				).then(res => {
-					if (res.data.code == 2000) {
-							uni.hideLoading()
-						uni.showToast({
-							title: '提交成功'
-						})
-						uni.setStorageSync('number', this.number)
-						uni.navigateTo({
-							url: '../assist/assist?all=' + JSON.stringify(this.all)
-						})
-					} else {
-							uni.hideLoading()
-						uni.showToast({
-							icon: 'none',
-							title: res.data.data.message
-						})
-					}
-				}).catch(err => {
-					uni.hideLoading()
-					console.log(err);
-				})
+				if(this.number.length != 0){
+					uni.showLoading({
+						title: '正在提交'
+					})
+					postRelease(
+						this.all.id,
+						this.all.type,
+						this.order.id,
+						this.serve
+					).then(res => {
+						if (res.data.code == 2000) {
+								uni.hideLoading()
+							uni.showToast({
+								title: '提交成功'
+							})
+							uni.setStorageSync('number', this.number)
+							uni.navigateTo({
+								url: '../assist/assist?all=' + JSON.stringify(this.all)
+							})
+						} else {
+								uni.hideLoading()
+							uni.showToast({
+								icon: 'none',
+								title: res.data.data.message
+							})
+						}
+					}).catch(err => {
+						uni.hideLoading()
+						console.log(err);
+					})
 				
+				}
+
 			}
-
-
 
 		},
 		created() {
@@ -208,10 +243,9 @@
 			width: 80%;
 			height: 100rpx;
 			background: #FFE300;
-			margin: 0 auto;
+			margin: 40rpx auto;
 			text-align: center;
 			line-height: 100rpx;
-			margin-top: 50rpx;
 			border-radius: 50rpx;
 			font-size: 30rpx;
 			font-size: 18px;

@@ -2,7 +2,7 @@
 <template>
 	<view class="box">
 		<!-- 中间部分项目分类 -->
-		<view class="centreBox">
+		<view class="centreBox" style="min-height:750rpx;">
 			<view class="collapse">
 				<u-collapse>
 					<u-collapse-item :title="item.head" v-for="(item, index) in itemList" :key="index" :open="item.open" :disabled="item.disabled"
@@ -187,10 +187,9 @@
 			width: 80%;
 			height: 100rpx;
 			background: #FFE300;
-			margin: 0 auto;
+			margin: 40rpx auto;
 			text-align: center;
 			line-height: 100rpx;
-			margin-top: 50rpx;
 			border-radius: 50rpx;
 			font-size: 30rpx;
 			font-size: 18px;
