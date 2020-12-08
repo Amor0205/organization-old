@@ -32,6 +32,111 @@ export default {
 			}
 		});
 		
+		//APP进程被杀死后，消息还存在通知栏的时候，点击消息会出触发
+		jyJPush.getLastPushInfo(result => {
+			console.log('进程被杀死收到消息'+ JSON.stringify(result));
+			//  监听成功后，若收到推送，会在result返回对应的数据；数据格式保持极光返回的安卓/iOS数据一致
+			var type 
+			var content
+			var time
+			if(JSON.parse(result.notificationExtras).type){
+				type = JSON.parse(result.notificationExtras).type
+			}
+			if(JSON.parse(result.notificationExtras).content){
+				content = JSON.parse(result.notificationExtras).content
+				content = JSON.parse(content)
+			}
+			
+			time = new Date(content.createTime); 
+			time = this.formatDate(time)
+			content.createTime = time
+						
+			/**
+			 * 0巡视订单 1求助报警(普通弹框) 2协助订单(普通弹框)
+			 * 3上班刷卡成功 4巡视订单刷卡
+			 * 5求助订单刷卡  6协助订单刷卡 
+			 */
+			
+			console.log(result)
+			if(type == 1){
+				var userInfo = uni.getStorageSync('userInfo')
+				uni.showModal({
+					title: '老人求助',
+					content:`求助人：${content.elderName}\n地点：${content.location}\n时间：${content.createTime}\n`,
+					// showCancel:false,
+					confirmText:'确认接单',
+					cancelText:'暂无时间',
+					success: function (res) {
+						if (res.confirm) {
+							// console.log('用户点击确定');
+							uni.showLoading({
+								title:'正在接单'
+							})
+							//接单  单号：前缀加单号  X 巡视  A报警 H协助
+							receiveOrder(
+								'A'+content.id,
+								userInfo.id
+							).then(res_1=>{
+								uni.hideLoading()
+								if(res_1.data.code == 2000){
+									
+									_this.gotoPage(content)
+								}else{
+									uni.showToast({
+										icon:'none',
+										title:res_1.data.message
+									})
+								}
+							}).catch(function(error) {
+								uni.hideLoading()
+								console.log(error);
+							}); 
+						}else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				})
+			}else if(type == 2){
+				var userInfo = uni.getStorageSync('userInfo')
+				uni.showModal({
+					title: '同事求助',
+					content:`求助人：${content.elderName}\n地点：${content.location}\n服务内容：${content.content}\n时间：${content.createTime}\n`,
+					confirmText:'确认求助',
+					cancelText:'暂无时间',
+					success: function (res) {
+						if (res.confirm) {
+							// console.log('用户点击确定');
+							uni.showLoading({
+								title:'正在接单'
+							})
+							//接单  单号：前缀加单号  X 巡视  A报警 H协助
+							receiveOrder(
+								'H'+content.id,
+								userInfo.id,
+								// content.parentOrderType
+							).then(res_1=>{
+								uni.hideLoading()
+								if(res_1.data.code == 2000){
+									_this.gotoPage(content)
+								}else{
+									uni.showToast({
+										icon:'none',
+										title:res_1.data.message
+									})
+								}
+							}).catch(function(error) {
+								uni.hideLoading()
+								console.log(error);
+							}); 
+							
+						}else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				})
+			}
+		});
+		
 		// //获取registrationID
 		// jyJPush.getRegistrationID(result => {
 		// 	console.log(JSON.stringify(result));
@@ -145,24 +250,18 @@ export default {
 				})
 			}
 			
-			
-			// uni.showToast({
-			// 	icon:'none',
-			// 	title: JSON.stringify(result)
-			// })
-			
-			
+		
 		});
 		
-		// //监听推送消息点击事件
-		// jyJPush.addJYJPushReceiveOpenNotificationListener(result=> {
-		// //  监听成功后，若点击推送消息，会触发result；数据格式保持极光返回的安卓/iOS数据一致
-		// 	console.log('点击消息'+ JSON.stringify(result));
-		// 	uni.showToast({
-		// 		icon:'none',
-		// 		title: JSON.stringify(result)
-		// 	})
-		// });
+		//监听推送消息点击事件
+		jyJPush.addJYJPushReceiveOpenNotificationListener(result=> {
+		//  监听成功后，若点击推送消息，会触发result；数据格式保持极光返回的安卓/iOS数据一致
+			console.log('点击消息'+ JSON.stringify(result));
+			uni.showToast({
+				icon:'none',
+				title: JSON.stringify(result)
+			})
+		});
 		
 		//监听自定义消息（穿透消息）
 		jyJPush.addJYJPushCustomReceiveNotificationListener(result => {
