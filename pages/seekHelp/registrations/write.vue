@@ -13,7 +13,7 @@
 			<!-- 选择服务对象 -->
 			<view class="session">
 				<view class="">
-				请选择接受服务的对象:
+					请选择接受服务的对象:
 				</view>
 				<view class="" @click="Others">
 					搜索其他人？
@@ -300,63 +300,72 @@
 						}
 					});
 				} else if (this.all.type == 1) {
-					uni.showLoading({
-						title: "正在提交"
-					})
-					var befimg = this.img.join('|')
-					var afimg = this.imgs.join('|')
-					this.list.map(item => {
-						this.abc.push(item.elderId)
-						console.log(this.abc);
-					})
-					this.oldid = this.abc.join('')
-					console.log(this.oldid);
-					this.number.map(item => {
-						this.awarry.push(item.name)
-						console.log(this.awarry);
-					})
-					this.serve = this.awarry.join('/')
-					console.log(this.serve);
-					var _this = this;
-					uni.uploadFile({
-						url: 'http://110.187.88.70:21605/order/submitService', //仅为示例，非真实的接口地址
-						filePath: '',
-						name: 'file',
-						methods: 'POST',
-						header: {
-							'Authorization': 'Bearer ' + _this.tokens
-						},
-						formData: {
-							beImages: befimg,
-							afImages: afimg,
-							content: this.serve,
-							type: this.all.type,
-							elderId: this.oldid,
-							orderId: this.all.id,
-						},
-						success: (res) => {
-							console.log(res);
-							uni.hideLoading()
-							if (JSON.parse(res.data).code == 2000) {
-								uni.showToast({
-									title: '提交成功'
-								})
+					if (befimg!=''&&afimg!='') {
+						
+						uni.showLoading({
+							title: "正在提交"
+						})
+						var befimg = this.img.join('|')
+						var afimg = this.imgs.join('|')
+						this.list.map(item => {
+							this.abc.push(item.elderId)
+							console.log(this.abc);
+						})
+						this.oldid = this.abc.join('')
+						console.log(this.oldid);
+						this.number.map(item => {
+							this.awarry.push(item.name)
+							console.log(this.awarry);
+						})
+						this.serve = this.awarry.join('/')
+						console.log(this.serve);
+						var _this = this;
+						uni.uploadFile({
+							url: 'http://110.187.88.70:21605/order/submitService', //仅为示例，非真实的接口地址
+							filePath: '',
+							name: 'file',
+							methods: 'POST',
+							header: {
+								'Authorization': 'Bearer ' + _this.tokens
+							},
+							formData: {
+								beImages: befimg,
+								afImages: afimg,
+								content: this.serve,
+								type: this.all.type,
+								elderId: this.oldid,
+								orderId: this.all.id,
+							},
+							success: (res) => {
+								console.log(res);
 								uni.hideLoading()
-								uni.setStorageSync('number', '')
-								uni.setStorageSync('all', '')
-								uni.setStorageSync('old', '')
-								uni.navigateTo({
-									url: '../../index/index'
-								})
-							} else {
-								uni.hideLoading()
-								uni.showToast({
-									icon: 'none',
-									title: res.data.message
-								})
+								if (JSON.parse(res.data).code == 2000) {
+									uni.showToast({
+										title: '提交成功'
+									})
+									uni.hideLoading()
+									uni.setStorageSync('number', '')
+									uni.setStorageSync('all', '')
+									uni.setStorageSync('old', '')
+									uni.navigateTo({
+										url: '../../index/index'
+									})
+								} else {
+									uni.hideLoading()
+									uni.showToast({
+										icon: 'none',
+										title: res.data.message
+									})
+								}
 							}
-						}
-					});
+						});
+					}else{
+						
+						uni.showToast({
+							icon: 'none',
+							title: '请先完善服务内容'
+						})
+					}
 				} else {
 					var befimg = this.img.join('|')
 					var afimg = this.imgs.join('|')
@@ -411,16 +420,16 @@
 
 			},
 			//获取房间内老人
-			oldlist() {
-				getold(
-					this.all.id
-				).then(res => {
-					if (res.data.code == 2000) {
-						this.list = res.data.data.elders
-						console.log(this.list);
-					}
-				})
-			},
+			// oldlist() {
+			// 	getold(
+			// 		this.all.id
+			// 	).then(res => {
+			// 		if (res.data.code == 2000) {
+			// 			this.list = res.data.data.elders
+			// 			console.log(this.list);
+			// 		}
+			// 	})
+			// },
 		},
 		mounted() {
 
@@ -430,7 +439,7 @@
 			//保存服务对象详情
 			// this.alls = uni.getStorageSync('alls')
 			// console.log(this.alls);
-			this.oldlist()
+			// this.oldlist()
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
 			this.tokens = uni.getStorageSync('token')
@@ -444,7 +453,11 @@
 				//服务对象详情
 				this.all = JSON.parse(option.data)
 				console.log(this.all);
-				// uni.setStorageSync('alls', this.all)
+				// this.all.map(item => {
+				this.list.push(this.all)
+				// })
+				console.log(this.list);
+
 			}
 
 

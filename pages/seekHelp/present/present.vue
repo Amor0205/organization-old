@@ -82,7 +82,7 @@
 					'A' + res.id,
 					this.userInfo.id
 				).then(res_1 => {
-					uni.hideLoading()
+					// uni.hideLoading()
 					if (res_1.data.code == 2000) {
 						uni.hideLoading()
 						uni.navigateTo({
@@ -128,8 +128,13 @@
 		},
 		created() {
 			// 获取userInfo
+			// this.userInfo = uni.getStorageSync('userInfo')
+			// // console.log(this.userInfo);
+			// // this.getlist()
+		},
+		onShow() {
+			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
-			// console.log(this.userInfo);
 			this.getlist()
 		},
 		mounted() {
