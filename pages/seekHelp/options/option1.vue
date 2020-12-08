@@ -4,11 +4,12 @@
 		<!-- 中间部分项目分类 -->
 		<view class="centreBox" style="min-height:750rpx;">
 			<view class="collapse">
-				<u-collapse>
+				<u-collapse  >
 					<u-collapse-item :title="item.head" v-for="(item, index) in itemList" :key="index" :open="item.open" :disabled="item.disabled"
 					 class="itemList">
 						<u-checkbox-group @change="checkboxGroupChange" v-for="(item1,index1) in item.list" :key="index1">
-							<u-checkbox @change="checkboxChange" v-model="item1.checked" :name="item1.name" shape="circle" active-color='#FFE300' class="u-checkbox">
+							<u-checkbox @change="checkboxChange" v-model="item1.checked" :name="item1.name" shape="circle" active-color='#FFE300'
+							 class="u-checkbox">
 								<view class="contain">
 									<view class="name">
 										{{item1.name}}
@@ -42,12 +43,13 @@
 </template>
 
 <script>
-	import{ getcontent } from '../../../src/ajax.js'
+	import {
+		getcontent
+	} from '../../../src/ajax.js'
 	export default {
 		data() {
 			return {
-				itemList: [
-				],
+				itemList: [],
 				rSelect: [], //点击标签添加的数组
 				number: [],
 				ids: '', //接收穿过来数据里面的flag
@@ -100,7 +102,7 @@
 				// 		uni.navigateBack()
 				// }, 1500)
 				uni.showToast({
-					title:'提交成功'
+					title: '提交成功'
 				})
 				uni.setStorageSync('number', this.number)
 				// uni.navigateTo({
@@ -110,16 +112,31 @@
 
 				})
 			},
-			getlist(){
-				getcontent().then(res=>{
-					if(res.data.code==2000){
-						console.log(res);
-						res.data.data.menus.map(res1=>{
-							this.itemList.push({head:res1.name,list:res1.children,checked:res1.checked==false,disabled:res1.disabled==false},)
+			getlist() {
+				// uni.showLoading({
+				// 	title: "正在加载"
+				// })
+				getcontent().then(res => {
+					if (res.data.code == 2000) {
+						// uni.hideLoading()
+						res.data.data.menus.map(res1 => {
+							this.itemList.push({
+								head: res1.name,
+								list: res1.children,
+								checked: res1.checked == false,
+								disabled: res1.disabled == false
+							}, )
 							console.log(this.itemList);
 						})
-						
+
+					}else{
+						// uni.showToast({
+						// 	icon: 'none',
+						// 	title: res.data.message
+						// })
 					}
+				}).catch(err=>{
+					// uni.hideLoading()
 				})
 			}
 
@@ -129,7 +146,7 @@
 			this.getlist()
 		},
 		mounted() {
-	
+
 		},
 		onLoad() {
 
@@ -159,19 +176,20 @@
 
 			.collapse {
 				padding: 20rpx 0rpx 20rpx 0rpx;
-				font-size: 20px;
-
+				font-size: 30px;
+				
 				.itemList {
 					margin-top: 50rpx;
-				
-					.u-checkbox{
+					font-size: 20rpx;
+					.u-checkbox {
 						margin-right: 30rpx;
-							margin-top: 40rpx;
+						margin-top: 40rpx;
 					}
+
 					.contain {
-					
+						
 						.name {
-							font-size: 16px;
+							font-size: 18px;
 						}
 					}
 				}
@@ -179,9 +197,7 @@
 			}
 		}
 
-		.baseBox {
-			
-		}
+		.baseBox {}
 
 		.submit {
 			width: 80%;

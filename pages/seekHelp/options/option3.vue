@@ -91,15 +91,25 @@
 			},
 			//获取服务列表
 			getlist(){
+				// uni.showLoading({
+				// 	title: "正在加载"
+				// })
 				getcontent().then(res=>{
 					if(res.data.code==2000){
-						console.log(res);
+						// uni.hideLoading()
 						res.data.data.menus.map(res1=>{
 							this.itemList.push({head:res1.name,list:res1.children,checked:res1.checked==false,disabled:res1.disabled==false},)
 							console.log(this.itemList);
 						})
 						
+					}else{
+						uni.showToast({
+							icon: 'none',
+							title: res.data.message
+						})
 					}
+				}).catch(err=>{
+					// uni.hideLoading()
 				})
 			},
 			//提交服务
@@ -217,7 +227,7 @@
 
 			.collapse {
 				padding: 20rpx 0rpx 20rpx 0rpx;
-				font-size: 20px;
+				font-size: 30px;
 
 				.itemList {
 					margin-top: 50rpx;
@@ -229,7 +239,7 @@
 
 					.contain {
 						.name {
-							font-size: 16px;
+							font-size: 18px;
 						}
 					}
 				}

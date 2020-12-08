@@ -154,15 +154,15 @@ export default {
 			
 		});
 		
-		// //监听推送消息点击事件
-		// jyJPush.addJYJPushReceiveOpenNotificationListener(result=> {
-		// //  监听成功后，若点击推送消息，会触发result；数据格式保持极光返回的安卓/iOS数据一致
-		// 	console.log('点击消息'+ JSON.stringify(result));
-		// 	uni.showToast({
-		// 		icon:'none',
-		// 		title: JSON.stringify(result)
-		// 	})
-		// });
+		//监听推送消息点击事件
+		jyJPush.addJYJPushReceiveOpenNotificationListener(result=> {
+		//  监听成功后，若点击推送消息，会触发result；数据格式保持极光返回的安卓/iOS数据一致
+			console.log('点击消息'+ JSON.stringify(result));
+			uni.showToast({
+				icon:'none',
+				title: JSON.stringify(result)
+			})
+		});
 		
 		//监听自定义消息（穿透消息）
 		jyJPush.addJYJPushCustomReceiveNotificationListener(result => {

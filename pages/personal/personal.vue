@@ -112,7 +112,7 @@
 				show: false,
 				closeable: false,
 				close: false,
-				headPortraitDefault: '../../static/imgs/xiangyous.png', //显示默认图片
+				headPortraitDefault: '../../static/imgs/tou.png', //显示默认图片
 				uploadPicData: '', //上传图片数据
 				personal: [{
 					title: '修改密码',
