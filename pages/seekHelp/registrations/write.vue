@@ -246,61 +246,70 @@
 			},
 			// 提交
 			submit() {
-				console.log(this.all.type)
+	
 				if (this.all.type == 0) {
-					var befimg = this.img.join('|')
-					var afimg = this.imgs.join('|')
-					this.number.map(item => {
-						this.awarry.push(item.name)
-						console.log(this.awarry);
-					})
-					this.serve = this.awarry.join('/')
-					uni.showLoading({
-						title: "正在提交"
-					})
-					var _this = this;
-					uni.uploadFile({
-						url: 'http://110.187.88.70:21605/order/submitService', //仅为示例，非真实的接口地址
-						filePath: '',
-						name: 'file',
-						methods: 'POST',
-						header: {
-							'Authorization': 'Bearer ' + _this.tokens
-						},
-						formData: {
-							beImages: befimg,
-							afImages: afimg,
-							content: this.serve,
-							type: this.all.type,
-							elderId: 0,
-							orderId: this.all.id,
-						},
-						success: (res) => {
-							console.log(res);
-							uni.hideLoading()
-							if (JSON.parse(res.data).code == 2000) {
-								uni.showToast({
-									title: '提交成功'
-								})
+					//日常巡视
+					if(befimg!==''&&afimg!==''&&this.number!==''){
+						var befimg = this.img.join('|')
+						var afimg = this.imgs.join('|')
+						this.number.map(item => {
+							this.awarry.push(item.name)
+							console.log(this.awarry);
+						})
+						this.serve = this.awarry.join('/')
+						uni.showLoading({
+							title: "正在提交"
+						})
+						var _this = this;
+						uni.uploadFile({
+							url: 'http://110.187.88.70:21605/order/submitService', //仅为示例，非真实的接口地址
+							filePath: '',
+							name: 'file',
+							methods: 'POST',
+							header: {
+								'Authorization': 'Bearer ' + _this.tokens
+							},
+							formData: {
+								beImages: befimg,
+								afImages: afimg,
+								content: this.serve,
+								type: this.all.type,
+								elderId: 0,
+								orderId: this.all.id,
+							},
+							success: (res) => {
+								console.log(res);
 								uni.hideLoading()
-								uni.setStorageSync('number', '')
-								uni.setStorageSync('all', '')
-								uni.setStorageSync('old', '')
-								uni.setStorageSync('alls', '')
-								uni.navigateTo({
-									url: '../../index/index'
-								})
-							} else {
-								uni.hideLoading()
-								uni.showToast({
-									icon: 'none',
-									title: res.data.message
-								})
+								if (JSON.parse(res.data).code == 2000) {
+									uni.showToast({
+										title: '提交成功'
+									})
+									uni.hideLoading()
+									uni.setStorageSync('number', '')
+									uni.setStorageSync('all', '')
+									uni.setStorageSync('old', '')
+									uni.setStorageSync('alls', '')
+									uni.navigateTo({
+										url: '../../index/index'
+									})
+								} else {
+									uni.hideLoading()
+									uni.showToast({
+										icon: 'none',
+										title: res.data.message
+									})
+								}
 							}
-						}
-					});
+						});
+					}else{
+						uni.showToast({
+							icon: 'none',
+							title: '请先完善服务内容'
+						})
+					}
 				} else if (this.all.type == 1) {
-					if (befimg!=''&&afimg!='') {
+					// 老人求助
+					if (befimg!=''&&afimg!=''&&this.number!='') {
 						
 						uni.showLoading({
 							title: "正在提交"
@@ -367,54 +376,63 @@
 						})
 					}
 				} else {
-					var befimg = this.img.join('|')
-					var afimg = this.imgs.join('|')
-					this.number.map(item => {
-						this.awarry.push(item.name)
-					})
-					this.serve = this.awarry.join('/')
-					uni.showLoading({
-						title: "正在提交"
-					})
-					var _this = this;
-					uni.uploadFile({
-						url: 'http://110.187.88.70:21605/order/genActiveOrder', //仅为示例，非真实的接口地址
-						filePath: '',
-						name: 'file',
-						methods: 'POST',
-						header: {
-							'Authorization': 'Bearer ' + _this.tokens
-						},
-						formData: {
-							beImages: befimg,
-							afImages: afimg,
-							elderId: this.all.elderId,
-							employeeId: this.userInfo.id,
-							content: this.serve
-						},
-						success: (res) => {
-							// console.log(res);
-							uni.hideLoading()
-							if (JSON.parse(res.data).code == 2000) {
-								uni.showToast({
-									title: '提交成功'
-								})
+				// 主动服务
+					if(befimg!=''&&afimg!=''&this.number!=''){
+						
+						var befimg = this.img.join('|')
+						var afimg = this.imgs.join('|')
+						this.number.map(item => {
+							this.awarry.push(item.name)
+						})
+						this.serve = this.awarry.join('/')
+						uni.showLoading({
+							title: "正在提交"
+						})
+						var _this = this;
+						uni.uploadFile({
+							url: 'http://110.187.88.70:21605/order/genActiveOrder', //仅为示例，非真实的接口地址
+							filePath: '',
+							name: 'file',
+							methods: 'POST',
+							header: {
+								'Authorization': 'Bearer ' + _this.tokens
+							},
+							formData: {
+								beImages: befimg,
+								afImages: afimg,
+								elderId: this.all.elderId,
+								employeeId: this.userInfo.id,
+								content: this.serve
+							},
+							success: (res) => {
+								// console.log(res);
 								uni.hideLoading()
-								uni.setStorageSync('number', '')
-								uni.setStorageSync('all', '')
-								uni.setStorageSync('old', '')
-								uni.navigateTo({
-									url: '../../index/index'
-								})
-							} else {
-								uni.hideLoading()
-								uni.showToast({
-									icon: 'none',
-									title: res.data.message
-								})
+								if (JSON.parse(res.data).code == 2000) {
+									uni.showToast({
+										title: '提交成功'
+									})
+									uni.hideLoading()
+									uni.setStorageSync('number', '')
+									uni.setStorageSync('all', '')
+									uni.setStorageSync('old', '')
+									uni.navigateTo({
+										url: '../../index/index'
+									})
+								} else {
+									uni.hideLoading()
+									uni.showToast({
+										icon: 'none',
+										title: res.data.message
+									})
+								}
 							}
-						}
-					});
+						});
+					}else{
+						uni.showToast({
+							icon: 'none',
+							title: '请先完善服务内容'
+						})
+					}
 				}
 
 
@@ -573,8 +591,8 @@
 				}
 
 				.names {
-					width: 160rpx;
-					height: 56rpx;
+					// width: 160rpx;
+					// height: 56rpx;
 					border: 1rpx solid #818181;
 					font-size: 28rpx;
 					text-align: center;
@@ -582,6 +600,7 @@
 					border-radius: 40rpx;
 					// color: #000000;
 					background: #c0c3bc;
+					padding: 0rpx 20rpx 0rpx 20rpx;
 				}
 
 
