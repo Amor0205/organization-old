@@ -36,6 +36,7 @@
 		props: {},
 		data() {
 			return {
+				show: false,
 				userInfo:'',
 				statusBarHeights: '',
 				serve: [{
@@ -43,9 +44,11 @@
 					flag: ''
 				}, {
 					title: '老人求助'
-				}, {
+				},
+				{
 					title: '日常巡视'
-				}, {
+				}, 
+				{
 					title: '主动服务'
 				}, ],
 				
@@ -76,12 +79,12 @@
 						case '日常巡视':
 							uni.navigateTo({
 								url: '../dailyPatrol/dailyPatrol'
-					
+								// url:'../seekHelp/options/option1'
 							})
 							break;
 						case '主动服务':
 							uni.navigateTo({
-								url: '../initiative/initiative?'
+								url: '../initiative/initiative'
 							})
 							break;
 						default:
@@ -177,7 +180,7 @@
 			
 		},
 		created() {
-			console.log(uni.getStorageSync('token'))
+			// console.log(uni.getStorageSync('token'))
 			uni.getSystemInfo({
 				success: function(res) {
 					// console.log(res.statusBarHeight);
@@ -189,14 +192,12 @@
 		mounted() {
 			this.getUpData()
 		},
-
 		onLoad() {
 			if( uni.getStorageSync('token').length == 0 ){
 				uni.redirectTo({
 					url: '../login/login'
 				})
 			}
-			
 			//获取版本号
 			// #ifdef APP-PLUS
 			plus.runtime.getProperty(plus.runtime.appid, widgetInfo => {
@@ -204,12 +205,63 @@
 				console.log(this.version)
 			});
 			// #endif
-			
-		},
+		},	
 		onShow() {
-			if(uni.getStorageSync('userInfo')){
-				this.userInfo = uni.getStorageSync('userInfo')
-			}
+		// onLoad() {	
+			// if(uni.getStorageSync('userInfo')){
+			// 	this.userInfo = uni.getStorageSync('userInfo')
+			// }
+			
+			// //#ifdef APP-PLUS
+			// // const jyJPush = this.jyJPush
+			// // const jyJPush = uni.requireNativePlugin('JY-JPush');
+			// var jyJPush = uni.requireNativePlugin('JY-JPush');
+			// var _this = this;
+			// //监听透传 
+			// jyJPush.addJYJPushCustomReceiveNotificationListener(result => { 
+			// //普通消息
+			// // jyJPush.addJYJPushReceiveNotificationListener(result => {	
+			// 	console.log('收到消息'+ JSON.stringify(result))
+			// 	//  监听成功后，若收到推送，会在result返回对应的数据
+			// 	var type
+			// 	var content
+			// 	//透传处理
+			// 	if (JSON.parse(result.extra).type) {
+			// 		type = JSON.parse(result.extra).type
+			// 	}
+			// 	if (JSON.parse(result.extra).content) {
+			// 		content = JSON.parse(result.extra).content
+			// 		content = JSON.parse(content)
+			// 	}
+			// 	//普通处理
+			// 	// if(JSON.parse(result.notificationExtras).type){
+			// 	// 	type = JSON.parse(result.notificationExtras).type
+			// 	// }
+			// 	// if(JSON.parse(result.notificationExtras).content){
+			// 	// 	content = JSON.parse(result.notificationExtras).content
+			// 	// 	content = JSON.parse(content)
+			// 	// }
+				
+			// 	/**
+			// 	 * 0巡视订单 1求助报警(普通弹框) 2协助订单(普通弹框)
+			// 	 * 3上班刷卡成功 4巡视订单刷卡
+			// 	 * 5求助订单刷卡  6协助订单刷卡  9订单刷卡
+			// 	 */
+			// 	if(type == 9){
+			// 		// console.log('收到消息'+ JSON.stringify(result));
+			// 		// 	//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
+			// 		uni.navigateTo({
+			// 			url:'../seekHelp/registrations/registration?data=' + JSON.stringify(content) + '&flag=5'
+			// 		})
+			// 		uni.showToast({
+			// 			title: result.message,
+			// 			icon: 'none'
+			// 		})
+			// 	}
+				
+			// })
+			//#endif
+			
 		},
 		filters: {
 

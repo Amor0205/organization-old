@@ -86,7 +86,7 @@
 					title: '正在搜索'
 				})
 				getsearchEmployee(
-					'100',
+					this.userInfo.regionId,
 					this.inputValue
 				).then(res => {
 					if (res.data.code === 2000) {

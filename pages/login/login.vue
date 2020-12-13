@@ -210,7 +210,9 @@
 		onLoad() {
 			
 			//#ifdef APP-PLUS
-			var jyJPush = this.jyJPush;
+			// const jyJPush = this.jyJPush
+			// const jyJPush = uni.requireNativePlugin('JY-JPush');
+			var jyJPush = uni.requireNativePlugin('JY-JPush');
 			//获取registrationID
 			jyJPush.getRegistrationID(result => {
 				this.registrationID = result.registrationID

@@ -69,18 +69,32 @@
 		<!-- 服务情况 -->
 		<view class="">
 			<view class="base">
-				<view class="options" @click="unmanned">
+				<!-- <view class="options" @click="unmanned">
 					无人
-				</view>
+				</view> -->
+				<u-button
+					shape="circle" 
+					class="options" 
+					@click="unmanned"
+					:hair-line="false" 
+					:disabled="forbidden">
+					无人</u-button>
 				<view class="options" @click="proceed(underway)">
 					进行服务
 				</view>
 				<view class="options" @click="goTos">
 					发起同事协助
 				</view>
-				<view class="options" @click="normal">
+				<!-- <view class="options" @click="normal">
 					正常
-				</view>
+				</view> -->
+				<u-button
+					shape="circle" 
+					class="options" 
+					@click="normal"
+					:hair-line="false" 
+					:disabled="forbidden">
+					正常</u-button>
 			</view>
 
 		</view>
@@ -105,6 +119,15 @@
 	import {
 		putordere
 	} from '../../../src/ajax.js'
+	function debounce(func, wait=600){
+		let timeout;
+		return function(event){
+			clearTimeout(timeout)
+			timeout = setTimeout(()=>{
+				func.call(this, event)
+			},wait)
+		}	
+	}
 	export default {
 		name: "",
 		components: {
@@ -116,6 +139,7 @@
 				imgUrl: '../../../static/imgs/tou.png',
 				show: false,
 				underway: '',
+				forbidden:false,	//按钮禁用
 				genres: [{
 					title: '无人',
 
@@ -143,7 +167,9 @@
 		},
 		methods: {
 			// 无人按钮
-			unmanned() {
+			unmanned:debounce(function(e){
+				//禁用按钮
+				this.forbidden = true;
 				putordere(
 					this.underway.id,
 					this.underway.type,
@@ -153,14 +179,18 @@
 						uni.showToast({
 							title: '提交成功'
 						})
-						uni.navigateTo({
+						//解放按钮
+						this.forbidden = false;
+						uni.reLaunch({
 							url: '../../index/index'
 						})
 					}
 				})
-			},
+			}),
 			//正常按钮
-			normal() {
+			normal:debounce(function(e){
+				//禁用按钮
+				this.forbidden = true;
 				putordere(
 					this.underway.id,
 					this.underway.type,
@@ -170,13 +200,15 @@
 						uni.showToast({
 							title: '提交成功'
 						})
-						uni.navigateTo({
+						//解放按钮
+						this.forbidden = false;
+						uni.reLaunch({
 							url: '../../index/index'
 						})
 					}
 
 				})
-			},
+			}),
 			//进行服务按钮
 			proceed(res) {
 				console.log(res);
@@ -311,15 +343,26 @@
 		margin-top: 50rpx;
 
 		.options {
+			// width: 300rpx;
+			// height: 100rpx;
+			// border-radius: 50rpx;
+			// background: #FFE300;
+			// text-align: center;
+			// line-height: 100rpx;
+			// margin-top: 50rpx;
+			// margin-bottom: 50rpx;
+			// font-size: 16px;
+			
 			width: 300rpx;
 			height: 100rpx;
-			border-radius: 50rpx;
-			background: #FFE300;
-			text-align: center;
+			background-color: #FFE300;
+			margin: 0 auto;
+			margin-top: 100rpx;
+			border-radius: 20rpx;
 			line-height: 100rpx;
-			margin-top: 50rpx;
-			margin-bottom: 50rpx;
-			font-size: 16px;
+			text-align: center;
+			border-radius: 50rpx;
+			border: none;
 		}
 
 

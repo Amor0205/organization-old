@@ -83,28 +83,39 @@
 				// 	url: '../seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(res)
 				// })
 
+				var _this = this;
 				//接单  单号：前缀加单号  X 巡视  A报警 H协助
-				uni.showLoading({
-					title: '正在接取任务'
-				})
-				console.log('X' + res.id,this.userInfo.id);
-				receiveOrder(
-					'X' + res.id,
-					this.userInfo.id
-				).then(res_1 => {
-					uni.hideLoading()
-					if (res_1.data.code == 2000) {
-						uni.navigateTo({
-							url: '../seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(res)
-						})
-					} else {
-						uni.showToast({
-							icon: 'none',
-							title: res_1.data.message
-						})
-					}
-				})
-
+				// console.log('X' + res.id,this.userInfo.id);
+				uni.showModal({
+				    title: '提示',
+				    content: '您确定领取该任务!',
+				    success: function (ress) {
+				        if (ress.confirm) {
+							// uni.showLoading({
+							// 	title: '正在接取任务'
+							// })
+				            receiveOrder(
+				            	'X' + res.id,
+				            	_this.userInfo.id
+				            ).then(res_1 => {
+				            	uni.hideLoading()
+				            	if (res_1.data.code == 2000) {
+				            		uni.navigateTo({
+				            			url: '../seekHelp/taskDetails/taskDetails?data=' + JSON.stringify(res)
+				            		})
+				            	} else {
+				            		uni.showToast({
+				            			icon: 'none',
+				            			title: res_1.data.message
+				            		})
+				            	}
+				            })
+				        } else if (ress.cancel) {
+				            // uni.hideLoading()
+				        }
+				    }
+				});
+				
 			},
 			// 获取巡视订单列表
 			getlist() {
@@ -122,7 +133,7 @@
 								// this.timer.push(item.createTime)
 								// console.log(this.timer);
 								var timestamp3 = new Date(item.createTime).getTime(); // 结果：1477808630404 ，通过原型方法直接获得当前时间的毫秒值，准确
-								console.log(timestamp3);
+								// console.log(timestamp3);
 								//当前时间与接口时间作对比
 								if (this.time > timestamp3) {
 									item.state = '超时'

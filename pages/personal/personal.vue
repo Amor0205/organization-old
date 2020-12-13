@@ -284,52 +284,54 @@
 		mounted() {},
 		onLoad() {
 			//#ifdef APP-PLUS
-			var jyJPush = this.jyJPush;
-			var _this = this;
-			// jyJPush.addJYJPushReceiveOpenNotificationListener(result => { 
-			// 	console.log(result)
-			// }),
-			//监听透传 
-			// jyJPush.addJYJPushReceiveOpenNotificationListener(result => { 
-			jyJPush.addJYJPushReceiveNotificationListener(result => {	
-				//  监听成功后，若收到推送，会在result返回对应的数据
-				var type
-				var content
-				//透传处理
-				// if (JSON.parse(result.extra).type) {
-				// 	type = JSON.parse(result.extra).type
-				// }
-				// if (JSON.parse(result.extra).content) {
-				// 	content = JSON.parse(result.extra).content
-				// }
+			// const jyJPush = this.jyJPush
+			// const jyJPush = uni.requireNativePlugin('JY-JPush');
+			// var jyJPush = uni.requireNativePlugin('JY-JPush');
+			// var _this = this;
+			// //监听透传
+			// jyJPush.addJYJPushCustomReceiveNotificationListener(result => { 
+			// //普通消息
+			// // jyJPush.addJYJPushReceiveNotificationListener(result => {	
+			// 	//  监听成功后，若收到推送，会在result返回对应的数据
+			// 	var type
+			// 	var content
+			// 	console.log('收到消息'+ JSON.stringify(result))
+			// 	//透传处理
+			// 	if (JSON.parse(result.extra).type) {
+			// 		type = JSON.parse(result.extra).type
+			// 	}
+			// 	if (JSON.parse(result.extra).content) {
+			// 		content = JSON.parse(result.extra).content
+			// 		// content = JSON.parse(content)
+			// 	}
 				
-				//普通处理
-				if(JSON.parse(result.notificationExtras).type){
-					type = JSON.parse(result.notificationExtras).type
-				}
-				if(JSON.parse(result.notificationExtras).content){
-					content = JSON.parse(result.notificationExtras).content
-					// content = JSON.parse(content)
-				}
+			// 	// //普通处理
+			// 	// if(JSON.parse(result.notificationExtras).type){
+			// 	// 	type = JSON.parse(result.notificationExtras).type
+			// 	// }
+			// 	// if(JSON.parse(result.notificationExtras).content){
+			// 	// 	content = JSON.parse(result.notificationExtras).content
+			// 	// 	// content = JSON.parse(content)
+			// 	// }
 				
-				/**
-				 * 0巡视订单 1求助报警(普通弹框) 2协助订单(普通弹框)
-				 * 3上班刷卡成功 4巡视订单刷卡
-				 * 5求助订单刷卡  6协助订单刷卡 
-				 */
-				if(type == 3){
-					console.log(result)
-					// 	//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
-					uni.showToast({
-						title: content,
-						icon: 'none'
-					})
-					_this.show = false;
-					_this.duty = false
-					_this.getuser()
-				}
-				
-			})
+			// 	/**
+			// 	 * 0巡视订单 1求助报警(普通弹框) 2协助订单(普通弹框)
+			// 	 * 3上班刷卡成功 4巡视订单刷卡
+			// 	 * 5求助订单刷卡  6协助订单刷卡 
+			// 	 */
+			// 	if(type == 3){
+			// 		console.log(result)
+			// 		// 	//改变工作状态 0上班 1空闲 2忙碌 3下班 4上班等待刷卡
+			// 		uni.showToast({
+			// 			title: result.message,
+			// 			icon: 'none'
+			// 		})
+			// 		_this.userInfo.status = 0;
+			// 		_this.show = false;
+			// 		_this.duty = false
+			// 		_this.getuser()
+			// 	}
+			// })
 			//#endif
 
 		},

@@ -98,7 +98,32 @@
 					}
 				}).catch(err => {
 					uni.hideLoading()
-					console.log(err);
+					// console.log(err);
+					if(err.statusCode == 500){
+						getunderway(
+							this.userInfo.regionId,
+							'2',
+							this.userInfo.id
+						).then(res => {
+							if (res.data.code == 2000) {
+								this.underway = res.data.data.orders
+								console.log(this.underway);
+							} else {
+								uni.showToast({
+									icon: 'none',
+									title: res.data.message
+								})
+							}
+						}).catch(err => {
+							// console.log(err);
+							if(err.statusCode == 500){
+								uni.showToast({
+									title:'网络错误请重试',
+									icon:'none'
+								})
+							}
+						})
+					}
 				})
 			}
 		},

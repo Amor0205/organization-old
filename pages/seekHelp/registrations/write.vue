@@ -54,9 +54,19 @@
 			</view>
 		</view>
 		<!-- 提交按钮 -->
-		<view class="u-button" @click="submit">
+		<!-- <view class="u-button" @click="submit"> -->
+		<!-- <view class="u-button" @click="submit">
 			提交
-		</view>
+		</view> -->
+		<u-button
+			shape="circle" 
+			class="u-button" 
+			@click="submit"
+			:hair-line="false" 
+			:disabled="forbidden">
+			提交</u-button>
+		
+		
 	</view>
 </template>
 
@@ -67,8 +77,17 @@
 		submitService,
 		getold
 	} from '../../../src/ajax.js'
+	function debounce(func, wait=600){
+		let timeout;
+		return function(event){
+			clearTimeout(timeout)
+			timeout = setTimeout(()=>{
+				func.call(this, event)
+			},wait)
+		}	
+	}
 	export default {
-
+		
 		components: {
 			mkUpload
 		},
@@ -92,7 +111,9 @@
 				list: [], //房间老人列表
 				abc: [],
 				oldid: '',
-				old: ''
+				old: '',
+				antiShake:true, //防抖
+				forbidden:false
 			}
 		},
 		methods: {
@@ -245,16 +266,19 @@
 				})
 			},
 			// 提交
-			submit() {
-	
+			// submit:debounce(function(e){
+			submit(){
+				var befimg = this.img.join('|')
+				var afimg = this.imgs.join('|')
 				if (this.all.type == 0) {
 					//日常巡视
-					if(befimg!==''&&afimg!==''&&this.number!==''){
-						var befimg = this.img.join('|')
-						var afimg = this.imgs.join('|')
+					// if( befimg !=='' && afimg !=='' && this.number !=='' ){
+					if( this.number !=='' ){
+						//禁用按钮
+						this.forbidden = true;
 						this.number.map(item => {
 							this.awarry.push(item.name)
-							console.log(this.awarry);
+							// console.log(this.awarry);
 						})
 						this.serve = this.awarry.join('/')
 						uni.showLoading({
@@ -279,6 +303,8 @@
 							},
 							success: (res) => {
 								console.log(res);
+								//解放按钮
+								this.forbidden = false;
 								uni.hideLoading()
 								if (JSON.parse(res.data).code == 2000) {
 									uni.showToast({
@@ -289,7 +315,7 @@
 									uni.setStorageSync('all', '')
 									uni.setStorageSync('old', '')
 									uni.setStorageSync('alls', '')
-									uni.navigateTo({
+									uni.reLaunch({
 										url: '../../index/index'
 									})
 								} else {
@@ -308,23 +334,26 @@
 						})
 					}
 				} else if (this.all.type == 1) {
+					//禁用按钮
+					this.forbidden = true;
+					this.list.map(item => {
+						this.abc.push(item.elderId)
+					})
+					this.oldid = this.abc.join('')
 					// 老人求助
-					if (befimg!=''&&afimg!=''&&this.number!='') {
-						
+					if ( this.abc.length != 0  && this.number != '') {
 						uni.showLoading({
 							title: "正在提交"
 						})
-						var befimg = this.img.join('|')
-						var afimg = this.imgs.join('|')
+						// var befimg = this.img.join('|')
+						// var afimg = this.imgs.join('|')
 						this.list.map(item => {
 							this.abc.push(item.elderId)
-							console.log(this.abc);
 						})
 						this.oldid = this.abc.join('')
-						console.log(this.oldid);
 						this.number.map(item => {
 							this.awarry.push(item.name)
-							console.log(this.awarry);
+							// console.log(this.awarry);
 						})
 						this.serve = this.awarry.join('/')
 						console.log(this.serve);
@@ -347,6 +376,8 @@
 							},
 							success: (res) => {
 								console.log(res);
+								//解放按钮
+								this.forbidden = false;
 								uni.hideLoading()
 								if (JSON.parse(res.data).code == 2000) {
 									uni.showToast({
@@ -356,7 +387,7 @@
 									uni.setStorageSync('number', '')
 									uni.setStorageSync('all', '')
 									uni.setStorageSync('old', '')
-									uni.navigateTo({
+									uni.reLaunch({
 										url: '../../index/index'
 									})
 								} else {
@@ -378,9 +409,10 @@
 				} else {
 				// 主动服务
 					if(befimg!=''&&afimg!=''&this.number!=''){
-						
-						var befimg = this.img.join('|')
-						var afimg = this.imgs.join('|')
+						//禁用按钮
+						this.forbidden = true;
+						// var befimg = this.img.join('|')
+						// var afimg = this.imgs.join('|')
 						this.number.map(item => {
 							this.awarry.push(item.name)
 						})
@@ -405,6 +437,8 @@
 								content: this.serve
 							},
 							success: (res) => {
+								//解放按钮
+								this.forbidden = false;
 								// console.log(res);
 								uni.hideLoading()
 								if (JSON.parse(res.data).code == 2000) {
@@ -415,7 +449,7 @@
 									uni.setStorageSync('number', '')
 									uni.setStorageSync('all', '')
 									uni.setStorageSync('old', '')
-									uni.navigateTo({
+									uni.reLaunch({
 										url: '../../index/index'
 									})
 								} else {
@@ -436,7 +470,9 @@
 				}
 
 
+			// }),
 			},
+			
 			//获取房间内老人
 			// oldlist() {
 			// 	getold(
@@ -618,6 +654,7 @@
 			line-height: 100rpx;
 			text-align: center;
 			border-radius: 50rpx;
+			border: none;
 		}
 
 

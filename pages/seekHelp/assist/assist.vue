@@ -131,33 +131,39 @@
 		onLoad(option) {
 			this.underway = JSON.parse(option.all)
 			console.log(this.underway);
-
+		// },	
+		// onShow() {
 			// 获取userInfo
 			this.userInfo = uni.getStorageSync('userInfo')
 			//#ifdef APP-PLUS
-			var jyJPush = this.jyJPush;
+			// const jyJPush = this.jyJPush
+			// const jyJPush = uni.requireNativePlugin('JY-JPush');
+			var jyJPush = uni.requireNativePlugin('JY-JPush');
 			var _this = this;
-			//监听透传
-			// jyJPush.addJYJPushCustomReceiveNotificationListener(result => {
-			jyJPush.addJYJPushReceiveNotificationListener(result => {	
+			//监听透传 
+			jyJPush.addJYJPushCustomReceiveNotificationListener(result => { 
+			//普通消息
+			// jyJPush.addJYJPushReceiveNotificationListener(result => {	
+				console.log('收到消息'+ JSON.stringify(result))
 				//  监听成功后，若收到推送，会在result返回对应的数据
 				var type
 				var content
 				//透传处理
-				// if (JSON.parse(result.extra).type) {
-				// 	type = JSON.parse(result.extra).type
-				// }
-				// if (JSON.parse(result.extra).content) {
-				// 	content = JSON.parse(result.extra).content
-				// }
-				
+				if (JSON.parse(result.extra).type) {
+					type = JSON.parse(result.extra).type
+				}
+				if (JSON.parse(result.extra).content) {
+					content = JSON.parse(result.extra).content
+					content = JSON.parse(content)
+				}
 				//普通处理
-				if(JSON.parse(result.notificationExtras).type){
-					type = JSON.parse(result.notificationExtras).type
-				}
-				if(JSON.parse(result.notificationExtras).content){
-					content = JSON.parse(result.notificationExtras).content
-				}
+				// if(JSON.parse(result.notificationExtras).type){
+				// 	type = JSON.parse(result.notificationExtras).type
+				// }
+				// if(JSON.parse(result.notificationExtras).content){
+				// 	content = JSON.parse(result.notificationExtras).content
+				// 	content = JSON.parse(content)
+				// }
 				
 				console.log(result)
 				/**
@@ -179,7 +185,7 @@
 								title: content + '成功',
 								icon: 'none'
 							})
-							uni.navigateTo({
+							uni.redirectTo({
 								// url: '../registrations/registration',
 								url: '../registrations/registration?data=' + JSON.stringify(_this.underway)
 							})
@@ -194,7 +200,7 @@
 					// })
 				} else if (type == 8) {
 					console.log(content, '协助刷卡成功')
-					uni.navigateTo({
+					uni.redirectTo({
 						// url: '../registrations/registration',
 						url: '../registrations/registration?data=' + JSON.stringify(_this.underway)
 					})

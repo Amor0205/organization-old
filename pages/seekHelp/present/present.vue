@@ -74,30 +74,42 @@
 		},
 		methods: {
 			goTo(res) {
-				uni.showLoading({
-					title: '正在接取任务'
-				})
-				//接单  单号：前缀加单号  X 巡视  A报警 H协助
-				receiveOrder(
-					'A' + res.id,
-					this.userInfo.id
-				).then(res_1 => {
-					// uni.hideLoading()
-					if (res_1.data.code == 2000) {
-						uni.hideLoading()
-						uni.navigateTo({
-							// url:`../taskDetails/taskDetails?all=${res.item}`,
-							// url: '../taskDetails/taskDetails',
-							url: '../taskDetails/taskDetails?data=' + JSON.stringify(res)
-						})
-					} else {
-						uni.hideLoading()
-						uni.showToast({
-							icon: 'none',
-							title: res_1.data.message
-						})
-					}
-				})
+				var _this = this;
+				uni.showModal({
+				    title: '提示',
+				    content: '您确定领取该任务!',
+				    success: function (ress) {
+				        if (ress.confirm) {
+							uni.showLoading({
+								title: '正在接取任务'
+							})
+				            //接单  单号：前缀加单号  X 巡视  A报警 H协助
+				            receiveOrder(
+				            	'A' + res.id,
+				            	_this.userInfo.id
+				            ).then(res_1 => {
+				            	uni.hideLoading()
+				            	if (res_1.data.code == 2000) {
+				            		// uni.hideLoading()
+				            		uni.navigateTo({
+				            			// url:`../taskDetails/taskDetails?all=${res.item}`,
+				            			// url: '../taskDetails/taskDetails',
+				            			url: '../taskDetails/taskDetails?data=' + JSON.stringify(res)
+				            		})
+				            	} else {
+				            		// uni.hideLoading()
+				            		uni.showToast({
+				            			icon: 'none',
+				            			title: res_1.data.message
+				            		})
+				            	}
+				            })
+				        } else if (ress.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
+				
 
 			},
 			// 获取求助列表
