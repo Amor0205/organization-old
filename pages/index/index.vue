@@ -23,6 +23,11 @@
 		 :update_des="update_des" :update_type="update_type" :update_url="update_url" :is_update_app="is_update_app"></mUpdateAppTip>
 		<!-- #endif -->
 		
+		<u-button  class="custom-style"  plain @click="fun">
+			<view :class="cueLight == true ? 'light_2' : 'light_1' "></view>
+			检查链接状态
+		</u-button>
+		
 	</view>
 </template>
 
@@ -59,9 +64,29 @@
 				update_des: [],
 				is_update_app: false,
 				is_forced_update: false, //是否强制升级
+				// cueLight:'',	//提示灯
 			}
 		},
 		methods: {
+			fun(){
+				
+				uni.sendSocketMessage({
+					data: 'E',
+					success: res => {
+						// uni.closeSocket();
+						// //提示成功
+						uni.showToast({
+							icon:'none',
+							title:'通讯链接正常',
+						})
+						return;
+					},
+					fail: err => {
+						uni.closeSocket(); // 确保已经关闭后再重新打开
+					}
+				});
+				
+			},
 			// 按钮跳转
 			goTo(res) {
 				if(this.userInfo.status != 3 && this.userInfo.status != 4){
@@ -146,7 +171,8 @@
 			},
 			getUpData(){
 				uni.request({
-					url: 'http://www.vykj.com.cn:21351/action/ApkInfo/getApkInfo?userkey=I8TLXT4DY1&appkey=I8TLYATOX1', //仅为示例，并非真实接口地址。', //仅为示例，并非真实接口地址。
+					url: 'http://www.vykj.com.cn:21351/action/ApkInfo/getApkInfo?userkey=I8TLXT4DY1&appkey=I8TLYATOX1', //仅为示例
+					// url: 'http://www.vykj.com.cn:21351/action/ApkInfo/getApkInfo?userkey=I8TLXT4DY1&appkey=I8V2X641M1', //仅为示例
 					data: {},
 					method: 'GET',
 					success: (res) => {
@@ -188,6 +214,7 @@
 					// console.log(this.statusBarHeights);
 				}
 			});
+			
 		},
 		mounted() {
 			this.getUpData()
@@ -267,7 +294,9 @@
 
 		},
 		computed: {
-
+			cueLight(){
+				return this.$store.state.cueLight;
+			}
 		},
 		watch: {
 
@@ -340,6 +369,25 @@
 				margin-bottom: 80rpx;
 				color: black;
 				background: #FFE300;
+			}
+		}
+		.custom-style{
+			border: none;
+			color: #d36a3d;
+			background: rgba($color: #9f9f9f, $alpha: .4);
+			.light_1{
+				margin-right:10upx ;
+				border-radius: 50%;
+				width: 20upx;
+				height: 20upx;
+				background-color: red;
+			}
+			.light_2{
+				margin-right:10upx ;
+				border-radius: 50%;
+				width: 20upx;
+				height: 20upx;
+				background-color: green;
 			}
 		}
 	}

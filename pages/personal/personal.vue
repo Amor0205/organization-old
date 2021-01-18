@@ -174,13 +174,23 @@
 			},
 			//退出登录
 			goOut() {
-				// 清除token
-				uni.setStorageSync('token', '')
-				// 清除userInfo
-				uni.setStorageSync("userInfo", '')
-				uni.reLaunch({
-					url: '../login/login'
-				})
+				uni.showModal({
+				    title: '提示',
+				    content: '您确定要退出登录!',
+				    success: function (res) {
+				        if (res.confirm) {
+				            // 清除token
+				            uni.setStorageSync('token', '')
+				            // 清除userInfo
+				            uni.setStorageSync("userInfo", '')
+				            uni.reLaunch({
+				            	url: '../login/login'
+				            })
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
 			},
 			//下班
 			offDuty() {
@@ -196,10 +206,16 @@
 								_this.userInfo.id,
 								3
 							).then(res => {
+								console.log(res.data)
 								if (res.data.code == 2000) {
 									_this.userInfo.status = 3;
 									uni.setStorageSync('userInfo', _this.userInfo)
 									console.log('上班')
+								}else if(res.data.code == 4000){
+									uni.showToast({
+										title:res.data.message,
+										icon:'none'
+									})
 								}
 							})
 						} else if (res.cancel) {
@@ -222,7 +238,7 @@
 						4
 					).then(res => {
 						if (res.data.code == 2000) {
-							_this.userInfo.status = 4;
+							this.userInfo.status = 4;
 							uni.setStorageSync('userInfo', this.userInfo)
 							console.log('上班')
 

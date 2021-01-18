@@ -10,6 +10,7 @@
 import Request from '@/utils/luch-request/luch-request/index.js'
 
 const IP = 'http://110.187.88.70:21605';		//全局接口地址
+// const IP = 'http://110.187.88.70:21706';		//全局接口地址
 
 const getTokenStorage = () => {
   let token = ''

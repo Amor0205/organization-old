@@ -146,7 +146,8 @@
 
 					var _this = this;
 					uni.uploadFile({
-						url: 'http://110.187.88.70:21605/serviceContent/upImage', //仅为示例，非真实的接口地址
+						// url: 'http://110.187.88.70:21605/serviceContent/upImage', //仅为示例，非真实的接口地址
+						url: 'http://110.187.88.70:21706/serviceContent/upImage', //仅为示例，非真实的接口地址
 						filePath: tempFilePaths[0],
 						name: 'file',
 						methods: 'POST',
@@ -214,7 +215,8 @@
 
 					var _this = this;
 					uni.uploadFile({
-						url: 'http://110.187.88.70:21605/serviceContent/upImage', //仅为示例，非真实的接口地址
+						// url: 'http://110.187.88.70:21605/serviceContent/upImage', //仅为示例，非真实的接口地址
+						url: 'http://110.187.88.70:21706/serviceContent/upImage', //仅为示例，非真实的接口地址
 						filePath: tempFilePaths[0],
 						name: 'file',
 						methods: 'POST',
@@ -270,6 +272,7 @@
 			submit(){
 				var befimg = this.img.join('|')
 				var afimg = this.imgs.join('|')
+				console.log(this.all)
 				if (this.all.type == 0) {
 					//日常巡视
 					// if( befimg !=='' && afimg !=='' && this.number !=='' ){
@@ -287,6 +290,7 @@
 						var _this = this;
 						uni.uploadFile({
 							url: 'http://110.187.88.70:21605/order/submitService', //仅为示例，非真实的接口地址
+							// url: 'http://110.187.88.70:21706/order/submitService', //仅为示例，非真实的接口地址
 							filePath: '',
 							name: 'file',
 							methods: 'POST',
@@ -302,7 +306,7 @@
 								orderId: this.all.id,
 							},
 							success: (res) => {
-								console.log(res);
+								console.log(JSON.parse(res.data));
 								//解放按钮
 								this.forbidden = false;
 								uni.hideLoading()
@@ -360,6 +364,7 @@
 						var _this = this;
 						uni.uploadFile({
 							url: 'http://110.187.88.70:21605/order/submitService', //仅为示例，非真实的接口地址
+							// url: 'http://110.187.88.70:21706/order/submitService', //仅为示例，非真实的接口地址
 							filePath: '',
 							name: 'file',
 							methods: 'POST',
@@ -423,6 +428,7 @@
 						var _this = this;
 						uni.uploadFile({
 							url: 'http://110.187.88.70:21605/order/genActiveOrder', //仅为示例，非真实的接口地址
+							// url: 'http://110.187.88.70:21706/order/genActiveOrder', //仅为示例，非真实的接口地址
 							filePath: '',
 							name: 'file',
 							methods: 'POST',

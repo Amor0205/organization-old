@@ -83,27 +83,53 @@
 							uni.showLoading({
 								title: '正在接取任务'
 							})
-				            //接单  单号：前缀加单号  X 巡视  A报警 H协助
-				            receiveOrder(
-				            	'A' + res.id,
-				            	_this.userInfo.id
-				            ).then(res_1 => {
-				            	uni.hideLoading()
-				            	if (res_1.data.code == 2000) {
-				            		// uni.hideLoading()
-				            		uni.navigateTo({
-				            			// url:`../taskDetails/taskDetails?all=${res.item}`,
-				            			// url: '../taskDetails/taskDetails',
-				            			url: '../taskDetails/taskDetails?data=' + JSON.stringify(res)
-				            		})
-				            	} else {
-				            		// uni.hideLoading()
-				            		uni.showToast({
-				            			icon: 'none',
-				            			title: res_1.data.message
-				            		})
-				            	}
-				            })
+							if(res.type == 1){
+								//老人求助
+								//接单  单号：前缀加单号  X 巡视  A报警 H协助
+								receiveOrder(
+									'A' + res.id,
+									_this.userInfo.id
+								).then(res_1 => {
+									uni.hideLoading()
+									if (res_1.data.code == 2000) {
+										// uni.hideLoading()
+										uni.navigateTo({
+											// url:`../taskDetails/taskDetails?all=${res.item}`,
+											// url: '../taskDetails/taskDetails',
+											url: '../taskDetails/taskDetails?data=' + JSON.stringify(res)
+										})
+									} else {
+										// uni.hideLoading()
+										uni.showToast({
+											icon: 'none',
+											title: res_1.data.message
+										})
+									}
+								})
+							}else if(res.type == 2){
+								//接单  单号：前缀加单号  X 巡视  A报警 H协助
+								receiveOrder(
+									'H' + res.id,
+									_this.userInfo.id
+								).then(res_1 => {
+									uni.hideLoading()
+									if (res_1.data.code == 2000) {
+										// uni.hideLoading()
+										uni.navigateTo({
+											// url:`../taskDetails/taskDetails?all=${res.item}`,
+											// url: '../taskDetails/taskDetails',
+											url: '../taskDetails/taskDetails?data=' + JSON.stringify(res)
+										})
+									} else {
+										// uni.hideLoading()
+										uni.showToast({
+											icon: 'none',
+											title: res_1.data.message
+										})
+									}
+								})
+							}
+				            
 				        } else if (ress.cancel) {
 				            console.log('用户点击取消');
 				        }

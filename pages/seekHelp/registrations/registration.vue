@@ -79,12 +79,12 @@
 					:hair-line="false" 
 					:disabled="forbidden">
 					无人</u-button>
-				<view class="options" @click="proceed(underway)">
+				<u-button class="options" :hair-line="false" @click="proceed(underway)">
 					进行服务
-				</view>
-				<view class="options" @click="goTos">
+				</u-button>
+				<u-button class="options" @click="goTos" :hair-line="false" >
 					发起同事协助
-				</view>
+				</u-button>
 				<!-- <view class="options" @click="normal">
 					正常
 				</view> -->
@@ -119,15 +119,15 @@
 	import {
 		putordere
 	} from '../../../src/ajax.js'
-	function debounce(func, wait=600){
-		let timeout;
-		return function(event){
-			clearTimeout(timeout)
-			timeout = setTimeout(()=>{
-				func.call(this, event)
-			},wait)
-		}	
-	}
+	// function debounce(func, wait=600){
+	// 	let timeout;
+	// 	return function(event){
+	// 		clearTimeout(timeout)
+	// 		timeout = setTimeout(()=>{
+	// 			func.call(this, event)
+	// 		},wait)
+	// 	}	
+	// }
 	export default {
 		name: "",
 		components: {
@@ -167,14 +167,18 @@
 		},
 		methods: {
 			// 无人按钮
-			unmanned:debounce(function(e){
+			unmanned(){
 				//禁用按钮
 				this.forbidden = true;
+				uni.showLoading({
+					title:'正在结单'
+				})
 				putordere(
 					this.underway.id,
 					this.underway.type,
 					1
 				).then(res => {
+					uni.hideLoading()
 					if (res.data.code == 2000) {
 						uni.showToast({
 							title: '提交成功'
@@ -186,16 +190,20 @@
 						})
 					}
 				})
-			}),
+			},
 			//正常按钮
-			normal:debounce(function(e){
+			normal(){
 				//禁用按钮
 				this.forbidden = true;
+				uni.showLoading({
+					title:'正在结单'
+				})
 				putordere(
 					this.underway.id,
 					this.underway.type,
 					2
 				).then(res => {
+					uni.hideLoading()
 					if (res.data.code == 2000) {
 						uni.showToast({
 							title: '提交成功'
@@ -208,7 +216,7 @@
 					}
 
 				})
-			}),
+			},
 			//进行服务按钮
 			proceed(res) {
 				console.log(res);
@@ -254,7 +262,6 @@
 			this.underway = JSON.parse(option.data)
 			console.log(this.underway);
 			this.flag = option.flag
-			console.log(this.flag);
 
 		},
 
@@ -352,7 +359,7 @@
 			// margin-top: 50rpx;
 			// margin-bottom: 50rpx;
 			// font-size: 16px;
-			
+			// color: #2f2f2f;
 			width: 300rpx;
 			height: 100rpx;
 			background-color: #FFE300;
